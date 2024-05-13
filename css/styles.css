@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f7f7f7;
+}
+
+h1, h2 {
+    color: #333;
+    text-align: center;
+}
+
+#form-container {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: grid;
+    gap: 10px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#tournament-table {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Estilos para la tabla de disponibilidad */
+#availability-table {
+    margin-bottom: 20px;
+}
+
+#availability {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+#availability th, #availability td {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    cursor: pointer; /* Hacemos las celdas interactivas */
+}
+
+#availability th:hover, #availability td:hover {
+    background-color: #dadbdb; /* Cambiamos el color de fondo al pasar el ratón */
+}
+
+.selected {
+    background-color: #007bff;
+    color: #fff;
+}
