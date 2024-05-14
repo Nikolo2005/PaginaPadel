@@ -12,18 +12,17 @@
 
     <!-- Sección de la tabla de disponibilidad -->
     <div id="availability-table">
-        <h2>Tabla de Disponibilidad</h2>
+        <h2>Seleccione la disponibilidad de las horas</h2>
         <table id="availability">
             <thead>
                 <tr>
-                    <th></th>
+                    <th>Hora</th>
                     <th>Pista 1</th>
                     <th>Pista 2</th>
                     <th>Pista 3</th>
                     <th>Pista 4</th>
                     <th>Pista 5</th>
                     <th>Pista 6</th>
-                    <!-- Puedes agregar más pistas según sea necesario -->
                 </tr>
             </thead>
             <tbody>
@@ -68,6 +67,7 @@
                     <th>Pareja 2</th>
                     <th>Hora</th>
                     <th>Pista</th>
+                    <th>Día</th>
                 </tr>
             </thead>
             <tbody id="matches-body">
@@ -76,38 +76,141 @@
         </table>
     </div>
 
-
-
-    <!-- Botón para borrar todas las parejas y datos -->
     <hr>
     <button id="delete-all-btn">Borrar todas las parejas y datos guardados</button>
+    <hr>
+    <button id="generate-matches-btn">Generar Partidos</button>
     <hr>
     <button id="generate-csv-btn">Generar CSV de Partidos</button>
 
     <script>
-        // JavaScript
         const availabilityTable = {
-            "2024-05-13": { // Ejemplo de un día disponible
-                "09:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "10:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "11:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "12:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "13:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "14:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "15:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "16:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "17:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "18:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "19:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "20:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`),
-                "21:15": Array(6).fill("Pista").map((pista, index) => `${pista} ${index + 1}`)
+            "2024-05-13": {
+                "08:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "09:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "10:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "11:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "12:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "13:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "14:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "15:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "16:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "17:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "18:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "19:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "20:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "21:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                "22:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+                // Más horas según sea necesario...
             },
-            // Puedes agregar más días y horas disponibles según sea necesario
         };
+
+        document.addEventListener('DOMContentLoaded', () => {
+        populateAvailabilityTable();
+        loadStoredData();
+        addAvailabilityListeners(); // Agregar listeners para las casillas de disponibilidad
+        restoreAvailability(); // Restaurar el estado visual de las casillas de disponibilidad
+    });
+
+
+    function addAvailabilityListeners() {
+            const cells = document.querySelectorAll('#availability td');
+            cells.forEach(cell => {
+                // Agregar evento de clic a la celda
+                cell.addEventListener('click', function(event) {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    if (checkbox) {
+                        checkbox.checked = !checkbox.checked; // Cambiar el estado de la casilla
+                        const day = checkbox.dataset.day;
+                        const time = checkbox.dataset.time;
+                        const pista = checkbox.dataset.pista;
+                        updateAvailabilityData(day, time, pista, checkbox.checked); // Actualizar los datos de disponibilidad en localStorage
+                    }
+                });
+
+                // Evitar que el clic en el cuadro de verificación active/desactive la casilla
+                const checkboxes = cell.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('click', function(event) {
+                        event.stopPropagation(); // Evitar que el clic en el cuadro de verificación active/desactive la casilla
+                    });
+                });
+            });
+        }
+
+    function updateAvailabilityData(day, time, pista, isChecked) {
+        let availabilityData = JSON.parse(localStorage.getItem('availabilityData')) || {};
+        if (!availabilityData[day]) {
+            availabilityData[day] = {};
+        }
+        if (!availabilityData[day][time]) {
+            availabilityData[day][time] = [];
+        }
+        if (isChecked) {
+            if (!availabilityData[day][time].includes(pista)) {
+                availabilityData[day][time].push(pista);
+            }
+        } else {
+            availabilityData[day][time] = availabilityData[day][time].filter(item => item !== pista);
+        }
+        localStorage.setItem('availabilityData', JSON.stringify(availabilityData));
+    }
+
+        function loadStoredData() {
+            const storedData = JSON.parse(localStorage.getItem('tournamentData'));
+            if (storedData) {
+                displayPairsInTournament(storedData);
+            }
+
+            const storedMatches = JSON.parse(localStorage.getItem('tournamentMatches'));
+            if (storedMatches) {
+                displayMatches(storedMatches);
+            }
+
+            const availabilityData = JSON.parse(localStorage.getItem('availabilityData'));
+            if (availabilityData) {
+                restoreAvailability(availabilityData);
+            }
+        }
+
+        function restoreAvailability() {
+            const availabilityData = JSON.parse(localStorage.getItem('availabilityData'));
+            if (availabilityData) {
+                Object.keys(availabilityData).forEach(day => {
+                    Object.keys(availabilityData[day]).forEach(time => {
+                        availabilityData[day][time].forEach(pista => {
+                            const checkbox = document.querySelector(`#availability input[type="checkbox"][data-day="${day}"][data-time="${time}"][data-pista="${pista}"]`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                            }
+                        });
+                    });
+                });
+            }
+        }
+
+        function populateAvailabilityTable() {
+            const tbody = document.querySelector('#availability tbody');
+            tbody.innerHTML = '';
+
+            Object.keys(availabilityTable).forEach(day => {
+                Object.keys(availabilityTable[day]).forEach(time => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${time}</td>`;
+                    availabilityTable[day][time].forEach((pista, index) => {
+                        const cell = document.createElement('td');
+                        cell.innerHTML = `<input type="checkbox" data-day="${day}" data-time="${time}" data-pista="${pista}">`;
+                        row.appendChild(cell);
+                    });
+                    tbody.appendChild(row);
+                });
+            });
+        }
 
         const form = document.getElementById('tournament-form');
         const matchesTableBody = document.getElementById('matches-body');
         const deleteAllButton = document.getElementById('delete-all-btn');
+        const generateMatchesButton = document.getElementById('generate-matches-btn');
         const generateCSVButton = document.getElementById('generate-csv-btn');
 
         deleteAllButton.addEventListener('click', function() {
@@ -115,9 +218,23 @@
             if (confirmDelete) {
                 localStorage.removeItem('tournamentData');
                 localStorage.removeItem('tournamentMatches');
-                const tableBody = document.getElementById('tournament-body');
-                tableBody.innerHTML = '';
+                document.getElementById('tournament-body').innerHTML = '';
                 matchesTableBody.innerHTML = '';
+            }
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const pairInput = document.getElementById('pair').value;
+            const pairArray = pairInput.split('-').map(name => name.trim());
+            if (pairArray.length === 2) {
+                const pair = { player1: pairArray[0], player2: pairArray[1] };
+                let storedData = JSON.parse(localStorage.getItem('tournamentData')) || [];
+                storedData.push(pair);
+                localStorage.setItem('tournamentData', JSON.stringify(storedData));
+                displayPairsInTournament(storedData);
+            } else {
+                alert('Debe ingresar dos nombres separados por un guión para formar una pareja.');
             }
         });
 
@@ -126,162 +243,8 @@
             tableBody.innerHTML = '';
             pairs.forEach(pair => {
                 const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${pair.player1} - ${pair.player2}</td>
-                    <td><button onclick="deletePair(this)">Eliminar</button></td>
-                `;
+                newRow.innerHTML = `<td>${pair.player1} - ${pair.player2}</td><td><button onclick="deletePair(this)">Eliminar</button></td>`;
                 tableBody.appendChild(newRow);
-            });
-        }
-
-        window.onload = function() {
-            const storedData = JSON.parse(localStorage.getItem('tournamentData'));
-            if (storedData && storedData.length > 0) {
-                displayPairsInTournament(storedData);
-                const storedMatches = JSON.parse(localStorage.getItem('tournamentMatches'));
-                if (storedMatches) {
-                    displayMatches(storedMatches);
-                } else {
-                    const matches = generateMatches(storedData);
-                    localStorage.setItem('tournamentMatches', JSON.stringify(matches));
-                    displayMatches(matches);
-                }
-            }
-
-            // Generar filas de horas en la tabla de disponibilidad
-            generateAvailabilityRows();
-        };
-
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const pairInput = document.getElementById('pair').value;
-            const pairArray = pairInput.split('-').map(name => name.trim());
-
-            if (pairArray.length === 2) {
-                const pair = {
-                    player1: pairArray[0],
-                    player2: pairArray[1]
-                };
-
-                let storedData = JSON.parse(localStorage.getItem('tournamentData')) || [];
-                storedData.push(pair);
-                localStorage.setItem('tournamentData', JSON.stringify(storedData));
-
-                const tableBody = document.getElementById('tournament-body');
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${pair.player1} - ${pair.player2}</td>
-                    <td><button onclick="deletePair(this)">Eliminar</button></td>
-                `;
-                tableBody.appendChild(newRow);
-
-                const matches = generateMatches(storedData);
-                localStorage.setItem('tournamentMatches', JSON.stringify(matches));
-                displayMatches(matches);
-            } else {
-                alert('Debe ingresar dos nombres separados por un guión para formar una pareja.');
-            }
-        });
-
-        function generateMatches(pairs) {
-            const totalPairs = pairs.length;
-            let byesNeeded = 0;
-
-            if (totalPairs % 4 !== 0) {
-                byesNeeded = 4 - (totalPairs % 4);
-            }
-
-            let allEntries = pairs.slice();
-            for (let i = 0; i < byesNeeded; i++) {
-                allEntries.push({ bye: true });
-            }
-            allEntries = shuffle(allEntries);
-
-            const matches = [];
-            let round = 1;
-
-            const days = Object.keys(availabilityTable); // Obtener todos los días disponibles
-
-            // Verificar si se ha seleccionado al menos una hora para cada día
-            let allDaysSelected = true;
-            days.forEach(day => {
-                if (!getSelectedTime(day)) {
-                    console.error(`No se ha seleccionado una hora para el día ${day}`);
-                    allDaysSelected = false;
-                }
-            });
-
-            if (!allDaysSelected) {
-                console.error('No se han seleccionado horas para todos los días.');
-                return matches; // Devolver una matriz vacía si no se han seleccionado horas para todos los días
-            }
-
-            while (allEntries.length >= 2 && days.length > 0) {
-                const roundMatches = [];
-                const pairsInRound = Math.ceil(allEntries.length / 2);
-                const day = days.shift(); // Tomar el primer día de la lista
-
-                for (let i = 0; i < pairsInRound; i++) {
-                    const pair1 = allEntries.pop();
-                    const pair2 = allEntries.pop();
-
-                    // Obtener la hora disponible de la pista seleccionada
-                    const selectedTime = findAvailableTime(day, Object.keys(availabilityTable[day]));
-                    const selectedPista = findAvailablePista(day, selectedTime);
-                    if (selectedTime && selectedPista) {
-                        roundMatches.push({ pair1, pair2, day: day, time: selectedTime, pista: selectedPista }); // Incluir el día y la hora en cada partido
-                    } else {
-                        console.error('No se encontró una hora o pista disponible para el día seleccionado.');
-                    }
-                }
-                matches.push({ round, matches: roundMatches });
-                round++;
-            }
-
-            return matches;
-        }
-
-        // Función para obtener la hora seleccionada para un día específico
-        function getSelectedTime(day) {
-            const timeCells = document.querySelectorAll(`#availability tbody tr[data-day="${day}"] td.selected`);
-            if (timeCells.length > 0) {
-                return Array.from(timeCells).map(cell => cell.textContent);
-            } else {
-                return null;
-            }
-        }
-
-        // Función para encontrar la pista disponible para una hora y día específicos
-        function findAvailablePista(day, time) {
-            const pistaCells = document.querySelectorAll(`#availability tbody tr[data-day="${day}"] td.selected[data-hour="${time}"]`);
-            if (pistaCells.length > 0) {
-                return pistaCells[0].textContent;
-            } else {
-                return null;
-            }
-        }
-
-        function displayMatches(matches) {
-            const tableBody = document.getElementById('matches-body');
-            tableBody.innerHTML = '';
-
-            matches.forEach((roundMatches, roundNumber) => {
-                roundMatches.matches.forEach((match, matchIndex) => {
-                    const newRow = document.createElement('tr');
-                    const roundLabel = roundNumber === 0 ? 'Primera Ronda' : `Ronda ${roundNumber + 1}`;
-                    const matchLabel = match.bye ? `${roundLabel} - Bye` : `${roundLabel} - Partido ${matchIndex + 1}`;
-                    const pair1Text = match.pair1 ? (match.pair1.player1 ? match.pair1.player1 + ' - ' + match.pair1.player2 : 'Bye') : 'Bye';
-                    const pair2Text = match.pair2 ? (match.pair2.player1 ? match.pair2.player1 + ' - ' + match.pair2.player2 : 'Bye') : 'Bye';
-                    newRow.innerHTML = `
-                        <td>${matchLabel}</td>
-                        <td>${pair1Text}</td>
-                        <td>${pair2Text}</td>
-                        <td>${match.time}</td>
-                        <td>${match.pista}</td>
-                    `;
-                    tableBody.appendChild(newRow);
-                });
             });
         }
 
@@ -289,112 +252,169 @@
             const row = button.parentNode.parentNode;
             const pair = row.cells[0].innerText;
             let storedData = JSON.parse(localStorage.getItem('tournamentData'));
-            storedData = storedData.filter(p => p.player1 + ' - ' + p.player2 !== pair);
+            storedData = storedData.filter(p => `${p.player1} - ${p.player2}` !== pair);
             localStorage.setItem('tournamentData', JSON.stringify(storedData));
             row.parentNode.removeChild(row);
-
-            const matches = generateMatches(storedData);
-            localStorage.setItem('tournamentMatches', JSON.stringify(matches));
-            displayMatches(matches);
         }
+
+        generateMatchesButton.addEventListener('click', function() {
+            const selectedTimes = getSelectedTimes();
+            const pairs = JSON.parse(localStorage.getItem('tournamentData')) || [];
+            if (selectedTimes.length > 0 && pairs.length > 0) {
+                const matches = generateMatches(pairs, selectedTimes);
+                localStorage.setItem('tournamentMatches', JSON.stringify(matches));
+                displayMatches(matches);
+            } else {
+                alert('Por favor, seleccione las horas disponibles y agregue parejas.');
+            }
+        });
+
+        function getSelectedTimes() {
+            const checkboxes = document.querySelectorAll('#availability input[type="checkbox"]:checked');
+            const selectedTimes = [];
+            checkboxes.forEach(checkbox => {
+                selectedTimes.push({
+                    day: checkbox.dataset.day,
+                    time: checkbox.dataset.time,
+                    pista: checkbox.dataset.pista
+                });
+            });
+            return selectedTimes;
+        }
+
+        function generateMatches(pairs, selectedTimes) {
+    const totalPairs = pairs.length;
+    let byesNeeded = 0;
+    if (totalPairs % 4 !== 0) {
+        byesNeeded = 4 - (totalPairs % 4);
+    }
+    let allEntries = pairs.slice();
+    for (let i = 0; i < byesNeeded; i++) {
+        allEntries.push({ bye: true });
+    }
+    allEntries = shuffle(allEntries);
+    const matches = [];
+    let round = 1;
+    let byesRemaining = byesNeeded;
+    
+    const playedPairs = new Set(); // Conjunto para registrar las parejas que ya han jugado
+    
+    while (allEntries.length >= 2 && selectedTimes.length > 0) {
+        const roundMatches = [];
+        const pairsInRound = Math.ceil(allEntries.length / 2);
+        
+        for (let i = 0; i < pairsInRound; i++) {
+            let pair1 = allEntries.pop();
+            let pair2 = allEntries.pop();
+            
+            // Verificar si alguna de las parejas ya ha jugado
+            if (playedPairs.has(pair1)) {
+                pair1 = pairs.pop(); // Obtener una nueva pareja que no haya jugado
+            }
+            if (playedPairs.has(pair2)) {
+                pair2 = pairs.pop(); // Obtener una nueva pareja que no haya jugado
+            }
+            
+            if (pair1.bye && pair2.bye) {
+                if (byesRemaining >= 2) {
+                    byesRemaining -= 2;
+                    pair1 = pairs.pop();
+                    pair2 = { bye: true };
+                } else {
+                    continue;
+                }
+            }
+            const selectedTime = selectedTimes.shift();
+            if (selectedTime) {
+                roundMatches.push({ pair1, pair2, day: selectedTime.day, time: selectedTime.time, pista: selectedTime.pista });
+                
+                // Registrar las parejas que han jugado
+                playedPairs.add(pair1);
+                playedPairs.add(pair2);
+            } else {
+                console.error('No se encontró una hora o pista disponible para el día seleccionado.');
+            }
+        }
+        matches.push({ round, matches: roundMatches });
+        round++;
+    }
+    return matches;
+}
+
+        function displayMatches(matches) {
+            matchesTableBody.innerHTML = '';
+            matches.forEach(round => {
+                round.matches.forEach(match => {
+                    const newRow = document.createElement('tr');
+                    let matchLabel = '';
+                    if (match.pair1.bye && match.pair2.bye) {
+                        matchLabel = 'Bye';
+                    } else {
+                        matchLabel = `Partido ${round.round}`;
+                    }
+                    const pair1Text = match.pair1.bye ? 'Bye' : `${match.pair1.player1} - ${match.pair1.player2}`;
+                    const pair2Text = match.pair2.bye ? 'Bye' : `${match.pair2.player1} - ${match.pair2.player2}`;
+                    newRow.innerHTML = `<td>${matchLabel}</td><td>${pair1Text}</td><td>${pair2Text}</td><td>${match.time}</td><td>${match.pista}</td><td>${match.day}</td>`;
+                    matchesTableBody.appendChild(newRow);
+                });
+            });
+        }
+
 
         function shuffle(array) {
             let currentIndex = array.length, randomIndex;
-
             while (currentIndex !== 0) {
                 randomIndex = Math.floor(Math.random() * currentIndex);
                 currentIndex--;
-
-                [array[currentIndex], array[randomIndex]] = [
-                    array[randomIndex], array[currentIndex]];
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
             }
-
             return array;
         }
 
-        function generateAvailabilityRows() {
-            const availabilityTableBody = document.querySelector('#availability tbody');
-
-            for (const day in availabilityTable) {
-                if (availabilityTable.hasOwnProperty(day)) {
-                    const availableHours = availabilityTable[day];
-
-                    for (const hour in availableHours) {
-                        if (availableHours.hasOwnProperty(hour)) {
-                            const row = document.createElement('tr');
-                            const hourCell = document.createElement('td');
-                            hourCell.textContent = hour;
-                            row.appendChild(hourCell);
-
-                            availableHours[hour].forEach((pista, index) => {
-                                const pistaCell = document.createElement('td');
-                                pistaCell.textContent = pista;
-                                pistaCell.setAttribute('data-hour', hour);
-                                pistaCell.setAttribute('data-pista', pista);
-                                pistaCell.setAttribute('data-day', day); // Establecer el atributo data-day
-                                row.appendChild(pistaCell);
-                            });
-
-                            availabilityTableBody.appendChild(row);
-                        }
-                    }
-                }
+        function loadStoredData() {
+            const storedData = JSON.parse(localStorage.getItem('tournamentData'));
+            if (storedData) {
+                displayPairsInTournament(storedData);
             }
-        }
-
-        // Evento para cambiar el color de las pistas al hacer clic en ellas
-        document.getElementById('availability').addEventListener('click', function(event) {
-            if (event.target.tagName === 'TD') {
-                toggleAvailability(event);
-            }
-        });
-
-        function toggleAvailability(event) {
-            const cell = event.target;
-            cell.classList.toggle('selected');
-
-            const dayRow = cell.parentNode;
-            const selectedCells = Array.from(dayRow.querySelectorAll('td.selected'));
-            const isSelected = cell.classList.contains('selected');
-
-            // Si todas las celdas de la fila están seleccionadas, marcar la fila entera
-            if (isSelected && selectedCells.length === dayRow.childElementCount - 1) {
-                dayRow.classList.add('selected');
-            } else {
-                dayRow.classList.remove('selected');
-            }
-        }
-
-        // Función para generar el archivo CSV de partidos
-        function generateCSV(matches) {
-            let csvContent = "data:text/csv;charset=utf-8;";
-
-            matches.forEach((roundMatches, roundNumber) => {
-                roundMatches.matches.forEach((match, matchIndex) => {
-                    const roundLabel = roundNumber === 0 ? 'Primera Ronda' : `Ronda ${roundNumber + 1}`;
-                    const pair1 = match.pair1 ? (match.pair1.player1 ? match.pair1.player1 + ' - ' + match.pair1.player2 : 'Bye') : 'Bye';
-                    const pair2 = match.pair2 ? (match.pair2.player1 ? match.pair2.player1 + ' - ' + match.pair2.player2 : 'Bye') : 'Bye';
-                    const time = match.time; // Obtener la hora del partido
-                    const pista = match.pista; // Obtener la pista del partido
-                    const day = match.day; // Obtener el día del partido
-                    const row = [roundLabel, pair1, pair2, time, pista, day].join(","); // Agregar la hora, pista y día al CSV
-                    csvContent += row + "\r\n";
-                });
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");  
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "partidos.csv");
-            document.body.appendChild(link);
-            link.click();
-        }
-
-        // Evento para generar CSV al hacer clic en el botón
-        generateCSVButton.addEventListener('click', function() {
             const storedMatches = JSON.parse(localStorage.getItem('tournamentMatches'));
-            generateCSV(storedMatches);
+            if (storedMatches) {
+                displayMatches(storedMatches);
+            }
+        }
+
+        generateCSVButton.addEventListener('click', function() {
+            const matches = JSON.parse(localStorage.getItem('tournamentMatches'));
+            if (matches && matches.length > 0) {
+                let csvContent = "data:text/csv;charset=utf-8,";
+                matches.forEach(round => {
+                    round.matches.forEach(match => {
+                        const row = [
+                            `Partido ${round.round}`,
+                            match.pair1.bye ? 'Bye' : `${match.pair1.player1} - ${match.pair1.player2}`,
+                            match.pair2.bye ? 'Bye' : `${match.pair2.player1} - ${match.pair2.player2}`,
+                            match.time,
+                            match.pista,
+                            match.day
+                        ].join(",");
+                        csvContent += row + "\r\n";
+                    });
+                });
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "tournament_matches.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert('No hay partidos disponibles para generar el CSV.');
+            }
         });
+
+        console.log('Selected Times:', selectedTimes);
+        console.log('Pairs:', pairs);
+        console.log('Generated Matches:', matches);
     </script>
+
 </body>
 </html>
