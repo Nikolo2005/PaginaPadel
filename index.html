@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
     <title>Organizador de Torneos de Pádel</title>
 </head>
+
 <body>
 
     <h1>Organizador de Torneos de Pádel</h1>
@@ -106,18 +108,18 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-        populateAvailabilityTable();
-        loadStoredData();
-        addAvailabilityListeners(); // Agregar listeners para las casillas de disponibilidad
-        restoreAvailability(); // Restaurar el estado visual de las casillas de disponibilidad
-    });
+            populateAvailabilityTable();
+            loadStoredData();
+            addAvailabilityListeners();
+            restoreAvailability();
+        });
 
 
-    function addAvailabilityListeners() {
+        function addAvailabilityListeners() {
             const cells = document.querySelectorAll('#availability td');
             cells.forEach(cell => {
                 // Agregar evento de clic a la celda
-                cell.addEventListener('click', function(event) {
+                cell.addEventListener('click', function (event) {
                     const checkbox = this.querySelector('input[type="checkbox"]');
                     if (checkbox) {
                         checkbox.checked = !checkbox.checked; // Cambiar el estado de la casilla
@@ -131,30 +133,30 @@
                 // Evitar que el clic en el cuadro de verificación active/desactive la casilla
                 const checkboxes = cell.querySelectorAll('input[type="checkbox"]');
                 checkboxes.forEach(checkbox => {
-                    checkbox.addEventListener('click', function(event) {
+                    checkbox.addEventListener('click', function (event) {
                         event.stopPropagation(); // Evitar que el clic en el cuadro de verificación active/desactive la casilla
                     });
                 });
             });
         }
 
-    function updateAvailabilityData(day, time, pista, isChecked) {
-        let availabilityData = JSON.parse(localStorage.getItem('availabilityData')) || {};
-        if (!availabilityData[day]) {
-            availabilityData[day] = {};
-        }
-        if (!availabilityData[day][time]) {
-            availabilityData[day][time] = [];
-        }
-        if (isChecked) {
-            if (!availabilityData[day][time].includes(pista)) {
-                availabilityData[day][time].push(pista);
+        function updateAvailabilityData(day, time, pista, isChecked) {
+            let availabilityData = JSON.parse(localStorage.getItem('availabilityData')) || {};
+            if (!availabilityData[day]) {
+                availabilityData[day] = {};
             }
-        } else {
-            availabilityData[day][time] = availabilityData[day][time].filter(item => item !== pista);
+            if (!availabilityData[day][time]) {
+                availabilityData[day][time] = [];
+            }
+            if (isChecked) {
+                if (!availabilityData[day][time].includes(pista)) {
+                    availabilityData[day][time].push(pista);
+                }
+            } else {
+                availabilityData[day][time] = availabilityData[day][time].filter(item => item !== pista);
+            }
+            localStorage.setItem('availabilityData', JSON.stringify(availabilityData));
         }
-        localStorage.setItem('availabilityData', JSON.stringify(availabilityData));
-    }
 
         function loadStoredData() {
             const storedData = JSON.parse(localStorage.getItem('tournamentData'));
@@ -213,7 +215,7 @@
         const generateMatchesButton = document.getElementById('generate-matches-btn');
         const generateCSVButton = document.getElementById('generate-csv-btn');
 
-        deleteAllButton.addEventListener('click', function() {
+        deleteAllButton.addEventListener('click', function () {
             const confirmDelete = confirm('¿Estás seguro de que deseas borrar todas las parejas y datos guardados?');
             if (confirmDelete) {
                 localStorage.removeItem('tournamentData');
@@ -223,7 +225,7 @@
             }
         });
 
-        form.addEventListener('submit', function(event) {
+        form.addEventListener('submit', function (event) {
             event.preventDefault();
             const pairInput = document.getElementById('pair').value;
             const pairArray = pairInput.split('-').map(name => name.trim());
@@ -257,7 +259,7 @@
             row.parentNode.removeChild(row);
         }
 
-        generateMatchesButton.addEventListener('click', function() {
+        generateMatchesButton.addEventListener('click', function () {
             const selectedTimes = getSelectedTimes();
             const pairs = JSON.parse(localStorage.getItem('tournamentData')) || [];
             if (selectedTimes.length > 0 && pairs.length > 0) {
@@ -283,63 +285,63 @@
         }
 
         function generateMatches(pairs, selectedTimes) {
-    const totalPairs = pairs.length;
-    let byesNeeded = 0;
-    if (totalPairs % 4 !== 0) {
-        byesNeeded = 4 - (totalPairs % 4);
-    }
-    let allEntries = pairs.slice();
-    for (let i = 0; i < byesNeeded; i++) {
-        allEntries.push({ bye: true });
-    }
-    allEntries = shuffle(allEntries);
-    const matches = [];
-    let round = 1;
-    let byesRemaining = byesNeeded;
-    
-    const playedPairs = new Set(); // Conjunto para registrar las parejas que ya han jugado
-    
-    while (allEntries.length >= 2 && selectedTimes.length > 0) {
-        const roundMatches = [];
-        const pairsInRound = Math.ceil(allEntries.length / 2);
-        
-        for (let i = 0; i < pairsInRound; i++) {
-            let pair1 = allEntries.pop();
-            let pair2 = allEntries.pop();
-            
-            // Verificar si alguna de las parejas ya ha jugado
-            if (playedPairs.has(pair1)) {
-                pair1 = pairs.pop(); // Obtener una nueva pareja que no haya jugado
+            const totalPairs = pairs.length;
+            let byesNeeded = 0;
+            if (totalPairs % 4 !== 0) {
+                byesNeeded = 4 - (totalPairs % 4);
             }
-            if (playedPairs.has(pair2)) {
-                pair2 = pairs.pop(); // Obtener una nueva pareja que no haya jugado
+            let allEntries = pairs.slice();
+            for (let i = 0; i < byesNeeded; i++) {
+                allEntries.push({ bye: true });
             }
-            
-            if (pair1.bye && pair2.bye) {
-                if (byesRemaining >= 2) {
-                    byesRemaining -= 2;
-                    pair1 = pairs.pop();
-                    pair2 = { bye: true };
-                } else {
-                    continue;
+            allEntries = shuffle(allEntries);
+            const matches = [];
+            let round = 1;
+            let byesRemaining = byesNeeded;
+
+            const playedPairs = new Set(); // Conjunto para registrar las parejas que ya han jugado
+
+            while (allEntries.length >= 2 && selectedTimes.length > 0) {
+                const roundMatches = [];
+                const pairsInRound = Math.ceil(allEntries.length / 2);
+
+                for (let i = 0; i < pairsInRound; i++) {
+                    let pair1 = allEntries.pop();
+                    let pair2 = allEntries.pop();
+
+                    // Verificar si alguna de las parejas ya ha jugado
+                    if (playedPairs.has(pair1)) {
+                        pair1 = pairs.pop(); // Obtener una nueva pareja que no haya jugado
+                    }
+                    if (playedPairs.has(pair2)) {
+                        pair2 = pairs.pop(); // Obtener una nueva pareja que no haya jugado
+                    }
+
+                    if (pair1.bye && pair2.bye) {
+                        if (byesRemaining >= 2) {
+                            byesRemaining -= 2;
+                            pair1 = pairs.pop();
+                            pair2 = { bye: true };
+                        } else {
+                            continue;
+                        }
+                    }
+                    const selectedTime = selectedTimes.shift();
+                    if (selectedTime) {
+                        roundMatches.push({ pair1, pair2, day: selectedTime.day, time: selectedTime.time, pista: selectedTime.pista });
+
+                        // Registrar las parejas que han jugado
+                        playedPairs.add(pair1);
+                        playedPairs.add(pair2);
+                    } else {
+                        console.error('No se encontró una hora o pista disponible para el día seleccionado.');
+                    }
                 }
+                matches.push({ round, matches: roundMatches });
+                round++;
             }
-            const selectedTime = selectedTimes.shift();
-            if (selectedTime) {
-                roundMatches.push({ pair1, pair2, day: selectedTime.day, time: selectedTime.time, pista: selectedTime.pista });
-                
-                // Registrar las parejas que han jugado
-                playedPairs.add(pair1);
-                playedPairs.add(pair2);
-            } else {
-                console.error('No se encontró una hora o pista disponible para el día seleccionado.');
-            }
+            return matches;
         }
-        matches.push({ round, matches: roundMatches });
-        round++;
-    }
-    return matches;
-}
 
         function displayMatches(matches) {
             matchesTableBody.innerHTML = '';
@@ -382,7 +384,7 @@
             }
         }
 
-        generateCSVButton.addEventListener('click', function() {
+        generateCSVButton.addEventListener('click', function () {
             const matches = JSON.parse(localStorage.getItem('tournamentMatches'));
             if (matches && matches.length > 0) {
                 let csvContent = "data:text/csv;charset=utf-8,";
@@ -417,4 +419,5 @@
     </script>
 
 </body>
+
 </html>
