@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/cuadros.css">
+  <title>Torneo de Eliminación</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Torneo de Eliminación</h1>
+    <form id="teamsForm">
+      <label for="csvFile">Subir archivo CSV:</label>
+      <input type="file" id="csvFile" accept=".csv" required>
+      <button type="submit">Generar Torneo</button>
+    </form>
+    <div id="bracket" class="bracket">
+      <!-- Aquí se generará dinámicamente el esquema del torneo -->
+    </div>
+    <div class="download-button">
+      <button id="downloadButton">Descargar Imagen del Torneo</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+  <script>
+    document.getElementById('teamsForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const file = document.getElementById('csvFile').files[0];
+      
+      if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          const csv = e.target.result;
+          parseCSV(csv);
+        };
+        
+        reader.readAsText(file);
+      }
+    });
+
+    function parseCSV(csv) {
+      Papa.parse(csv, {
+        delimiter: ",",  // Delimitador para separar los campos
+        header: false,    // No hay encabezados en el CSV
+        skipEmptyLines: true, // Saltar líneas vacías (si las hay)
+        complete: function(results) {
+          const matches = results.data.map(row => {
+            if (row.length >= 3) {
+              return {
+                partido: row[0],
+                equipo1: row[1].split(' - ').map(team => team.trim()),
+                equipo2: row[2].split(' - ').map(team => team.trim())
+              };
+            } else {
+              console.error('Error: Formato incorrecto en una línea del CSV:', row);
+            }
+          }).filter(match => match); // Filtrar para eliminar elementos undefined
+
+          generateBracket(matches); // Generar el esquema del torneo con los partidos
+        },
+        error: function(error) {
+          console.error('Error al parsear el CSV:', error);
+          alert('Hubo un error al procesar el archivo CSV.');
+        }
+      });
+    }
+
+    function generateBracket(matches) {
+      const bracketDiv = document.getElementById('bracket');
+      bracketDiv.innerHTML = ''; // Limpiar el contenido previo del esquema del torneo
+
+      const rounds = [
+        { name: 'Primera ronda', matches: [0, 1, 2, 3] }, // Los índices corresponden a los partidos en 'matches'
+        { name: 'Semifinales', matches: [4, 5] },
+        { name: 'Final', matches: [6] }
+      ];
+
+      rounds.forEach((round, roundIndex) => {
+        const roundDiv = document.createElement('div');
+        roundDiv.classList.add('round');
+
+        const roundTitle = document.createElement('div');
+        roundTitle.classList.add('round-title');
+        roundTitle.textContent = round.name;
+        roundDiv.appendChild(roundTitle);
+
+        round.matches.forEach(matchIndex => {
+          const match = matches[matchIndex];
+          const matchDiv = document.createElement('div');
+          matchDiv.classList.add('match');
+
+          const team1Div = document.createElement('div');
+          team1Div.classList.add('team');
+          team1Div.textContent = match.equipo1.join(' & ');
+          matchDiv.appendChild(team1Div);
+
+          const vsDiv = document.createElement('div');
+          vsDiv.classList.add('vs');
+          vsDiv.textContent = 'vs';
+          matchDiv.appendChild(vsDiv);
+
+          const team2Div = document.createElement('div');
+          team2Div.classList.add('team');
+          team2Div.textContent = match.equipo2.join(' & ');
+          matchDiv.appendChild(team2Div);
+
+          roundDiv.appendChild(matchDiv);
+        });
+
+        bracketDiv.appendChild(roundDiv);
+      });
+
+      // Agregar el ganador final si existe
+      const winnerDiv = document.createElement('div');
+      winnerDiv.classList.add('round');
+      winnerDiv.innerHTML = '<div class="round-title">Ganador</div><div class="match"><div class="team winner" id="winnerTeam"></div></div>';
+      bracketDiv.appendChild(winnerDiv);
+
+      // Habilitar la descarga de la imagen del esquema del torneo
+      const downloadButton = document.getElementById('downloadButton');
+      downloadButton.addEventListener('click', function() {
+        // Capturar el contenido de bracketDiv como una imagen y guardarla como archivo
+        captureBracketImage(bracketDiv);
+      });
+    }
+
+    function captureBracketImage(bracketDiv) {
+      // Crear un elemento de lienzo temporal
+      const canvas = document.createElement('canvas');
+      const rect = bracketDiv.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      // Obtener el contexto de dibujo 2D
+      const ctx = canvas.getContext('2d');
+
+      // Dibujar el contenido de bracketDiv en el lienzo
+      ctx.fillStyle = '#ffffff'; // Fondo blanco opcional
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = '14px Arial'; // Estilo de fuente para el texto
+      ctx.fillStyle = '#000000'; // Color de texto negro
+      ctx.textAlign = 'left';
+
+      // Obtener todos los elementos hijos de bracketDiv
+      const elements = bracketDiv.querySelectorAll('*');
+
+      // Iterar sobre cada elemento y dibujarlo en el lienzo
+      elements.forEach(element => {
+        if (element.tagName === 'DIV') {
+          const rect = element.getBoundingClientRect();
+          const style = window.getComputedStyle(element);
+
+          // Dibujar el elemento solo si tiene dimensiones visibles
+          if (rect.width > 0 && rect.height > 0) {
+            if (element.classList.contains('round-title')) {
+              // Estilo especial para los títulos de ronda
+              ctx.font = 'bold 16px Arial';
+              ctx.fillText(element.textContent, rect.left, rect.top + rect.height);
+            } else if (element.classList.contains('match')) {
+              // Estilo especial para los partidos
+              const teams = element.querySelectorAll('.team');
+              if (teams.length === 2) {
+                ctx.fillText(teams[0].textContent, rect.left, rect.top + 20);
+                ctx.fillText(teams[1].textContent, rect.left, rect.top + 40);
+              }
+            } else {
+              // Estilo predeterminado para otros elementos
+              ctx.font = style.font;
+              ctx.fillText(element.textContent, rect.left, rect.top + rect.height);
+            }
+          }
+        }
+      });
+
+      // Convertir el lienzo a un blob y descargar como archivo
+      canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+
+        // Crear un enlace temporal para la descarga
+        const tempLink = document.createElement('a');
+        tempLink.href = url;
+        tempLink.setAttribute('download', 'torneo.png');
+        tempLink.style.display = 'none';
+        document.body.appendChild(tempLink);
+
+        // Simular clic en el enlace para iniciar la descarga
+        tempLink.click();
+
+        // Limpiar el elemento temporal después de un pequeño retraso
+        setTimeout(function() {
+          document.body.removeChild(tempLink);
+          window.URL.revokeObjectURL(url);
+        }, 500); // Retraso de 500 milisegundos (ajústalo según sea necesario)
+      });
+    }
+  </script>
+</body>
+</html>
