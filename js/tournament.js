@@ -1,7 +1,61 @@
 const availabilityTable = {
-    "2024-05-13": {
+    "Viernes": {
+        "Viernes":[],
         "08:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
         "09:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "10:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "11:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "12:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "13:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "14:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "15:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "16:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "17:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "18:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "19:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "20:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "21:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        
+        // Más horas según sea necesario...
+    },
+
+    "Sabado": {
+        "Sabado":[],
+        "08:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "09:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "10:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "11:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "12:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "13:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "14:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "15:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "16:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "17:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "18:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "19:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "20:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "21:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        
+        // Más horas según sea necesario...
+    },
+
+    "Domingo": {
+        "Domingo":[],
+        "08:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "09:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "10:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "11:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "12:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "13:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "14:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "15:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "16:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "17:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "18:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "19:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "20:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        "21:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
+        
         // Más horas según sea necesario...
     },
 };
@@ -188,6 +242,8 @@ function containsInvalidMatches(matches) {
 function createMatches(pairs, selectedTimes) {
     const matches = [];
     let timeIndex = 0;
+    let totalByes = 0;
+    let totalPairs = 0;
 
     // Shuffle function (Fisher-Yates shuffle)
     function shuffle(array) {
@@ -210,9 +266,12 @@ function createMatches(pairs, selectedTimes) {
         const pairsInCategory = pairsByCategory[category];
         
         // Calculate total pairs and ensure it's a multiple of 4
-        let totalPairs = pairsInCategory.length;
-        let additionalByes = (4 - (totalPairs % 4)) % 4;
+        let totalPairsCategory = pairsInCategory.length;
+        let additionalByes = (4 - (totalPairsCategory % 4)) % 4;
         
+        totalByes = totalByes + additionalByes;
+        totalPairs = totalPairs + totalPairsCategory;
+
         // Generate additional byes
         const byes = Array.from({ length: additionalByes }, () => ({
             player1: 'BYE',
@@ -231,18 +290,37 @@ function createMatches(pairs, selectedTimes) {
             if (i + 1 < shuffledPairs.length) {
                 const pair1 = shuffledPairs[i];
                 const pair2 = shuffledPairs[i + 1];
-                matches.push({
-                    pair1,
-                    pair2,
-                    time: selectedTimes[timeIndex % selectedTimes.length],
-                    category: category,
-                });
-                timeIndex++;
+                const matchTime = pair1.player1.startsWith('BYE') || pair2.player1.startsWith('BYE') ? null : selectedTimes[timeIndex % selectedTimes.length];
+
+                if (matchTime) {
+                    matches.push({
+                        pair1,
+                        pair2,
+                        time: matchTime,
+                        category: category,
+                    });
+                    timeIndex++;
+                } else {
+                    matches.push({
+                        pair1,
+                        pair2,
+                        time: { day: '', time: '', pista: '' },
+                        category: category,
+                    });
+                
+                }
             }
         }
+        
     });
 
-    return matches;
+        if( ((totalPairs + totalByes)/2) - totalByes > selectedTimes.length ){
+
+            alert ("La disponibilidad horaria no es suficiente")
+
+        }
+        
+        return matches;
 }
 
 function displayMatches(matches) {
@@ -274,7 +352,6 @@ generateCSVButton.addEventListener('click', function () {
         alert('No hay partidos generados para exportar.');
     }
 });
-
 
 function groupMatchesByCategory(matches) {
     return matches.reduce((acc, match) => {
@@ -309,6 +386,3 @@ function downloadCSV(csvContent, filename) {
     a.click();
     document.body.removeChild(a);
 }
-
-
-
