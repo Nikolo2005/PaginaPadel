@@ -53,9 +53,16 @@
                         <option value="tercera">Tercera</option>
                         <option value="cuarta">Cuarta</option>
                     </select>
+                    <label for="sex">Sexo:</label>
+                    <select id="sex" required>
+                        <option value="masculino">Masculino</option>
+                        <option value="femenino">Femenino</option>
+                        <option value="mixto">Mixto</option>
+                    </select>
                     <button type="submit">Agregar Pareja</button>
                 </form>
             </div>
+            
 
             <div id="tournament-table">
                 <h2>Cuadro de Torneo</h2>
@@ -64,6 +71,7 @@
                         <tr>
                             <th>Pareja</th>
                             <th>Categoría</th>
+                            <th>Sexo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -84,6 +92,8 @@
                             <th>Hora</th>
                             <th>Pista</th>
                             <th>Día</th>
+                            <th>Sexo</th>
+                            <th>Ronda</th>
                         </tr>
                     </thead>
                     <tbody id="matches-body">

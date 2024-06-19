@@ -18,46 +18,6 @@ const availabilityTable = {
         
         // Más horas según sea necesario...
     },
-
-    "Sabado": {
-        "Sabado":[],
-        "08:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "09:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "10:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "11:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "12:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "13:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "14:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "15:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "16:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "17:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "18:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "19:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "20:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "21:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        
-        // Más horas según sea necesario...
-    },
-
-    "Domingo": {
-        "Domingo":[],
-        "08:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "09:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "10:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "11:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "12:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "13:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "14:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "15:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "16:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "17:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "18:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "19:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "20:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        "21:15": ["Pista 1", "Pista 2", "Pista 3", "Pista 4", "Pista 5", "Pista 6"],
-        
-        // Más horas según sea necesario...
-    },
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -173,9 +133,10 @@ form.addEventListener('submit', function (event) {
     event.preventDefault();
     const pairInput = document.getElementById('pair').value;
     const category = document.getElementById('category').value;
+    const sex = document.getElementById('sex').value;
     const pairArray = pairInput.split('-').map(name => name.trim());
     if (pairArray.length === 2) {
-        const pair = { player1: pairArray[0], player2: pairArray[1], category };
+        const pair = { player1: pairArray[0], player2: pairArray[1], category, sex };
         let storedData = JSON.parse(localStorage.getItem('tournamentData')) || [];
         storedData.push(pair);
         localStorage.setItem('tournamentData', JSON.stringify(storedData));
@@ -190,7 +151,7 @@ function displayPairsInTournament(pairs) {
     tableBody.innerHTML = '';
     pairs.forEach(pair => {
         const newRow = document.createElement('tr');
-        newRow.innerHTML = `<td>${pair.player1} - ${pair.player2}</td><td>${pair.category}</td><td><button onclick="deletePair(this)">Eliminar</button></td>`;
+        newRow.innerHTML = `<td>${pair.player1} - ${pair.player2}</td><td>${pair.category}</td><td>${pair.sex}</td><td><button onclick="deletePair(this)">Eliminar</button></td>`;
         tableBody.appendChild(newRow);
     });
 }
@@ -241,9 +202,9 @@ function containsInvalidMatches(matches) {
 
 function createMatches(pairs, selectedTimes) {
     const matches = [];
-    let timeIndex = 0;
     let totalByes = 0;
     let totalPairs = 0;
+    let availabilitySufficient = true;
 
     // Shuffle function (Fisher-Yates shuffle)
     function shuffle(array) {
@@ -254,73 +215,95 @@ function createMatches(pairs, selectedTimes) {
         return array;
     }
 
-    // Group pairs by category
-    const pairsByCategory = pairs.reduce((acc, pair) => {
-        acc[pair.category] = acc[pair.category] || [];
-        acc[pair.category].push(pair);
+    // Group pairs by category and sex
+    const pairsByCategoryAndSex = pairs.reduce((acc, pair) => {
+        const key = `${pair.category}-${pair.sex}`;
+        acc[key] = acc[key] || [];
+        acc[key].push(pair);
         return acc;
     }, {});
 
-    // Generate matches for each category
-    Object.keys(pairsByCategory).forEach(category => {
-        const pairsInCategory = pairsByCategory[category];
-        
-        // Calculate total pairs and ensure it's a multiple of 4
-        let totalPairsCategory = pairsInCategory.length;
-        let additionalByes = (4 - (totalPairsCategory % 4)) % 4;
-        
-        totalByes = totalByes + additionalByes;
-        totalPairs = totalPairs + totalPairsCategory;
+    // Check if there is enough availability for all rounds in all categories and sexes
+    let totalRequiredMatches = 0;
+
+    Object.keys(pairsByCategoryAndSex).forEach(key => {
+        let pairsInCategoryAndSex = pairsByCategoryAndSex[key];
+        const totalPairsCategoryAndSex = pairsInCategoryAndSex.length;
+        totalPairs += totalPairsCategoryAndSex;
+        const nextPowerOf2 = Math.pow(2, Math.ceil(Math.log2(totalPairsCategoryAndSex)));
+        totalByes += nextPowerOf2 - totalPairsCategoryAndSex;
+        totalRequiredMatches += nextPowerOf2 - 1;
+    });
+
+    if (totalRequiredMatches > selectedTimes.length) {
+        availabilitySufficient = false;
+    }
+
+    if (!availabilitySufficient) {
+        alert('No hay suficiente disponibilidad para generar los partidos. Seleccione más disponibilidad.');
+        return [];
+    }
+
+    let timeIndex = 0;
+
+    Object.keys(pairsByCategoryAndSex).forEach(key => {
+        let pairsInCategoryAndSex = pairsByCategoryAndSex[key];
+
+        // Calculate total pairs and ensure it's a power of 2
+        const totalPairsCategoryAndSex = pairsInCategoryAndSex.length;
+        const nextPowerOf2 = Math.pow(2, Math.ceil(Math.log2(totalPairsCategoryAndSex)));
+        const additionalByes = nextPowerOf2 - totalPairsCategoryAndSex;
 
         // Generate additional byes
         const byes = Array.from({ length: additionalByes }, () => ({
             player1: 'BYE',
             player2: '',
-            category,
+            category: pairsInCategoryAndSex[0].category,
+            sex: pairsInCategoryAndSex[0].sex,
         }));
 
         // Merge real pairs with byes
-        const mergedPairs = [...pairsInCategory, ...byes];
+        const mergedPairs = [...pairsInCategoryAndSex, ...byes];
 
         // Shuffle mergedPairs
         const shuffledPairs = shuffle(mergedPairs);
 
-        // Generate matches within the category
-        for (let i = 0; i < shuffledPairs.length; i += 2) {
-            if (i + 1 < shuffledPairs.length) {
-                const pair1 = shuffledPairs[i];
-                const pair2 = shuffledPairs[i + 1];
-                const matchTime = pair1.player1.startsWith('BYE') || pair2.player1.startsWith('BYE') ? null : selectedTimes[timeIndex % selectedTimes.length];
+        // Generate matches for the first round within the category and sex
+        let currentRoundPairs = shuffledPairs;
+        let roundNumber = 1;
 
-                if (matchTime) {
-                    matches.push({
-                        pair1,
-                        pair2,
-                        time: matchTime,
-                        category: category,
-                    });
-                    timeIndex++;
-                } else {
-                    matches.push({
-                        pair1,
-                        pair2,
-                        time: { day: '', time: '', pista: '' },
-                        category: category,
-                    });
-                
-                }
+        while (currentRoundPairs.length > 1) {
+            const nextRoundPairs = [];
+            for (let i = 0; i < currentRoundPairs.length; i += 2) {
+                const pair1 = currentRoundPairs[i];
+                const pair2 = currentRoundPairs[i + 1];
+
+                const matchTime = selectedTimes[timeIndex % selectedTimes.length];
+                timeIndex++;
+
+                matches.push({
+                    pair1: pair1,
+                    pair2: pair2,
+                    time: matchTime,
+                    category: pairsInCategoryAndSex[0].category,
+                    sex: pairsInCategoryAndSex[0].sex,
+                    round: roundNumber,
+                });
+
+                // For the next round, we push a placeholder pair
+                nextRoundPairs.push({
+                    player1: '',
+                    player2: '',
+                    category: pairsInCategoryAndSex[0].category,
+                    sex: pairsInCategoryAndSex[0].sex,
+                });
             }
+            currentRoundPairs = nextRoundPairs;
+            roundNumber++;
         }
-        
     });
 
-        if( ((totalPairs + totalByes)/2) - totalByes > selectedTimes.length ){
-
-            alert ("La disponibilidad horaria no es suficiente")
-
-        }
-        
-        return matches;
+    return matches;
 }
 
 function displayMatches(matches) {
@@ -329,11 +312,13 @@ function displayMatches(matches) {
         const newRow = document.createElement('tr');
         newRow.innerHTML = `
             <td>${match.category}</td>
-            <td>${match.pair1.player1} - ${match.pair1.player2}</td>
-            <td>${match.pair2.player1} - ${match.pair2.player2}</td>
+            <td>${match.pair1.player1 ? `${match.pair1.player1} - ${match.pair1.player2}` : 'TBD'}</td>
+            <td>${match.pair2.player1 ? `${match.pair2.player1} - ${match.pair2.player2}` : 'TBD'}</td>
             <td>${match.time.time}</td>
             <td>${match.time.pista}</td>
             <td>${match.time.day}</td>
+            <td>${match.sex}</td>
+            <td>Ronda ${match.round}</td>
         `;
         matchesTableBody.appendChild(newRow);
     });
@@ -342,22 +327,25 @@ function displayMatches(matches) {
 generateCSVButton.addEventListener('click', function () {
     const storedMatches = JSON.parse(localStorage.getItem('tournamentMatches'));
     if (storedMatches) {
-        const matchesByCategory = groupMatchesByCategory(storedMatches);
-        Object.keys(matchesByCategory).forEach(category => {
-            const matches = matchesByCategory[category];
-            const csvContent = convertMatchesToCSV(matches);
-            downloadCSV(csvContent, `partidos_${category}.csv`);
+        const matchesByCategoryAndSex = groupMatchesByCategoryAndSex(storedMatches);
+        Object.keys(matchesByCategoryAndSex).forEach(category => {
+            Object.keys(matchesByCategoryAndSex[category]).forEach(sex => {
+                const matches = matchesByCategoryAndSex[category][sex];
+                const csvContent = convertMatchesToCSV(matches);
+                downloadCSV(csvContent, `partidos_${category}_${sex}.csv`);
+            });
         });
     } else {
         alert('No hay partidos generados para exportar.');
     }
 });
 
-function groupMatchesByCategory(matches) {
+function groupMatchesByCategoryAndSex(matches) {
     return matches.reduce((acc, match) => {
         const category = match.category;
-        acc[category] = acc[category] || [];
-        acc[category].push(match);
+        const sex = match.sex;
+        acc[category] = acc[category] || { masculino: [], femenino: [], mixto: [] };
+        acc[category][sex].push(match);
         return acc;
     }, {});
 }
@@ -370,6 +358,8 @@ function convertMatchesToCSV(matches) {
         match.time.time,
         match.time.pista,
         match.time.day,
+        match.sex,
+        `Ronda ${match.round}`,
     ]);
 
     const csvContent = rows.map(row => row.join(',')).join('\n');
@@ -386,3 +376,4 @@ function downloadCSV(csvContent, filename) {
     a.click();
     document.body.removeChild(a);
 }
+
