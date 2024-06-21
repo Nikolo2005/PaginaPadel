@@ -25,10 +25,26 @@ function deletePair(button) {
     const player1 = pairNames[0].trim();
     const player2 = pairNames[1].trim();
     let storedData = JSON.parse(localStorage.getItem('tournamentData')) || [];
-    storedData = storedData.filter(pair => !(pair.player1 === player1 && pair.player2 === player2));
-    localStorage.setItem('tournamentData', JSON.stringify(storedData));
-    displayPairsInTournament(storedData);
+    
+    // Encontrar el índice de la primera pareja que coincida
+    const indexToDelete = storedData.findIndex(pair => pair.player1 === player1 && pair.player2 === player2);
+    
+    if (indexToDelete !== -1) {
+        // Mostrar confirmación antes de eliminar
+        const confirmDelete = confirm(`¿Estás seguro de que deseas eliminar la pareja ${player1} - ${player2}?`);
+        
+        if (confirmDelete) {
+            // Eliminar solo la primera instancia encontrada
+            storedData.splice(indexToDelete, 1);
+            localStorage.setItem('tournamentData', JSON.stringify(storedData));
+            displayPairsInTournament(storedData);
+        }
+    } else {
+        console.warn('No se encontró la pareja para eliminar.');
+    }
 }
+
+
 
 const form = document.getElementById('tournament-form');
 form.addEventListener('submit', function (event) {
@@ -44,7 +60,10 @@ form.addEventListener('submit', function (event) {
         storedData.push(pair);
         localStorage.setItem('tournamentData', JSON.stringify(storedData));
         displayPairsInTournament(storedData);
-        form.reset();
+
+        // Limpiar solo los campos de jugador1 y jugador2
+        document.getElementById('player1').value = '';
+        document.getElementById('player2').value = '';
     } else {
         alert('Debe ingresar los nombres de ambos jugadores.');
     }

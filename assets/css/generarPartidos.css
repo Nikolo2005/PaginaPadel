@@ -1,0 +1,10 @@
+.hidden-row {
+    display: none;
+}
+
+.category-header {
+    cursor: pointer;
+    color: rgb(255, 115, 0);
+    background-color: rgba(29, 29, 29, 0.459);
+
+}

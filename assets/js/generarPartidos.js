@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     addEventListeners();
-    // Attempt to display matches on page load
+    // Intentar mostrar los partidos al cargar la página
     const matches = JSON.parse(localStorage.getItem('tournamentMatches')) || [];
-    displayMatches(matches);
+    displayMatchesByCategory(matches);
 });
-
 
 function addEventListeners() {
     const deleteAllButton = document.getElementById('delete-all-btn');
@@ -21,9 +20,11 @@ function deleteAllData() {
     if (confirmDelete) {
         localStorage.removeItem('tournamentData');
         localStorage.removeItem('tournamentMatches');
-        // No se manipula directamente el DOM relacionado con 'tournament-body'
+        const matchesBody = document.getElementById('matches-body');
+        matchesBody.innerHTML = ''; // Limpiar los partidos al eliminar datos
     }
 }
+
 
 function generateMatches() {
     const storedData = JSON.parse(localStorage.getItem('tournamentData'));
@@ -35,7 +36,7 @@ function generateMatches() {
             matches = createMatches(storedData, availabilityData);
         } while (containsInvalidMatches(matches));
         localStorage.setItem('tournamentMatches', JSON.stringify(matches));
-        displayMatches(matches);
+        displayMatchesByCategory(matches);
     } else {
         alert('Debe haber al menos dos parejas y una disponibilidad seleccionada para generar partidos.');
     }
@@ -49,7 +50,6 @@ function createMatches(pairs, availabilityData) {
     const matches = [];
     let totalByes = 0;
     let totalPairs = 0;
-    let availabilitySufficient = true;
     let timeIndex = 0;
 
     // Shuffle function (Fisher-Yates shuffle)
@@ -81,11 +81,10 @@ function createMatches(pairs, availabilityData) {
         totalRequiredMatches += nextPowerOf2 - 1;
     });
 
-    if (totalRequiredMatches > getTotalAvailableSlots(availabilityData)) {
-        availabilitySufficient = false;
-    }
+    const totalAvailableSlots = getTotalAvailableSlots(availabilityData);
+    const requiredNonByeMatches = totalRequiredMatches - totalByes;
 
-    if (!availabilitySufficient) {
+    if (requiredNonByeMatches > totalAvailableSlots) {
         alert('No hay suficiente disponibilidad para generar los partidos. Seleccione más disponibilidad.');
         return [];
     }
@@ -122,8 +121,11 @@ function createMatches(pairs, availabilityData) {
                 const pair1 = currentRoundPairs[i];
                 const pair2 = currentRoundPairs[i + 1];
 
-                const matchTime = getNextAvailableSlot(availabilityData, timeIndex);
-                timeIndex++;
+                let matchTime = null;
+                if (pair1.player1 !== 'BYE' && pair2.player1 !== 'BYE') {
+                    matchTime = getNextAvailableSlot(availabilityData, timeIndex);
+                    timeIndex++;
+                }
 
                 matches.push({
                     pair1: pair1,
@@ -172,24 +174,55 @@ function getNextAvailableSlot(availabilityData, index) {
     return slots[index % slots.length];
 }
 
-function displayMatches(matches) {
-    const matchesTableBody = document.getElementById('matches-body');
-    matchesTableBody.innerHTML = '';
-    matches.forEach((match, index) => {
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td>${match.category}</td>
-            <td>${match.pair1.player1 ? `${match.pair1.player1} - ${match.pair1.player2}` : 'TBD'}</td>
-            <td>${match.pair2.player1 ? `${match.pair2.player1} - ${match.pair2.player2}` : 'TBD'}</td>
-            <td>${match.time.day}</td>
-            <td>${match.time.time}</td>
-            <td>${match.time.pista}</td>
-            <td>${match.sex}</td>
-            <td>${match.round}</td>
-        `;
-        matchesTableBody.appendChild(newRow);
+function displayMatchesByCategory(matches) {
+    const matchesBody = document.getElementById('matches-body');
+    matchesBody.innerHTML = ''; // Limpiar el cuerpo de la tabla antes de añadir los nuevos partidos
+
+    // Agrupar matches por categoría y sexo
+    const matchesByCategoryAndSex = matches.reduce((acc, match) => {
+        const key = `${match.category}-${match.sex}`;
+        acc[key] = acc[key] || [];
+        acc[key].push(match);
+        return acc;
+    }, {});
+
+    // Iterar sobre cada grupo y generar filas de tabla por categoría
+    Object.keys(matchesByCategoryAndSex).forEach(key => {
+        const matchesInCategory = matchesByCategoryAndSex[key];
+
+        // Crear fila de encabezado para la categoría
+        const categoryRow = document.createElement('tr');
+        categoryRow.classList.add('category-header');
+        categoryRow.innerHTML = `<td colspan="8">${key}</td>`;
+        categoryRow.addEventListener('click', () => {
+            toggleCategoryMatches(key); // Función para mostrar/ocultar partidos al hacer clic en el encabezado
+        });
+        matchesBody.appendChild(categoryRow);
+
+        // Crear filas de partidos dentro de la categoría
+        matchesInCategory.forEach(match => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${match.pair1.player1 !== 'BYE' ? `${match.pair1.player1} - ${match.pair1.player2}` : 'BYE'}</td>
+                <td>${match.pair2.player1 !== 'BYE' ? `${match.pair2.player1} - ${match.pair2.player2}` : 'BYE'}</td>
+                <td>${match.time ? match.time.day : ''}</td>
+                <td>${match.time ? match.time.time : ''}</td>
+                <td>${match.time ? match.time.pista : ''}</td>
+                <td>${match.round}</td>
+            `;
+            row.classList.add('hidden-row', `${key}-matches`); // Ocultar las filas por defecto
+            matchesBody.appendChild(row);
+        });
     });
 }
+
+function toggleCategoryMatches(categoryKey) {
+    const matchesRows = document.querySelectorAll(`.${categoryKey}-matches`);
+    matchesRows.forEach(row => {
+        row.classList.toggle('hidden-row'); // Alternar clase para mostrar/ocultar las filas de partidos
+    });
+}
+
 
 function generateCSV() {
     const matches = JSON.parse(localStorage.getItem('tournamentMatches')) || [];
@@ -205,14 +238,15 @@ function generateCSV() {
     // Iterar sobre cada grupo y generar CSV
     Object.keys(matchesByCategoryAndSex).forEach(key => {
         const csvRows = [
-            ['Categoría', 'Pareja 1', 'Pareja 2', 'Día', 'Hora', 'Pista', 'Ronda'],
+            ['Categoría', 'Pareja 1', 'Pareja 2', 'Día', 'Hora', 'Pista', 'Sexo', 'Ronda'],
             ...matchesByCategoryAndSex[key].map(match => [
                 match.category,
                 `${match.pair1.player1} - ${match.pair1.player2}`,
                 `${match.pair2.player1} - ${match.pair2.player2}`,
-                match.time.day,
-                match.time.time,
-                match.time.pista,
+                match.time ? match.time.day : '',
+                match.time ? match.time.time : '',
+                match.time ? match.time.pista : '',
+                match.sex,
                 match.round,
             ]),
         ];
@@ -227,3 +261,4 @@ function generateCSV() {
         document.body.removeChild(link);
     });
 }
+
