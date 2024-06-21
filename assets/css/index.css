@@ -25,6 +25,15 @@ body {
     margin-bottom: 20px;
 }
 
+.sidebar-image {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 100%;
+    height: auto; 
+}
+
 .sidebar button {
     width: 100%;
     padding: 10px;
@@ -78,7 +87,6 @@ body {
 
 .container {
     width: 100%;
-    max-width: 800px;
     background-color: #3c3c3c;
     padding: 20px;
     border-radius: 8px;

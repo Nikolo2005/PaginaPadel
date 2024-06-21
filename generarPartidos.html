@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/index.css">
+    
 </head>
 
 <body>
     <div class="sidebar">
+        <img src="favicon.ico" class="sidebar-image">
         <a href="index.html"><button>Inicio</button></a>
         <a href="disponibilidad.html"><button>Pistas/Horarios</button></a>
         <a href="inscripciones.html"><button>Inscripciones</button></a>
         <a href="generarPartidos.html"><button class="active-button">Partidos</button></a>
         <button id="generate-matches-btn" class="button-subOption">Generar Partidos</button>
-        <button id="generate-csv-btn" class="button-subOption">Generar CSV de Partidos</button>
         <a href="cuadrosProbar.html"><button class="button-subOption">Generar Cuadro</button></a>
         <button id="delete-all-btn">Borrar todas las parejas y datos guardados</button>
     </div>
@@ -41,8 +41,10 @@
                     </tbody>
                 </table>
             </div>
+            <button id="generate-csv-btn" class="button-subOption">Descargar partidos</button>
         </div>
     </div>
+    
 
     <script src="assets/js/generarPartidos.js"></script>
 </body>

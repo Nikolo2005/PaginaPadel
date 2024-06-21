@@ -14,11 +14,11 @@
 
 #day-input {
     margin-right: 10px;
-    padding: 5px;
+
 }
 
 #add-day-btn {
-    padding: 5px 10px;
+    margin-top: 1em;
     cursor: pointer;
 }
 
@@ -31,13 +31,13 @@
 }
 
 #availability-tables table {
-    width: 100%;
+    margin: 0 auto;
+    width: 80%;
     border-collapse: collapse;
 }
 
 #availability-tables th, #availability-tables td {
     border: 1px solid #000000;
-    padding: 8px;
     text-align: center;
 }
 

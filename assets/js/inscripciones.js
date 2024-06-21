@@ -33,20 +33,23 @@ function deletePair(button) {
 const form = document.getElementById('tournament-form');
 form.addEventListener('submit', function (event) {
     event.preventDefault();
-    const pairInput = document.getElementById('pair').value;
+    const player1Input = document.getElementById('player1').value.trim();
+    const player2Input = document.getElementById('player2').value.trim();
     const category = document.getElementById('category').value;
     const sex = document.getElementById('sex').value;
-    const pairArray = pairInput.split('-').map(name => name.trim());
-    if (pairArray.length === 2) {
-        const pair = { player1: pairArray[0], player2: pairArray[1], category, sex };
+
+    if (player1Input && player2Input) {
+        const pair = { player1: player1Input, player2: player2Input, category, sex };
         let storedData = JSON.parse(localStorage.getItem('tournamentData')) || [];
         storedData.push(pair);
         localStorage.setItem('tournamentData', JSON.stringify(storedData));
         displayPairsInTournament(storedData);
+        form.reset();
     } else {
-        alert('Debe ingresar dos nombres separados por un guión para formar una pareja.');
+        alert('Debe ingresar los nombres de ambos jugadores.');
     }
 });
+
 
 const deleteAllButton = document.getElementById('delete-all-btn');
 deleteAllButton.addEventListener('click', function () {
