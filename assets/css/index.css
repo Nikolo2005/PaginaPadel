@@ -11,7 +11,7 @@ body {
 }
 
 .sidebar {
-    width: 250px;
+    width: 17%;
     background-color: #1a1a1a;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
@@ -35,6 +35,32 @@ body {
     cursor: pointer;
     margin-bottom: 10px;
     transition: background-color 0.3s ease;
+}
+
+.sidebar .button-subOption{
+    width: 100%;
+    padding: 10px;
+    background-color: #474747;
+    color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar .active-button{
+
+    width: 100%;
+    padding: 10px;
+    background-color: #696868;
+    color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+    
 }
 
 .sidebar button:hover {

@@ -4,107 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organizador de Torneos de Pádel</title>
-    <link rel="stylesheet" href="css/index.css">
+    <title>Organizador de Torneos</title>
+    <link rel="stylesheet" href="assets/css/index.css">
 </head>
 
 <body>
     <div class="sidebar">
-        <h2>Opciones</h2>
+        <a href="index.html"><button class="active-button">Inicio</button></a>
+        <a href="disponibilidad.html"><button>Pistas/Horarios</button></a>
+        <a href="inscripciones.html"><button>Inscripciones</button></a>
+        <a href="generarPartidos.html"><button>Partidos</button></a>
         <button id="delete-all-btn">Borrar todas las parejas y datos guardados</button>
-        <button id="generate-matches-btn">Generar Partidos</button>
-        <button id="generate-csv-btn">Generar CSV de Partidos</button>
-        <a href="cuadrosProbar.html"><button>Generar Cuadro</button></a>
     </div>
 
     <div class="content">
         <div class="container">
             <h1>Organizador de Torneos de Pádel</h1>
 
-            <!-- Sección de la tabla de disponibilidad -->
-            <div id="availability-table">
-                <h2>Seleccione la disponibilidad de las horas</h2>
-                <table id="availability">
-                    <thead>
-                        <tr>
-                            <th>Hora</th>
-                            <th>Pista 1</th>
-                            <th>Pista 2</th>
-                            <th>Pista 3</th>
-                            <th>Pista 4</th>
-                            <th>Pista 5</th>
-                            <th>Pista 6</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Las filas para las horas se generarán dinámicamente con JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div id="form-container">
-                <form id="tournament-form">
-                    <label for="pair">Pareja (formato: Jugador1 - Jugador2):</label>
-                    <input type="text" id="pair" required>
-                    <label for="category">Categoría:</label>
-                    <select id="category" required>
-                        <option value="primera">Primera</option>
-                        <option value="segunda">Segunda</option>
-                        <option value="tercera">Tercera</option>
-                        <option value="cuarta">Cuarta</option>
-                    </select>
-                    <label for="sex">Sexo:</label>
-                    <select id="sex" required>
-                        <option value="masculino">Masculino</option>
-                        <option value="femenino">Femenino</option>
-                        <option value="mixto">Mixto</option>
-                    </select>
-                    <button type="submit">Agregar Pareja</button>
-                </form>
-            </div>
-            
-
-            <div id="tournament-table">
-                <h2>Cuadro de Torneo</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Pareja</th>
-                            <th>Categoría</th>
-                            <th>Sexo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tournament-body">
-                        <!-- Aquí se mostrarán las parejas del torneo -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div id="tournament-matches">
-                <h2>Partidos del Torneo</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Categoría</th>
-                            <th>Pareja 1</th>
-                            <th>Pareja 2</th>
-                            <th>Hora</th>
-                            <th>Pista</th>
-                            <th>Día</th>
-                            <th>Sexo</th>
-                            <th>Ronda</th>
-                        </tr>
-                    </thead>
-                    <tbody id="matches-body">
-                        <!-- Aquí se mostrarán los partidos del torneo -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <script src="js/tournament.js"></script>
 </body>
 
 </html>

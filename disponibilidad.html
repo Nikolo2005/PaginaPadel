@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Torneos</title>
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/disponibilidad.css">
+</head>
+
+<style>
+
+    
+</style>
+
+<body>
+    <div class="sidebar">
+        <a href="index.html"><button>Inicio</button></a>
+        <a href="disponibilidad.html"><button class="active-button">Pistas/Horarios</button></a>
+        <a href="inscripciones.html"><button>Inscripciones</button></a>
+        <a href="generarPartidos.html"><button>Partidos</button></a>
+        <button id="delete-all-btn">Borrar todas las parejas y datos guardados</button>
+    </div>
+
+    <div class="content">
+        <div class="container">
+    
+
+            <!-- Sección para seleccionar días -->
+            <div id="day-selection">
+                <h2>Horarios y Disponibilidad</h2>
+                <input type="text" id="day-input" placeholder="Añadir día (ej. Lunes)">
+                <button id="add-day-btn">Añadir Día</button>
+            </div>
+
+            <!-- Sección de la tabla de disponibilidad -->
+            <div id="availability-tables">
+                <!-- Las tablas de disponibilidad para los días se generarán dinámicamente con JavaScript -->
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/disponibilidad.js"></script>
+</body>
+
+</html>

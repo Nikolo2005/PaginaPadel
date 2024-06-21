@@ -1,0 +1,46 @@
+.availability-cell {
+    cursor: pointer;
+    background-color: #ffffff; /* Color de fondo por defecto */
+    padding: 5px;
+}
+
+.availability-cell.selected {
+    background-color: #f7984b; /* Color de fondo cuando está seleccionado */
+}
+
+#day-selection {
+    margin-bottom: 20px;
+}
+
+#day-input {
+    margin-right: 10px;
+    padding: 5px;
+}
+
+#add-day-btn {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#availability-tables {
+    margin-top: 20px;
+}
+
+#availability-tables > div {
+    margin-bottom: 20px;
+}
+
+#availability-tables table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#availability-tables th, #availability-tables td {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: center;
+}
+
+#availability-tables th {
+    background-color: #302f2f;
+}
