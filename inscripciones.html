@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organizador de Torneos</title>
-    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/inscripciones.css">
 </head>
-
 <body>
     <div class="sidebar">
         <img src="favicon.png" class="sidebar-image">
@@ -22,6 +21,8 @@
         <div class="container">
             <div id="form-container">
                 <form id="tournament-form">
+                    <h2>Inscripciones de la prueba</h2>
+
                     <label for="player1">Jugador 1:</label>
                     <input type="text" id="player1" required>
                     <label for="player2">Jugador 2:</label>
@@ -41,7 +42,6 @@
                     </select>
                     <button type="submit">Agregar Pareja</button>
                 </form>
-                
             </div>
 
             <div id="tournament-table">
@@ -65,5 +65,4 @@
 
     <script src="assets/js/inscripciones.js"></script>
 </body>
-
 </html>

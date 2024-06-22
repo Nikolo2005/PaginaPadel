@@ -3,6 +3,26 @@ h1, h2 {
     color: #f0f0f0;
 }
 
+form {
+    display: grid;
+    gap: 10px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #2c2c2c;
+    color: #f0f0f0;
+    box-sizing: border-box;
+}
+
 button {
     width: auto;
     padding: 12px;
@@ -15,7 +35,6 @@ button {
 }
 
 
-/* Tablas */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -27,20 +46,13 @@ table {
 th, td {
     padding: 4px;
     text-align: left;
-    border: 1px solid #000000;
+    border-bottom: 1px solid #555;
 }
 
 th {
     background-color: #444;
 }
 
-tr:nth-child(even) {
-    background-color: #3c3c3c;
-}
-
-.hidden-row {
-    display: none;
-}
 
 .category-header {
     cursor: pointer;
@@ -48,10 +60,6 @@ tr:nth-child(even) {
     background-color: rgba(29, 29, 29, 0.459);
 
 }
-
-.overflow-cell {
-    max-width: 300px; /* Ancho máximo de la celda */
-    white-space: nowrap; /* Evita que el contenido se divida en varias líneas */
-    overflow: hidden; /* Oculta el desbordamiento */
-    text-overflow: ellipsis; /* Añade "..." al contenido desbordado */
+.hidden-row {
+    display: none;
 }

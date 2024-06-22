@@ -118,8 +118,13 @@ function createMatches(pairs, availabilityData) {
         while (currentRoundPairs.length > 1) {
             const nextRoundPairs = [];
             for (let i = 0; i < currentRoundPairs.length; i += 2) {
-                const pair1 = currentRoundPairs[i];
-                const pair2 = currentRoundPairs[i + 1];
+                let pair1 = currentRoundPairs[i];
+                let pair2 = currentRoundPairs[i + 1];
+
+                // Ensure BYE is always in pair2
+                if (pair1.player1 === 'BYE' && pair2.player1 !== 'BYE') {
+                    [pair1, pair2] = [pair2, pair1];
+                }
 
                 let matchTime = null;
                 if (pair1.player1 !== 'BYE' && pair2.player1 !== 'BYE') {
@@ -193,7 +198,7 @@ function displayMatchesByCategory(matches) {
         // Crear fila de encabezado para la categoría
         const categoryRow = document.createElement('tr');
         categoryRow.classList.add('category-header');
-        categoryRow.innerHTML = `<td colspan="8">${key}</td>`;
+        categoryRow.innerHTML = `<td colspan="6">${key}</td>`;
         categoryRow.addEventListener('click', () => {
             toggleCategoryMatches(key); // Función para mostrar/ocultar partidos al hacer clic en el encabezado
         });
@@ -203,8 +208,8 @@ function displayMatchesByCategory(matches) {
         matchesInCategory.forEach(match => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${match.pair1.player1 !== 'BYE' ? `${match.pair1.player1} - ${match.pair1.player2}` : 'BYE'}</td>
-                <td>${match.pair2.player1 !== 'BYE' ? `${match.pair2.player1} - ${match.pair2.player2}` : 'BYE'}</td>
+                <td class="overflow-cell">${match.pair1.player1 !== 'BYE' ? `${match.pair1.player1} - ${match.pair1.player2}` : 'BYE'}</td>
+                <td class="overflow-cell">${match.pair2.player1 !== 'BYE' ? `${match.pair2.player1} - ${match.pair2.player2}` : 'BYE'}</td>
                 <td>${match.time ? match.time.day : ''}</td>
                 <td>${match.time ? match.time.time : ''}</td>
                 <td>${match.time ? match.time.pista : ''}</td>
