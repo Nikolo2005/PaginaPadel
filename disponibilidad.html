@@ -16,24 +16,29 @@
         <a href="disponibilidad.html"><button class="active-button">Pistas/Horarios</button></a>
         <a href="inscripciones.html"><button>Inscripciones</button></a>
         <a href="generarPartidos.html"><button>Partidos</button></a>
-        <button id="delete-all-btn">Borrar todas las parejas y datos guardados</button>
     </div>
 
     <div class="content">
         <div class="container">
-    
-
             <!-- Sección para seleccionar días -->
-            <div id="day-selection">
-                <h2>Horarios y Disponibilidad</h2>
-                <input type="text" id="day-input" placeholder="Añadir día (ej. Lunes)">
-                <button id="add-day-btn">Añadir Día</button>
-            </div>
+            <select id="day-select">
+                <option value="" disabled selected>Selecciona un día</option>
+                <option value="Lunes">Lunes</option>
+                <option value="Martes">Martes</option>
+                <option value="Miércoles">Miércoles</option>
+                <option value="Jueves">Jueves</option>
+                <option value="Viernes">Viernes</option>
+                <option value="Sábado">Sábado</option>
+                <option value="Domingo">Domingo</option>
+            </select>
+            <button id="add-day-btn">Añadir Día</button>
 
             <!-- Sección de la tabla de disponibilidad -->
             <div id="availability-tables">
                 <!-- Las tablas de disponibilidad para los días se generarán dinámicamente con JavaScript -->
             </div>
+            <button id="delete-all-btn">Borrar todos los días</button>
+
         </div>
     </div>
     <script src="assets/js/disponibilidad.js"></script>

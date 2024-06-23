@@ -82,7 +82,7 @@ select {
 }
 
 button {
-    width: 100%;
+    width: auto;
     padding: 12px;
     background-color: #ff5100bb;
     color: #fff;
@@ -90,4 +90,31 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.5s ease;
+}
+
+
+.availability-cell {
+    cursor: pointer;
+    background-color: #ffffff; 
+    padding: 5px;
+    transition: background-color 0.3s ease; 
+}
+
+.availability-cell.selected {
+    background-color: #f5a768; 
+}
+
+.availability-cell:hover,
+.pista-cell:hover {
+    background-color: #cac4b6; 
+    cursor: pointer;
+}
+
+.hour-cell:hover {
+
+    cursor: pointer;
+}
+
+.availability-cell.preview {
+    background-color: #cac4b6; 
 }

@@ -18,7 +18,6 @@ function addEventListeners() {
 function deleteAllData() {
     const confirmDelete = confirm('¿Estás seguro de que deseas borrar todas las parejas y datos guardados?');
     if (confirmDelete) {
-        localStorage.removeItem('tournamentData');
         localStorage.removeItem('tournamentMatches');
         const matchesBody = document.getElementById('matches-body');
         matchesBody.innerHTML = ''; // Limpiar los partidos al eliminar datos

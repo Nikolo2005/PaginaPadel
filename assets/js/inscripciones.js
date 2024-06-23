@@ -1,117 +1,148 @@
 document.addEventListener('DOMContentLoaded', () => {
-    addEventListeners();
-    const pairs = JSON.parse(localStorage.getItem('tournamentData')) || [];
-    displayPairsByCategory(pairs);
-    restoreCategoryState();
+    initializeApp();
 });
 
+function initializeApp() {
+    addEventListeners();
+    const pairs = getStoredPairs();
+    displayPairsByCategory(pairs);
+    restoreCategoryState();
+}
+
+function getStoredPairs() {
+    return JSON.parse(localStorage.getItem('tournamentData')) || [];
+}
+
+function addEventListeners() {
+    document.getElementById('tournament-form').addEventListener('submit', addPair);
+    document.getElementById('delete-all-btn').addEventListener('click', deleteAllData);
+}
+
+function addPair(event) {
+    event.preventDefault();
+
+    const newPair = getPairFromForm();
+    const pairs = getStoredPairs();
+    
+    pairs.push(newPair);
+    localStorage.setItem('tournamentData', JSON.stringify(pairs));
+    
+    displayPairsByCategory(pairs);
+    resetPairInputs();
+    animateAddButton();
+}
+
+function getPairFromForm() {
+    return {
+        player1: document.getElementById('player1').value,
+        player2: document.getElementById('player2').value,
+        category: document.getElementById('category').value,
+        sex: document.getElementById('sex').value
+    };
+}
+
+function resetPairInputs() {
+    document.getElementById('player1').value = '';
+    document.getElementById('player2').value = '';
+}
+
+function animateAddButton() {
+    const addButton = document.querySelector('#tournament-form button[type="submit"]');
+    addButton.textContent = 'Pareja añadida';
+    addButton.style.backgroundColor = '#45a049'; 
+    addButton.disabled = true; 
+    setTimeout(() => {
+        addButton.textContent = 'Agregar Pareja';
+        addButton.style.backgroundColor = '#ff5100bb'; 
+        addButton.disabled = false; 
+    }, 700); // Cambia de vuelta a "Agregar Pareja" después de 0.7 segundo
+}
+
+function deleteAllData() {
+    if (confirm('¿Estás seguro de que deseas borrar todas las parejas?')) {
+        localStorage.removeItem('tournamentData');
+        document.getElementById('tournament-body').innerHTML = '';
+    }
+}
+
+function displayPairsByCategory(pairs) {
+    const tournamentBody = document.getElementById('tournament-body');
+    tournamentBody.innerHTML = '';
+
+    const pairsByCategoryAndSex = groupPairsByCategoryAndSex(pairs);
+
+    Object.keys(pairsByCategoryAndSex).forEach(key => {
+        createCategoryRow(tournamentBody, key);
+        pairsByCategoryAndSex[key].forEach(pair => createPairRow(tournamentBody, pair, key));
+    });
+}
+
+function groupPairsByCategoryAndSex(pairs) {
+    return pairs.reduce((acc, pair) => {
+        const key = `${pair.category}-${pair.sex}`;
+        acc[key] = acc[key] || [];
+        acc[key].push(pair);
+        return acc;
+    }, {});
+}
+
+function createCategoryRow(tournamentBody, key) {
+    const categoryRow = document.createElement('tr');
+    categoryRow.classList.add('category-header');
+    
+    const categoryCell = document.createElement('td');
+    categoryCell.colSpan = 4;
+    categoryCell.textContent = key;
+    categoryCell.addEventListener('click', () => toggleCategoryPairs(key));
+    
+    categoryRow.appendChild(categoryCell);
+    tournamentBody.appendChild(categoryRow);
+}
+
+function createPairRow(tournamentBody, pair, key) {
+    const row = document.createElement('tr');
+    row.classList.add(`${key}-pairs`);
+    row.innerHTML = `
+        <td class="overflow-cell">${pair.player1} - ${pair.player2}</td>
+        <td>${pair.category}</td>
+        <td>${pair.sex}</td>
+        <td><button class="delete-button" onclick="deletePair('${pair.player1}', '${pair.player2}')"><i class="fas fa-trash"></i>Eliminar</button></td>
+    `;
+    tournamentBody.appendChild(row);
+}
+
+function toggleCategoryPairs(categoryKey) {
+    const pairsRows = document.querySelectorAll(`.${categoryKey}-pairs`);
+    const isHidden = pairsRows[0].classList.contains('hidden-row');
+
+    pairsRows.forEach(row => row.classList.toggle('hidden-row'));
+    localStorage.setItem(`${categoryKey}-collapsed`, JSON.stringify(!isHidden));
+}
+
 function restoreCategoryState() {
-    const categories = document.querySelectorAll('.category-header');
-    categories.forEach(category => {
+    document.querySelectorAll('.category-header').forEach(category => {
         const key = category.textContent;
-        const isCollapsed = JSON.parse(localStorage.getItem(key + '-collapsed'));
+        const isCollapsed = JSON.parse(localStorage.getItem(`${key}-collapsed`));
         if (isCollapsed) {
             toggleCategoryPairs(key);
         }
     });
 }
 
-function addEventListeners() {
-    const form = document.getElementById('tournament-form');
-    const deleteAllButton = document.getElementById('delete-all-btn');
-
-    form.addEventListener('submit', addPair);
-    deleteAllButton.addEventListener('click', deleteAllData);
-}
-
-function addPair(event) {
-    event.preventDefault();
-
-    const player1 = document.getElementById('player1').value;
-    const player2 = document.getElementById('player2').value;
-    const category = document.getElementById('category').value;
-    const sex = document.getElementById('sex').value;
-
-    const newPair = { player1, player2, category, sex };
-
-    const pairs = JSON.parse(localStorage.getItem('tournamentData')) || [];
-    pairs.push(newPair);
-    localStorage.setItem('tournamentData', JSON.stringify(pairs));
-
-    displayPairsByCategory(pairs);
-
-    document.getElementById('tournament-form').reset();
-}
-
-function deleteAllData() {
-    const confirmDelete = confirm('¿Estás seguro de que deseas borrar todas las parejas y datos guardados?');
-    if (confirmDelete) {
-        localStorage.removeItem('tournamentData');
-        const tournamentBody = document.getElementById('tournament-body');
-        tournamentBody.innerHTML = ''; // Limpiar las parejas al eliminar datos
-    }
-}
-
-function displayPairsByCategory(pairs) {
-    const tournamentBody = document.getElementById('tournament-body');
-    tournamentBody.innerHTML = ''; // Limpiar el cuerpo de la tabla antes de añadir las nuevas parejas
-
-    const pairsByCategoryAndSex = pairs.reduce((acc, pair) => {
-        const key = `${pair.category}-${pair.sex}`;
-        acc[key] = acc[key] || [];
-        acc[key].push(pair);
-        return acc;
-    }, {});
-
-    Object.keys(pairsByCategoryAndSex).forEach(key => {
-        const pairsInCategory = pairsByCategoryAndSex[key];
-
-        const categoryRow = document.createElement('tr');
-        categoryRow.classList.add('category-header');
-        const categoryCell = document.createElement('td');
-        categoryCell.colSpan = 4; // Asegúrate de que coincida con el número de columnas de tu tabla
-        categoryCell.textContent = key;
-        categoryCell.addEventListener('click', () => {
-            toggleCategoryPairs(key); // Función para mostrar/ocultar parejas al hacer clic en el encabezado
-        });
-        categoryRow.appendChild(categoryCell);
-        tournamentBody.appendChild(categoryRow);
-
-        pairsInCategory.forEach(pair => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="overflow-cell">${pair.player1} - ${pair.player2}</td>
-                <td>${pair.category}</td>
-                <td>${pair.sex}</td>
-                <td><button onclick="deletePair('${pair.player1}', '${pair.player2}')">Eliminar</button></td>
-            `;
-            row.classList.add(`${key}-pairs`);
-            tournamentBody.appendChild(row);
-        });
-    });
-}
-
-function toggleCategoryPairs(categoryKey) {
-    const pairsRows = document.querySelectorAll(`.${categoryKey}-pairs`);
-    const isHidden = pairsRows[0].classList.contains('hidden-row');
-    pairsRows.forEach(row => {
-        row.classList.toggle('hidden-row');
-    });
-    localStorage.setItem(categoryKey + '-collapsed', JSON.stringify(!isHidden));
-}
-
 function deletePair(player1, player2) {
-    const confirmDelete = confirm(`¿Estás seguro de que deseas eliminar la pareja ${player1} - ${player2}?`);
-    if (confirmDelete) {
-        const pairs = JSON.parse(localStorage.getItem('tournamentData')) || [];
+    if (confirm(`¿Estás seguro de que deseas eliminar la pareja ${player1} - ${player2}?`)) {
+        const pairs = getStoredPairs();
+        
+        // Encuentra la pareja exacta que se desea eliminar
         const pairIndex = pairs.findIndex(pair => pair.player1 === player1 && pair.player2 === player2);
         
         if (pairIndex !== -1) {
-            pairs.splice(pairIndex, 1);
-            localStorage.setItem('tournamentData', JSON.stringify(pairs));
-            displayPairsByCategory(pairs);
+            pairs.splice(pairIndex, 1); // Elimina la pareja del arreglo
+            localStorage.setItem('tournamentData', JSON.stringify(pairs)); // Actualiza el almacenamiento local
+            displayPairsByCategory(pairs); // Vuelve a mostrar las parejas actualizadas
         } else {
             alert(`No se encontró la pareja ${player1} - ${player2}.`);
         }
     }
 }
+

@@ -34,6 +34,20 @@ button {
     transition: background-color 0.5s ease;
 }
 
+button.delete-button {
+    background-color: #d9534f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.delete-button i {
+    margin-right: 5px;
+}
+
+button.delete-button:hover {
+    background-color: #c9302c;
+}
 
 table {
     width: 100%;
@@ -53,13 +67,12 @@ th {
     background-color: #444;
 }
 
-
 .category-header {
     cursor: pointer;
     color: rgb(255, 115, 0);
     background-color: rgba(29, 29, 29, 0.459);
-
 }
+
 .hidden-row {
     display: none;
 }
