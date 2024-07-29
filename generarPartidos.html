@@ -1,49 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/sidebar.css">
-    <link rel="stylesheet" href="assets/css/generarPartidos.css">
-</head>
-<body>
-    <div class="sidebar">
-        <img src="favicon.png" class="sidebar-image">
-        <a href="index.html"><button>Inicio</button></a>
-        <a href="disponibilidad.html"><button>Pistas/Horarios</button></a>
-        <a href="inscripciones.html"><button>Inscripciones</button></a>
-        <a href="generarPartidos.html"><button class="active-button">Partidos</button></a>
-    </div>
-
-    <div class="content">
-        <div class="container">
-            <div id="tournament-matches">
-                <h2>Emparejamiento de Jugadores</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Pareja 1</th>
-                            <th>Pareja 2</th>
-                            <th>Día</th>
-                            <th>Hora</th>
-                            <th>Pista</th>
-                            <th>Ronda</th>
-                        </tr>
-                    </thead>
-                    <tbody id="matches-body">
-                        <!-- Aquí se mostrarán los partidos del torneo -->
-                    </tbody>
-                </table>
-            </div>
-            <button id="generate-matches-btn">Generar Partidos</button>
-            <button id="generate-csv-btn">Descargar partidos</button>
-            <a href="cuadrosProbar.html"><button>Generar Cuadro</button></a>
-            <button id="delete-all-btn">Borrar los emparejamientos</button>
-
-
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="assets/css/sidebar.css" />
+        <link rel="stylesheet" href="assets/css/generarPartidos.css" />
+    </head>
+    <body>
+        <div class="sidebar">
+            <img src="favicon.png" class="sidebar-image" />
+            <a href="index.html"><button>Inicio</button></a>
+            <a href="disponibilidad.html"><button>Pistas/Horarios</button></a>
+            <a href="inscripciones.html"><button>Inscripciones</button></a>
+            <a href="generarPartidos.html"
+                ><button class="active-button">Partidos</button></a
+            >
         </div>
-    </div>
 
-    <script src="assets/js/generarPartidos.js"></script>
-</body>
+        <div class="content">
+            <div class="container">
+                <div id="tournament-matches">
+                    <h2>Emparejamiento de Jugadores</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pareja 1</th>
+                                <th>Pareja 2</th>
+                                <th>Ronda</th>
+                                <th>Horario</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matches-body">
+                            <!-- Aquí se mostrarán los partidos del torneo -->
+                        </tbody>
+                    </table>
+                </div>
+                <button id="generate-matches-btn">Generar Partidos</button>
+                <button id="generate-json-btn">Generar JSON</button>
+                <a href="cuadrosProbar.html"><button>Generar Cuadro</button></a>
+                <button id="delete-all-btn">Borrar los emparejamientos</button>
+            </div>
+        </div>
+
+        <!-- Popup for scheduling -->
+        <div id="schedule-popup" class="popup">
+            <div class="popup-content">
+                <h3>Programar Partido</h3>
+                <label for="day-input">Día:</label>
+                <select id="day-input"></select>
+                <label for="time-input">Hora:</label>
+                <select id="time-input"></select>
+                <label for="court-input">Pista:</label>
+                <select id="court-input"></select>
+                <button id="save-schedule-btn">Guardar</button>
+                <button id="cancel-schedule-btn">Cancelar</button>
+            </div>
+        </div>
+
+        <script src="assets/js/generarPartidos.js"></script>
+    </body>
 </html>

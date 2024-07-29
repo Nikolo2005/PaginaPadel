@@ -1,4 +1,6 @@
-h1, h2 {
+/* General styling */
+h1,
+h2 {
     text-align: center;
     color: #f0f0f0;
 }
@@ -11,11 +13,23 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.5s ease;
+    transition: background-color 0.3s ease;
 }
 
+button:hover {
+    background-color: #ff5100;
+}
 
-/* Tablas */
+.edit-btn {
+    padding: 5px;
+    background-color: #ff751a;
+}
+
+.edit-btn:hover {
+    background-color: #ff5100;
+}
+
+/* Table styles */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -24,14 +38,16 @@ table {
     color: #f0f0f0;
 }
 
-th, td {
-    padding: 4px;
+th,
+td {
+    padding: 8px;
     text-align: left;
     border: 1px solid #000000;
 }
 
 th {
     background-color: #444;
+    color: #fff;
 }
 
 tr:nth-child(even) {
@@ -46,12 +62,82 @@ tr:nth-child(even) {
     cursor: pointer;
     color: rgb(255, 115, 0);
     background-color: rgba(29, 29, 29, 0.459);
-
+    font-weight: bold;
+    text-align: center;
 }
 
 .overflow-cell {
-    max-width: 300px; /* Ancho máximo de la celda */
-    white-space: nowrap; /* Evita que el contenido se divida en varias líneas */
-    overflow: hidden; /* Oculta el desbordamiento */
-    text-overflow: ellipsis; /* Añade "..." al contenido desbordado */
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Popup styles */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Background with transparency */
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    z-index: 1000; /* Ensure the popup is above other content */
+    display: none; /* Hidden by default */
+}
+
+.popup-content {
+    background: #2c2c2c;
+    padding: 20px;
+    border-radius: 5px;
+    color: #f0f0f0;
+    width: 300px; /* Fixed width */
+    max-width: 90%; /* Ensure it doesn't overflow on small screens */
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional for better visibility */
+}
+
+.popup-content h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+}
+
+.popup-content label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.popup-content select {
+    width: calc(100% - 16px); /* Adjust for padding */
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #3c3c3c;
+    color: #f0f0f0;
+}
+
+.popup-content select:focus {
+    border-color: #ff5100;
+    outline: none;
+}
+
+#save-schedule-btn,
+#cancel-schedule-btn {
+    width: 45%;
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff5100bb;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#save-schedule-btn:hover,
+#cancel-schedule-btn:hover {
+    background-color: #ff5100;
 }

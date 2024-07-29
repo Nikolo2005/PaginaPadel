@@ -1,55 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Torneo Dinámico</title>
-    <style>
-        svg {
-            font: 10px sans-serif;
-        }
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Diagrama de Torneo</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+                background-color: #f4f4f4;
+            }
 
-        .node rect {
-            fill: #fff;
-            stroke: steelblue;
-            stroke-width: 1.5px;
-        }
+            #fileInput {
+                margin-bottom: 20px;
+            }
 
-        .node text {
-            text-anchor: middle;
-            dominant-baseline: central; /* Alineación vertical central */
-        }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
 
-        .team-text {
-            font-size: 12px; /* Tamaño de fuente para los nombres de las parejas */
-            text-anchor: middle; /* Alineación horizontal central */
-            pointer-events: none; /* Evitar interacción con los nombres */
-        }
+            th,
+            td {
+                border: 1px solid #ccc;
+                padding: 10px;
+                text-align: center;
+                vertical-align: middle;
+                position: relative;
+            }
 
-        .team1-text {
-            dy: -30px; /* Ajuste para colocar la pareja 1 encima */
-        }
+            th {
+                background-color: #f4f4f4;
+                font-weight: bold;
+                writing-mode: vertical-rl;
+                transform: rotate(180deg);
+            }
 
-        .team2-text {
-            dy: 30px; /* Ajuste para colocar la pareja 2 debajo */
-        }
+            .match {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-        .link {
-            fill: none;
-            stroke: #ccc;
-            stroke-width: 1.5px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Esquema de Torneo Dinámico</h1>
-    <input type="file" id="csvFile" accept=".csv" />
-    <div id="bracket"></div>
+            .pair {
+                font-size: 0.9em;
+                font-weight: bold;
+            }
 
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script src="assets/js/schedule.js">
+            .score {
+                color: green;
+                font-size: 0.8em;
+            }
 
+            .connector {
+                width: 20px;
+                height: 1px;
+                background: #ccc;
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(-50%);
+            }
 
-    </script>
-</body>
+            .vertical-connector {
+                width: 1px;
+                height: 100%;
+                background: #ccc;
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        </style>
+    </head>
+    <body>
+        <input type="file" id="fileInput" />
+        <table id="tournament"></table>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const fileInput = document.getElementById("fileInput");
+
+                fileInput.addEventListener("change", function (event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            try {
+                                const content = e.target.result;
+                                const data = JSON.parse(content);
+                                generateTournamentDiagram(data);
+                            } catch (error) {
+                                alert(
+                                    "Error al leer el archivo: Asegúrese de que el archivo sea un JSON válido.",
+                                );
+                            }
+                        };
+                        reader.readAsText(file);
+                    }
+                });
+            });
+
+            function generateTournamentDiagram(data) {
+                const tournamentTable = document.getElementById("tournament");
+                tournamentTable.innerHTML = ""; // Clear any previous content
+
+                const rounds = {};
+                data.forEach((match) => {
+                    const round = match.round;
+                    if (!rounds[round]) {
+                        rounds[round] = [];
+                    }
+                    rounds[round].push(match);
+                });
+
+                const roundNames = Object.keys(rounds);
+                const maxMatches = Math.max(
+                    ...roundNames.map((round) => rounds[round].length),
+                );
+
+                const headerRow = document.createElement("tr");
+                roundNames.forEach((round) => {
+                    const th = document.createElement("th");
+                    th.textContent = `Ronda ${round}`;
+                    headerRow.appendChild(th);
+                });
+                tournamentTable.appendChild(headerRow);
+
+                for (let i = 0; i < maxMatches; i++) {
+                    const row = document.createElement("tr");
+                    roundNames.forEach((round) => {
+                        const td = document.createElement("td");
+                        if (rounds[round][i]) {
+                            const match = rounds[round][i];
+                            const matchDiv = document.createElement("div");
+                            matchDiv.className = "match";
+
+                            const pair1Div = document.createElement("div");
+                            pair1Div.className = "pair";
+                            pair1Div.textContent = `${match.pair1.player1} - ${match.pair1.player2}`;
+                            matchDiv.appendChild(pair1Div);
+
+                            const pair2Div = document.createElement("div");
+                            pair2Div.className = "pair";
+                            pair2Div.textContent = `${match.pair2.player1} - ${match.pair2.player2}`;
+                            matchDiv.appendChild(pair2Div);
+
+                            const scoreDiv = document.createElement("div");
+                            scoreDiv.className = "score";
+                            scoreDiv.textContent = match.score || "";
+                            matchDiv.appendChild(scoreDiv);
+
+                            td.appendChild(matchDiv);
+
+                            // Add connectors
+                            if (
+                                roundNames.indexOf(round) <
+                                roundNames.length - 1
+                            ) {
+                                const connector = document.createElement("div");
+                                connector.className = "connector";
+                                td.appendChild(connector);
+                            }
+                            if (i % 2 === 0 && rounds[round][i + 1]) {
+                                const verticalConnector =
+                                    document.createElement("div");
+                                verticalConnector.className =
+                                    "vertical-connector";
+                                td.appendChild(verticalConnector);
+                            }
+                        }
+                        row.appendChild(td);
+                    });
+                    tournamentTable.appendChild(row);
+                }
+            }
+        </script>
+    </body>
 </html>

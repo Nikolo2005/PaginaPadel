@@ -1,47 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Organizador de Torneos</title>
+        <link rel="stylesheet" href="assets/css/sidebar.css" />
+        <link rel="stylesheet" href="assets/css/disponibilidad.css" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organizador de Torneos</title>
-    <link rel="stylesheet" href="assets/css/sidebar.css">
-    <link rel="stylesheet" href="assets/css/disponibilidad.css">
-</head>
-
-<body>
-    <div class="sidebar">
-        <img src="favicon.png" class="sidebar-image">
-        <a href="index.html"><button>Inicio</button></a>
-        <a href="disponibilidad.html"><button class="active-button">Pistas/Horarios</button></a>
-        <a href="inscripciones.html"><button>Inscripciones</button></a>
-        <a href="generarPartidos.html"><button>Partidos</button></a>
-    </div>
-
-    <div class="content">
-        <div class="container">
-            <!-- Sección para seleccionar días -->
-            <select id="day-select">
-                <option value="" disabled selected>Selecciona un día</option>
-                <option value="Lunes">Lunes</option>
-                <option value="Martes">Martes</option>
-                <option value="Miércoles">Miércoles</option>
-                <option value="Jueves">Jueves</option>
-                <option value="Viernes">Viernes</option>
-                <option value="Sábado">Sábado</option>
-                <option value="Domingo">Domingo</option>
-            </select>
-            <button id="add-day-btn">Añadir Día</button>
-
-            <!-- Sección de la tabla de disponibilidad -->
-            <div id="availability-tables">
-                <!-- Las tablas de disponibilidad para los días se generarán dinámicamente con JavaScript -->
-            </div>
-            <button id="delete-all-btn">Borrar todos los días</button>
-
+    <body>
+        <div class="sidebar">
+            <img src="favicon.png" class="sidebar-image" />
+            <a href="index.html"><button>Inicio</button></a>
+            <a href="disponibilidad.html"
+                ><button class="active-button">Pistas/Horarios</button></a
+            >
+            <a href="inscripciones.html"><button>Inscripciones</button></a>
+            <a href="generarPartidos.html"><button>Partidos</button></a>
         </div>
-    </div>
-    <script src="assets/js/disponibilidad.js"></script>
-</body>
 
+        <div class="content">
+            <div class="container">
+                <!-- Sección para seleccionar días -->
+                <select id="day-select">
+                    <option value="" disabled selected>
+                        Selecciona un día
+                    </option>
+                    <option value="Lunes">Lunes</option>
+                    <option value="Martes">Martes</option>
+                    <option value="Miércoles">Miércoles</option>
+                    <option value="Jueves">Jueves</option>
+                    <option value="Viernes">Viernes</option>
+                    <option value="Sábado">Sábado</option>
+                    <option value="Domingo">Domingo</option>
+                </select>
+
+                <button id="add-day-btn">Añadir Día</button>
+
+                <!-- Sección de la tabla de disponibilidad -->
+                <div id="availability-tables">
+                    <!-- Las tablas de disponibilidad para los días se generarán dinámicamente con JavaScript -->
+                </div>
+                <button id="delete-all-btn">Borrar todos los días</button>
+            </div>
+        </div>
+        <script src="assets/js/disponibilidad.js"></script>
+    </body>
 </html>
