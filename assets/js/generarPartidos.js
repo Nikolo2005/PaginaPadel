@@ -11,7 +11,15 @@ function addEventListeners() {
     .addEventListener("click", deleteAllData);
   document
     .getElementById("generate-matches-btn")
-    .addEventListener("click", generateMatches);
+    .addEventListener("click", () => {
+      if (
+        confirm(
+          "¿Estás seguro de que deseas generar los partidos? Este proceso reemplazará los partidos actuales.",
+        )
+      ) {
+        generateMatches();
+      }
+    });
   document
     .getElementById("generate-json-btn")
     .addEventListener("click", generateJSON);
@@ -162,21 +170,42 @@ function displayMatchesByCategory(matches) {
     ([key, matchesInCategory]) => {
       const categoryRow = document.createElement("tr");
       categoryRow.classList.add("category-header");
-      categoryRow.innerHTML = `<td colspan="5">${key}</td>`;
+      categoryRow.innerHTML = `<td colspan="6">${key}</td>`;
       categoryRow.addEventListener("click", () => toggleCategoryMatches(key));
       matchesBody.appendChild(categoryRow);
 
       matchesInCategory.forEach((match, index) => {
         const row = document.createElement("tr");
         row.classList.add("hidden-row", `${key}-matches`);
+
+        // Determine if the match should be highlighted
+        const isUnprogrammed =
+          match.pair1.player1 === "BYE" ||
+          match.pair2.player1 === "BYE" ||
+          !match.schedule;
+        if (
+          isUnprogrammed &&
+          match.pair1.player1 !== "BYE" &&
+          match.pair2.player1 !== "BYE"
+        ) {
+          row.classList.add("unprogrammed-match");
+        }
+        if (match.pair1.player1 === "BYE" || match.pair2.player1 === "BYE") {
+          row.classList.add("by-rows");
+        }
+
         row.innerHTML = `
         <td class="overflow-cell">${match.pair1.player1 !== "BYE" ? `${match.pair1.player1} - ${match.pair1.player2}` : "BYE"}</td>
         <td class="overflow-cell">${match.pair2.player1 !== "BYE" ? `${match.pair2.player1} - ${match.pair2.player2}` : "BYE"}</td>
         <td>${match.round}</td>
-        <td>${match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : "No programado"}</td>
+        <td>${isUnprogrammed ? "" : match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : "No programado"}</td>
         ${
           match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
-            ? `<td><button class="edit-btn" data-match-index="${index}" data-category="${key}">Editar</button></td>`
+            ? `
+            <td>
+              <button class="edit-btn" data-match-index="${index}" data-category="${key}">Editar</button>
+              <button class="clear-schedule-btn" data-match-index="${index}" data-category="${key}">Borrar Horario</button>
+            </td>`
             : `<td></td>`
         }
       `;
@@ -188,6 +217,7 @@ function displayMatchesByCategory(matches) {
     },
   );
 
+  // Event listeners for edit and clear buttons
   document.querySelectorAll(".edit-btn").forEach((button) => {
     button.addEventListener("click", (event) => {
       const matchIndex = event.target.getAttribute("data-match-index");
@@ -195,6 +225,36 @@ function displayMatchesByCategory(matches) {
       openSchedulePopup(category, matchIndex);
     });
   });
+
+  document.querySelectorAll(".clear-schedule-btn").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const matchIndex = event.target.getAttribute("data-match-index");
+      const category = event.target.getAttribute("data-category");
+      clearMatchSchedule(category, matchIndex);
+    });
+  });
+}
+
+function clearMatchSchedule(category, matchIndex) {
+  const matches = JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+  const matchesByCategoryAndSex = matches.reduce((acc, match) => {
+    const key = `${match.category}-${match.sex}`;
+    (acc[key] = acc[key] || []).push(match);
+    return acc;
+  }, {});
+
+  if (
+    matchesByCategoryAndSex[category] &&
+    matchesByCategoryAndSex[category][matchIndex]
+  ) {
+    const match = matchesByCategoryAndSex[category][matchIndex];
+    match.schedule = null; // Clear the schedule
+
+    // Update matches in localStorage
+    const updatedMatches = Object.values(matchesByCategoryAndSex).flat();
+    localStorage.setItem("tournamentMatches", JSON.stringify(updatedMatches));
+    displayMatchesByCategory(updatedMatches); // Refresh the display
+  }
 }
 
 function toggleCategoryMatches(categoryKey) {
@@ -285,7 +345,6 @@ function openSchedulePopup(category, matchIndex) {
 
   dayInput.addEventListener("change", updateTimes);
   timeInput.addEventListener("change", updateCourts);
-
   function updateTimes() {
     const selectedDay = dayInput.value;
     timeInput.innerHTML =
@@ -294,7 +353,18 @@ function openSchedulePopup(category, matchIndex) {
       "<option value='' selected>Selecciona una pista</option>"; // Clear courts on day change
 
     if (availabilityData[selectedDay]) {
-      Object.keys(availabilityData[selectedDay]).forEach((time) => {
+      // Obtener y ordenar las horas
+      const sortedTimes = Object.keys(availabilityData[selectedDay]).sort(
+        (a, b) => {
+          // Suponiendo que las horas están en formato HH:MM, comparar como horas
+          const [aHour, aMinute] = a.split(":").map(Number);
+          const [bHour, bMinute] = b.split(":").map(Number);
+          return aHour - bHour || aMinute - bMinute;
+        },
+      );
+
+      // Agregar las horas ordenadas al menú desplegable
+      sortedTimes.forEach((time) => {
         if (hasAvailableCourts(selectedDay, time)) {
           const option = document.createElement("option");
           option.value = time;

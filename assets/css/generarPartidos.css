@@ -19,12 +19,12 @@ button {
 button:hover {
     background-color: #ff5100;
 }
-
+.clear-schedule-btn,
 .edit-btn {
     padding: 5px;
     background-color: #ff751a;
 }
-
+.clear-schedule-btn:hover,
 .edit-btn:hover {
     background-color: #ff5100;
 }
@@ -140,4 +140,16 @@ tr:nth-child(even) {
 #save-schedule-btn:hover,
 #cancel-schedule-btn:hover {
     background-color: #ff5100;
+}
+
+.unprogrammed-match {
+    border-right: 4px solid #ff0000;
+}
+
+.unprogrammed-match td {
+    color: #b0b0b0; /* Color de texto más suave, pero aún legible */
+}
+
+.by-rows {
+    border-left: none; /* Eliminar el borde para filas con "BYE" */
 }
