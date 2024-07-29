@@ -176,7 +176,7 @@ function displayMatchesByCategory(matches) {
         <td>${match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : "No programado"}</td>
         ${
           match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
-            ? `<td><button class="edit-btn" data-match-index="${matches.indexOf(match)}">Editar</button></td>`
+            ? `<td><button class="edit-btn" data-match-index="${index}" data-category="${key}">Editar</button></td>`
             : `<td></td>`
         }
       `;
@@ -191,7 +191,8 @@ function displayMatchesByCategory(matches) {
   document.querySelectorAll(".edit-btn").forEach((button) => {
     button.addEventListener("click", (event) => {
       const matchIndex = event.target.getAttribute("data-match-index");
-      openSchedulePopup(matches[matchIndex]);
+      const category = event.target.getAttribute("data-category");
+      openSchedulePopup(category, matchIndex);
     });
   });
 }
@@ -242,18 +243,21 @@ function setupPopup() {
     });
 }
 
+let currentEditingCategory = "";
 let currentEditingMatchIndex = -1;
 
-function openSchedulePopup(match) {
-  currentEditingMatchIndex = JSON.parse(
-    localStorage.getItem("tournamentMatches"),
-  ).findIndex(
-    (m) =>
-      m.pair1.player1 === match.pair1.player1 &&
-      m.pair1.player2 === match.pair1.player2 &&
-      m.pair2.player1 === match.pair2.player1 &&
-      m.pair2.player2 === match.pair2.player2,
-  );
+function openSchedulePopup(category, matchIndex) {
+  const matches = JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+  const matchesByCategoryAndSex = matches.reduce((acc, match) => {
+    const key = `${match.category}-${match.sex}`;
+    (acc[key] = acc[key] || []).push(match);
+    return acc;
+  }, {});
+
+  const match = matchesByCategoryAndSex[category][matchIndex];
+
+  currentEditingCategory = category;
+  currentEditingMatchIndex = matchIndex;
 
   const availabilityData =
     JSON.parse(localStorage.getItem("availabilityData")) || {};
@@ -379,10 +383,19 @@ function openSchedulePopup(match) {
     };
 
     const matches = JSON.parse(localStorage.getItem("tournamentMatches")) || [];
-    if (currentEditingMatchIndex > -1) {
-      matches[currentEditingMatchIndex] = match;
-      localStorage.setItem("tournamentMatches", JSON.stringify(matches));
-      displayMatchesByCategory(matches);
+    const matchesByCategoryAndSex = matches.reduce((acc, match) => {
+      const key = `${match.category}-${match.sex}`;
+      (acc[key] = acc[key] || []).push(match);
+      return acc;
+    }, {});
+
+    if (currentEditingCategory && currentEditingMatchIndex > -1) {
+      matchesByCategoryAndSex[currentEditingCategory][
+        currentEditingMatchIndex
+      ] = match;
+      const updatedMatches = Object.values(matchesByCategoryAndSex).flat();
+      localStorage.setItem("tournamentMatches", JSON.stringify(updatedMatches));
+      displayMatchesByCategory(updatedMatches);
     }
 
     popup.style.display = "none";
