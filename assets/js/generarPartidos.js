@@ -170,16 +170,16 @@ function displayMatchesByCategory(matches) {
         const row = document.createElement("tr");
         row.classList.add("hidden-row", `${key}-matches`);
         row.innerHTML = `
-          <td class="overflow-cell">${match.pair1.player1 !== "BYE" ? `${match.pair1.player1} - ${match.pair1.player2}` : "BYE"}</td>
-          <td class="overflow-cell">${match.pair2.player1 !== "BYE" ? `${match.pair2.player1} - ${match.pair2.player2}` : "BYE"}</td>
-          <td>${match.round}</td>
-          <td>${match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : "No programado"}</td>
-          ${
-            match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
-              ? `<td><button class="edit-btn" data-match-index="${index}">Editar</button></td>`
-              : `<td></td>`
-          }
-        `;
+        <td class="overflow-cell">${match.pair1.player1 !== "BYE" ? `${match.pair1.player1} - ${match.pair1.player2}` : "BYE"}</td>
+        <td class="overflow-cell">${match.pair2.player1 !== "BYE" ? `${match.pair2.player1} - ${match.pair2.player2}` : "BYE"}</td>
+        <td>${match.round}</td>
+        <td>${match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : "No programado"}</td>
+        ${
+          match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
+            ? `<td><button class="edit-btn" data-match-index="${matches.indexOf(match)}">Editar</button></td>`
+            : `<td></td>`
+        }
+      `;
         if (categoryStatesMatches[key]) {
           row.classList.remove("hidden-row");
         }
@@ -242,7 +242,19 @@ function setupPopup() {
     });
 }
 
+let currentEditingMatchIndex = -1;
+
 function openSchedulePopup(match) {
+  currentEditingMatchIndex = JSON.parse(
+    localStorage.getItem("tournamentMatches"),
+  ).findIndex(
+    (m) =>
+      m.pair1.player1 === match.pair1.player1 &&
+      m.pair1.player2 === match.pair1.player2 &&
+      m.pair2.player1 === match.pair2.player1 &&
+      m.pair2.player2 === match.pair2.player2,
+  );
+
   const availabilityData =
     JSON.parse(localStorage.getItem("availabilityData")) || {};
   const savedMatches =
@@ -367,16 +379,8 @@ function openSchedulePopup(match) {
     };
 
     const matches = JSON.parse(localStorage.getItem("tournamentMatches")) || [];
-    const matchIndex = matches.findIndex(
-      (m) =>
-        m.pair1.player1 === match.pair1.player1 &&
-        m.pair1.player2 === match.pair1.player2 &&
-        m.pair2.player1 === match.pair2.player1 &&
-        m.pair2.player2 === match.pair2.player2,
-    );
-
-    if (matchIndex > -1) {
-      matches[matchIndex] = match;
+    if (currentEditingMatchIndex > -1) {
+      matches[currentEditingMatchIndex] = match;
       localStorage.setItem("tournamentMatches", JSON.stringify(matches));
       displayMatchesByCategory(matches);
     }
