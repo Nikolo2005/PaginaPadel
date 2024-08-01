@@ -1,11 +1,8 @@
-document.addEventListener("DOMContentLoaded", () => {
-  initializeApp();
-});
+document.addEventListener("DOMContentLoaded", initializeApp);
 
 function initializeApp() {
   addEventListeners();
-  const pairs = getStoredPairs();
-  displayPairsByCategory(pairs);
+  displayPairsByCategory(getStoredPairs());
 }
 
 function getStoredPairs() {
@@ -23,13 +20,9 @@ function addEventListeners() {
 
 function addPair(event) {
   event.preventDefault();
-
   const newPair = getPairFromForm();
-  const pairs = getStoredPairs();
-
-  pairs.push(newPair);
+  const pairs = [...getStoredPairs(), newPair];
   localStorage.setItem("tournamentData", JSON.stringify(pairs));
-
   displayPairsByCategory(pairs);
   resetPairInputs();
   animateAddButton();
@@ -37,6 +30,7 @@ function addPair(event) {
 
 function getPairFromForm() {
   return {
+    id: generateUniqueId(),
     player1: document.getElementById("player1").value,
     player2: document.getElementById("player2").value,
     category: document.getElementById("category").value,
@@ -44,9 +38,14 @@ function getPairFromForm() {
   };
 }
 
+function generateUniqueId() {
+  return "_" + Math.random().toString(36).substr(2, 9);
+}
+
 function resetPairInputs() {
-  document.getElementById("player1").value = "";
-  document.getElementById("player2").value = "";
+  ["player1", "player2"].forEach(
+    (id) => (document.getElementById(id).value = ""),
+  );
 }
 
 function animateAddButton() {
@@ -60,7 +59,7 @@ function animateAddButton() {
     addButton.textContent = "Agregar Pareja";
     addButton.style.backgroundColor = "#ff5100bb";
     addButton.disabled = false;
-  }, 700); // Cambia de vuelta a "Agregar Pareja" después de 0.7 segundo
+  }, 500);
 }
 
 function deleteAllData() {
@@ -73,14 +72,13 @@ function deleteAllData() {
 function displayPairsByCategory(pairs) {
   const tournamentBody = document.getElementById("tournament-body");
   tournamentBody.innerHTML = "";
-
   const pairsByCategoryAndSex = groupPairsByCategoryAndSex(pairs);
   const categoryStatesInscriptions =
     JSON.parse(localStorage.getItem("categoryStatesInscriptions")) || {};
 
-  Object.keys(pairsByCategoryAndSex).forEach((key) => {
+  Object.entries(pairsByCategoryAndSex).forEach(([key, categoryPairs]) => {
     createCategoryRow(tournamentBody, key, categoryStatesInscriptions[key]);
-    pairsByCategoryAndSex[key].forEach((pair) =>
+    categoryPairs.forEach((pair) =>
       createPairRow(tournamentBody, pair, key, categoryStatesInscriptions[key]),
     );
   });
@@ -103,6 +101,7 @@ function groupPairsByCategoryAndSex(pairs) {
 function createCategoryRow(tournamentBody, key, isCollapsed) {
   const categoryRow = document.createElement("tr");
   categoryRow.classList.add("category-header");
+  if (isCollapsed) categoryRow.classList.add("collapsed");
 
   const categoryCell = document.createElement("td");
   categoryCell.colSpan = 4;
@@ -110,24 +109,19 @@ function createCategoryRow(tournamentBody, key, isCollapsed) {
 
   categoryRow.appendChild(categoryCell);
   tournamentBody.appendChild(categoryRow);
-
-  if (isCollapsed) {
-    categoryRow.classList.add("collapsed");
-  }
 }
 
 function createPairRow(tournamentBody, pair, key, isCollapsed) {
   const row = document.createElement("tr");
   row.classList.add(`${key}-pairs`);
-  if (isCollapsed) {
-    row.classList.add("hidden-row");
-  }
+  if (isCollapsed) row.classList.add("hidden-row");
+
   row.innerHTML = `
-        <td class="overflow-cell">${pair.player1} - ${pair.player2}</td>
-        <td>${pair.category}</td>
-        <td>${pair.sex}</td>
-        <td><button class="delete-button" onclick="deletePair('${pair.player1}', '${pair.player2}')"><i class="fas fa-trash"></i>Eliminar</button></td>
-    `;
+    <td class="overflow-cell">${pair.player1} - ${pair.player2}</td>
+    <td>${pair.category}</td>
+    <td>${pair.sex}</td>
+    <td><button class="delete-button" onclick="deletePair('${pair.id}')"><i class="fas fa-trash"></i>Eliminar</button></td>
+  `;
   tournamentBody.appendChild(row);
 }
 
@@ -146,25 +140,10 @@ function toggleCategoryPairs(categoryKey) {
   );
 }
 
-function deletePair(player1, player2) {
-  if (
-    confirm(
-      `¿Estás seguro de que deseas eliminar la pareja ${player1} - ${player2}?`,
-    )
-  ) {
-    const pairs = getStoredPairs();
-
-    // Encuentra la pareja exacta que se desea eliminar
-    const pairIndex = pairs.findIndex(
-      (pair) => pair.player1 === player1 && pair.player2 === player2,
-    );
-
-    if (pairIndex !== -1) {
-      pairs.splice(pairIndex, 1); // Elimina la pareja del arreglo
-      localStorage.setItem("tournamentData", JSON.stringify(pairs)); // Actualiza el almacenamiento local
-      displayPairsByCategory(pairs); // Vuelve a mostrar las parejas actualizadas
-    } else {
-      alert(`No se encontró la pareja ${player1} - ${player2}.`);
-    }
+function deletePair(pairId) {
+  if (confirm(`¿Estás seguro de que deseas eliminar esta pareja?`)) {
+    const pairs = getStoredPairs().filter((pair) => pair.id !== pairId);
+    localStorage.setItem("tournamentData", JSON.stringify(pairs));
+    displayPairsByCategory(pairs);
   }
 }

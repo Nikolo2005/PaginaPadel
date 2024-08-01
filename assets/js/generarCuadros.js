@@ -7,25 +7,29 @@ document
       reader.onload = function (event) {
         try {
           const json = JSON.parse(event.target.result);
-          generateTournament(json);
+          generateTournament(json, file.name);
         } catch (error) {
           console.error("Error parsing JSON file:", error);
-          alert("Error parsing JSON file. Please check the file format.");
+          alert(
+            "Error al analizar el archivo JSON. Por favor, verifica el formato.",
+          );
         }
       };
       reader.onerror = function (error) {
         console.error("Error reading file:", error);
-        alert("Error reading file. Please try again.");
+        alert("Error al leer el archivo. Inténtalo de nuevo.");
       };
       reader.readAsText(file);
     } else {
-      alert("Please upload a valid JSON file.");
+      alert("Por favor, sube un archivo JSON válido.");
     }
   });
 
-function generateTournament(data) {
+function generateTournament(data, fileName) {
   if (!Array.isArray(data) || data.length === 0) {
-    alert("The tournament data is empty or not formatted correctly.");
+    alert(
+      "Los datos del torneo están vacíos o no están formateados correctamente.",
+    );
     return;
   }
 
@@ -44,6 +48,7 @@ function generateTournament(data) {
 
   const sortedRounds = Object.keys(rounds).sort((a, b) => {
     const roundOrder = {
+      "Treintaidosavos de Final": 0,
       "Cuartos de Final": 1,
       Semifinal: 2,
       Final: 3,
@@ -52,6 +57,7 @@ function generateTournament(data) {
   });
 
   const roundPositions = {};
+  let totalHeight = 0;
 
   sortedRounds.forEach((round, roundIndex) => {
     const roundDiv = document.createElement("div");
@@ -74,7 +80,15 @@ function generateTournament(data) {
         ? `${match.pair2.player1} - ${match.pair2.player2}`
         : "‎ ";
 
-      matchDiv.innerHTML = `<div class="pair">${pair1}</div><div class="connector"></div><div class="pair">${pair2}</div>`;
+      const pair1Div = document.createElement("div");
+      pair1Div.classList.add("pair");
+      pair1Div.textContent = pair1;
+
+      const pair2Div = document.createElement("div");
+      pair2Div.classList.add("pair");
+      pair2Div.textContent = pair2;
+
+      matchDiv.appendChild(pair1Div);
 
       if (match.schedule) {
         const scheduleDiv = document.createElement("div");
@@ -83,6 +97,7 @@ function generateTournament(data) {
         matchDiv.appendChild(scheduleDiv);
       }
 
+      matchDiv.appendChild(pair2Div);
       matchWrapperDiv.appendChild(matchDiv);
 
       let topPosition;
@@ -102,7 +117,6 @@ function generateTournament(data) {
 
       roundDiv.appendChild(matchWrapperDiv);
 
-      // Draw the connectors
       if (roundIndex > 0) {
         const leftConnectorDiv = document.createElement("div");
         leftConnectorDiv.classList.add("round-connector-left");
@@ -129,5 +143,26 @@ function generateTournament(data) {
     });
 
     tournamentDiv.appendChild(roundDiv);
+
+    const lastMatchIndex = rounds[round].length - 1;
+    const lastMatchPosition = roundPositions[round][lastMatchIndex];
+    totalHeight = Math.max(totalHeight, lastMatchPosition + 90);
   });
+
+  tournamentDiv.style.height = `${totalHeight + 100}px`;
 }
+
+document.getElementById("downloadPdf").addEventListener("click", function () {
+  html2canvas(document.querySelector("#tournament"), { scale: 2 }).then(
+    (canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jspdf.jsPDF({
+        orientation: "landscape",
+        unit: "px",
+        format: [canvas.width, canvas.height],
+      });
+      pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+      pdf.save("tournament.pdf");
+    },
+  );
+});

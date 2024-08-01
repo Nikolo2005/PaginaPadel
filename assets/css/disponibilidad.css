@@ -14,7 +14,6 @@
 
 #day-input {
     margin-right: 10px;
-
 }
 
 #add-day-btn {
@@ -36,7 +35,8 @@
     border-collapse: collapse;
 }
 
-#availability-tables th, #availability-tables td {
+#availability-tables th,
+#availability-tables td {
     border: 1px solid #000000;
     text-align: center;
 }
@@ -45,18 +45,21 @@
     background-color: #302f2f;
 }
 
-#availability th, #availability td {
+#availability th,
+#availability td {
     padding: 4px;
     border: 1px solid #555;
     text-align: center;
     cursor: pointer;
 }
 
-#availability th:hover, #availability td:hover {
+#availability th:hover,
+#availability td:hover {
     background-color: #555;
 }
 
-h1, h2 {
+h1,
+h2 {
     text-align: center;
     color: #f0f0f0;
 }
@@ -83,7 +86,7 @@ select {
 
 button {
     width: auto;
-    padding: 12px;
+    padding: 5px;
     background-color: #ff5100bb;
     color: #fff;
     border: none;
@@ -92,29 +95,27 @@ button {
     transition: background-color 0.5s ease;
 }
 
-
 .availability-cell {
     cursor: pointer;
-    background-color: #ffffff; 
+    background-color: #ffffff;
     padding: 5px;
-    transition: background-color 0.3s ease; 
+    transition: background-color 0.3s ease;
 }
 
 .availability-cell.selected {
-    background-color: #f5a768; 
+    background-color: #f5a768;
 }
 
 .availability-cell:hover,
 .pista-cell:hover {
-    background-color: #cac4b6; 
+    background-color: #cac4b6;
     cursor: pointer;
 }
 
 .hour-cell:hover {
-
     cursor: pointer;
 }
 
 .availability-cell.preview {
-    background-color: #cac4b6; 
+    background-color: #cac4b6;
 }

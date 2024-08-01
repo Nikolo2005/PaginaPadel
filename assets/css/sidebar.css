@@ -11,7 +11,7 @@ body {
 }
 
 .sidebar {
-    width: 17%;
+    width: 13%;
     background-color: #1a1a1a;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
@@ -28,6 +28,7 @@ body {
     padding: 10px;
     background-color: #333;
     color: #f0f0f0;
+    font-size: 0.8em;
     border: none;
     border-radius: 5px;
     cursor: pointer;

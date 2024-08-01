@@ -3,13 +3,22 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Torneo</title>
+        <title>Open T</title>
         <link rel="stylesheet" href="assets/css/generarCuadros.css" />
+        <link rel="icon" href="assets/img/favicon.png" type="image/png" />
     </head>
     <body>
-        <input type="file" id="fileInput" />
+        <header>
+            <h2>Generar Cuadros</h2>
+            <h3>Selecciona el archivo con los partidos</h3>
+            <input type="file" id="fileInput" />
+            <button id="downloadPdf">Descargar PDF</button>
+        </header>
         <div id="tournament"></div>
 
         <script src="assets/js/generarCuadros.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     </body>
 </html>
