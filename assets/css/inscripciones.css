@@ -1,11 +1,71 @@
-h1, h2 {
+h1,
+h2 {
     text-align: center;
     color: #f0f0f0;
 }
 
-form {
+form { 
     display: grid;
     gap: 10px;
+}
+
+#tournament-form {
+    margin-top: 2em;
+    background-color: #4b6c8b;
+    padding: 1.5em;
+    border-radius: 1em;
+    box-shadow: 5px 5px 5px #395269;
+    text-align: center;
+    align-items: end;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    gap: 1em;
+
+    grid-template-areas:
+        "name1 name2"
+        "name1-form name2-form"
+        "category sex"
+        "category-form sex-form"
+        "button button ";
+}
+
+#tournament-form > .player1-title {
+    grid-area: name1;
+}
+
+#tournament-form > #player1 {
+    grid-area: name1-form;
+}
+
+#tournament-form > .player2-title {
+    grid-area: name2;
+}
+
+#tournament-form > #player2 {
+    grid-area: name2-form;
+}
+
+#tournament-form > .category-title {
+    grid-area: category;
+}
+
+#tournament-form > #category {
+    grid-area: category-form;
+}
+
+#tournament-form > .sex-title {
+    grid-area: sex;
+}
+
+#tournament-form > #sex {
+    grid-area: sex-form;
+}
+
+#tournament-form > .add-button {
+    margin: 0 auto;
+    width: 30%;
+    grid-area: button;
 }
 
 label {
@@ -16,15 +76,15 @@ input[type="text"],
 select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #555;
+    border: 1px solid #4b6c8b;
     border-radius: 5px;
-    background-color: #2c2c2c;
-    color: #f0f0f0;
+    background-color: #f4f4f9;
+    color: #4b6c8b;
+    font-weight: bold;
     box-sizing: border-box;
 }
 
 button {
-    width: auto;
     padding: 12px;
     background-color: #ff5100bb;
     color: #fff;
@@ -42,10 +102,22 @@ button.delete-button {
 }
 
 button.delete-button i {
-    margin-right: 5px;
+    margin-right: 0.5em;
 }
 
 button.delete-button:hover {
+    background-color: #c9302c;
+}
+
+#delete-all-btn {
+    background-color: #d9534f;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 0.3em;
+    border-radius: 0 0 7px 7px;
+}
+
+#delete-all-btn:hover {
     background-color: #c9302c;
 }
 
@@ -53,23 +125,32 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #2c2c2c;
+    background-color: #4b6c8b;
+
     color: #f0f0f0;
 }
 
-th, td {
-    padding: 4px;
+th,
+td {
+    padding: 0.2em;
+    padding-left: 0.5em;
     text-align: left;
-    border-bottom: 1px solid #555;
+    border: 1px solid #adadb2;
+    
 }
 
 th {
     background-color: #444;
 }
 
+tr:hover {
+    background-color: rgba(29, 29, 29, 0.5);
+}
+
 .category-header {
     cursor: pointer;
-    color: rgb(255, 115, 0);
+    color: #f4f4f9;
+    font-weight: bold;
     background-color: rgba(29, 29, 29, 0.459);
 }
 

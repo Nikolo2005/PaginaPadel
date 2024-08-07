@@ -1,21 +1,22 @@
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    background-color: #2c2c2c;
+    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
-    color: #f0f0f0;
+    color: #f4f4f9;
     display: flex;
-    height: 100vh;
+    height: 100vh; 
     overflow: hidden;
 }
 
 .sidebar {
     width: 13%;
-    background-color: #1a1a1a;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    height: 100%;
+    background-color: #4b6c8b;
+    margin: 1em;
+    padding: 1.2em;
+    box-shadow: 5px 10px 15px #4b6c8b;
+    border-radius: 0.4em;
     overflow-y: auto;
 }
 
@@ -26,9 +27,10 @@ body {
 .sidebar button {
     width: 100%;
     padding: 10px;
-    background-color: #333;
-    color: #f0f0f0;
-    font-size: 0.8em;
+    background-color: #f4f4f9;
+    color: #4b6c8b;
+    font-weight: bold;
+    font-size: 0.9em;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -39,8 +41,8 @@ body {
 .sidebar .active-button {
     width: 100%;
     padding: 10px;
-    background-color: #696868;
-    color: #f0f0f0;
+    background-color: #bebebe;
+
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -49,12 +51,12 @@ body {
 }
 
 .sidebar button:hover {
-    background-color: #555;
+    background-color: #bebebe;
 }
 
 .content {
-    flex: 1;
-    padding: 20px;
+    width: 100%;
+    padding: 1em;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -62,10 +64,13 @@ body {
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    background-color: #3c3c3c;
+    background-color: #88b0d6;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2em;
+    border-radius: 0.4em;
+    box-shadow: 10px 15px 20px #4b6c8b;
     box-sizing: border-box;
 }

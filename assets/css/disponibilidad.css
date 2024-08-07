@@ -1,11 +1,11 @@
 .availability-cell {
-    cursor: pointer;
-    background-color: #ffffff; /* Color de fondo por defecto */
+    cursor: pointer; 
+    background-color: #ffffff; 
     padding: 5px;
 }
 
 .availability-cell.selected {
-    background-color: #f7984b; /* Color de fondo cuando está seleccionado */
+    background-color: #f7984b; 
 }
 
 #day-selection {
@@ -37,12 +37,16 @@
 
 #availability-tables th,
 #availability-tables td {
+    
     border: 1px solid #000000;
     text-align: center;
 }
 
 #availability-tables th {
-    background-color: #302f2f;
+    background-color: #4b6c8b;
+}
+#availability-tables tr {
+    background-color: #7f9db8;
 }
 
 #availability th,
@@ -77,10 +81,11 @@ input[type="text"],
 select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #555;
+    border: 1px solid #4b6c8b;
     border-radius: 5px;
-    background-color: #2c2c2c;
-    color: #f0f0f0;
+    background-color: #f4f4f9;
+    color: #4b6c8b;
+    font-weight: bold;
     box-sizing: border-box;
 }
 
