@@ -1,11 +1,11 @@
 .availability-cell {
-    cursor: pointer; 
-    background-color: #ffffff; 
+    cursor: pointer;
+    background-color: #ffffff;
     padding: 5px;
 }
 
 .availability-cell.selected {
-    background-color: #f7984b; 
+    background-color: #f7984b;
 }
 
 #day-selection {
@@ -37,7 +37,6 @@
 
 #availability-tables th,
 #availability-tables td {
-    
     border: 1px solid #000000;
     text-align: center;
 }
@@ -60,6 +59,17 @@
 #availability th:hover,
 #availability td:hover {
     background-color: #555;
+}
+
+#delete-all-btn {
+    background-color: #d9534f;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 0.3em;
+}
+
+#delete-all-btn:hover {
+    background-color: #c9302c;
 }
 
 h1,

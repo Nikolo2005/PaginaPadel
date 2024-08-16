@@ -138,10 +138,6 @@ td {
     border: 1px solid #adadb2;
 }
 
-th {
-    background-color: #444;
-}
-
 tr:hover {
     background-color: rgba(29, 29, 29, 0.5);
 }
