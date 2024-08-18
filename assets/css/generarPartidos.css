@@ -8,25 +8,36 @@ h2 {
 button {
     width: auto;
     padding: 12px;
-    background-color: #ff5100bb;
     color: #fff;
     border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.down-button {
+    width: 20em;
+    justify-content: start;
+    margin: 0.5em 0.5em 0.5em 0;
+    padding: 1em;
+    background-color: #586f7c;
+    color: #fff;
+    font-weight: bold;
+    border: solid 1px #3b4954;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #ff5100;
-}
 .clear-schedule-btn,
 .edit-btn {
     padding: 5px;
-    background-color: #ff751a;
+    background-color: #586f7c;
+    border: solid 1px #3b4954;
 }
+
+.down-button:hover,
 .clear-schedule-btn:hover,
 .edit-btn:hover {
-    background-color: #ff5100;
+    background-color: #2a353c;
 }
 
 /* Table styles */
@@ -70,6 +81,12 @@ tr:hover {
     text-align: center;
 }
 
+.down-options {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
 .overflow-cell {
     max-width: 300px;
     white-space: nowrap;
@@ -93,7 +110,7 @@ tr:hover {
 }
 
 .popup-content {
-    background: #2c2c2c;
+    background: #586f7c;
     padding: 20px;
     border-radius: 5px;
     color: #f0f0f0;
@@ -119,7 +136,7 @@ tr:hover {
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background: #3c3c3c;
+    background: #3b4954;
     color: #f0f0f0;
 }
 
@@ -138,7 +155,6 @@ tr:hover {
     background-color: #ff5100bb;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
 #save-schedule-btn:hover,
