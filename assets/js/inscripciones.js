@@ -77,14 +77,19 @@ function displayPairsByCategory(pairs) {
     JSON.parse(localStorage.getItem("categoryStatesInscriptions")) || {};
 
   Object.entries(pairsByCategoryAndSex).forEach(([key, categoryPairs]) => {
-    createCategoryRow(tournamentBody, key, categoryStatesInscriptions[key]);
+    createCategoryRow(
+      tournamentBody,
+      key,
+      categoryPairs.length,
+      categoryStatesInscriptions[key],
+    );
     categoryPairs.forEach((pair) =>
       createPairRow(tournamentBody, pair, key, categoryStatesInscriptions[key]),
     );
   });
 
   document.querySelectorAll(".category-header").forEach((category) => {
-    const key = category.textContent;
+    const key = category.textContent.split(" (")[0];
     category.addEventListener("click", () => toggleCategoryPairs(key));
   });
 }
@@ -98,14 +103,14 @@ function groupPairsByCategoryAndSex(pairs) {
   }, {});
 }
 
-function createCategoryRow(tournamentBody, key, isCollapsed) {
+function createCategoryRow(tournamentBody, key, count, isCollapsed) {
   const categoryRow = document.createElement("tr");
   categoryRow.classList.add("category-header");
   if (isCollapsed) categoryRow.classList.add("collapsed");
 
   const categoryCell = document.createElement("td");
-  categoryCell.colSpan = 4;
-  categoryCell.textContent = key;
+  categoryCell.colSpan = 4; // Ajusta el colSpan según lo necesario
+  categoryCell.textContent = `${key} (${count})`; // Incluye el contador de parejas
 
   categoryRow.appendChild(categoryCell);
   tournamentBody.appendChild(categoryRow);

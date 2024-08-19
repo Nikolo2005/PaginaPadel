@@ -21,6 +21,7 @@ button {
     background-color: #586f7c;
     color: #fff;
     font-weight: bold;
+    font-size: 0.9em;
     border: solid 1px #3b4954;
     border-radius: 5px;
     cursor: pointer;
@@ -38,6 +39,23 @@ button {
 .clear-schedule-btn:hover,
 .edit-btn:hover {
     background-color: #2a353c;
+}
+
+.total-matches {
+    margin: 0.5em 0.5em 0.5em 0;
+    font-weight: bold;
+    font-size: 0.9em;
+
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #586f7c;
+    border: solid 1px #3b4954;
+    border-radius: 5px;
+    width: 20em;
+    float: right;
 }
 
 /* Table styles */
@@ -82,8 +100,6 @@ tr:hover {
 }
 
 .down-options {
-    display: flex;
-    flex-direction: row;
     width: 100%;
 }
 

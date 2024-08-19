@@ -27,12 +27,11 @@ function addEventListeners() {
 
 function deleteAllData() {
   if (
-    confirm(
-      "¿Estás seguro de que deseas borrar todas las parejas y datos guardados?",
-    )
+    confirm("¿Estás seguro de que deseas borrar todas los emparejamientos?")
   ) {
     localStorage.removeItem("tournamentMatches");
     document.getElementById("matches-body").innerHTML = "";
+    updateTotalMatches(0);
   }
 }
 
@@ -44,19 +43,17 @@ function generateMatches() {
   }
 
   const matches = createMatches(storedData);
-  if (containsInvalidMatches(matches)) {
+  const consolationMatches = createConsolationMatches(matches);
+
+  const allMatches = [...matches, ...consolationMatches];
+
+  if (containsInvalidMatches(allMatches)) {
     alert("No se pueden generar partidos válidos.");
     return;
   }
 
-  localStorage.setItem("tournamentMatches", JSON.stringify(matches));
-  displayMatchesByCategory(matches);
-}
-
-function containsInvalidMatches(matches) {
-  return matches.some(
-    (match) => match.pair1.player1 === "BYE" && match.pair2.player1 === "BYE",
-  );
+  localStorage.setItem("tournamentMatches", JSON.stringify(allMatches));
+  displayMatchesByCategory(allMatches);
 }
 
 function createMatches(pairs) {
@@ -116,8 +113,8 @@ function createMatches(pairs) {
           pair2,
           category: pair1.category,
           sex: pair1.sex,
-          round: getRoundName(roundNumber),
-          schedule: null, // Placeholder for schedule details
+          round: getRoundName(roundNumber), // Almacena la ronda usando la función getRoundName
+          schedule: null,
         });
 
         if (pair1.player1 !== "BYE" && pair2.player1 === "BYE") {
@@ -139,6 +136,51 @@ function createMatches(pairs) {
   return matches;
 }
 
+function createConsolationMatches(matches) {
+  const consolationMatches = [];
+
+  // Agrupar los partidos por categoría y sexo
+  const matchesByCategoryAndSex = matches.reduce((acc, match) => {
+    const key = `${match.category}-${match.sex}`;
+    (acc[key] = acc[key] || []).push(match);
+    return acc;
+  }, {});
+
+  Object.entries(matchesByCategoryAndSex).forEach(
+    ([key, matchesInCategory]) => {
+      // Calcular la cantidad de partidos de consolación que se deben crear
+      const numConsolationMatches = Math.floor(matchesInCategory.length / 2);
+
+      let numMatches = numConsolationMatches + 1;
+      let roundNumber = Math.ceil(Math.log2(numMatches));
+
+      for (let i = 0; i < numConsolationMatches; i++) {
+        const consolationMatch = {
+          pair1: { player1: "", player2: "" },
+          pair2: { player1: "", player2: "" },
+          category: `consolación-${matchesInCategory[0].category}`, // Cambiado aquí
+          sex: matchesInCategory[0].sex, // Mantener el sexo si es necesario
+          round: getRoundName(roundNumber - 1), // Establecer la ronda usando la función getRoundName
+          schedule: null,
+        };
+        consolationMatches.push(consolationMatch);
+        numMatches--;
+        if (numMatches === Math.pow(2, Math.ceil(Math.log2(numMatches)))) {
+          roundNumber--;
+        }
+      }
+    },
+  );
+
+  return consolationMatches;
+}
+
+function containsInvalidMatches(matches) {
+  return matches.some(
+    (match) => match.pair1.player1 === "BYE" && match.pair2.player1 === "BYE",
+  );
+}
+
 function getRoundName(roundNumber) {
   const roundNames = [
     "Final",
@@ -153,9 +195,38 @@ function getRoundName(roundNumber) {
     : `Ronda ${roundNumber}`;
 }
 
+function calculateTotalMatches(matches) {
+  const matchesCount = calculateMatchesPerCategory(matches);
+  return Object.values(matchesCount).reduce((total, count) => total + count, 0);
+}
+
+function calculateMatchesPerCategory(matches) {
+  const matchesByCategoryAndSex = matches.reduce((acc, match) => {
+    const key = `${match.category}-${match.sex}`;
+    (acc[key] = acc[key] || []).push(match);
+    return acc;
+  }, {});
+
+  const matchesCount = {};
+  for (const [key, matchesInCategory] of Object.entries(
+    matchesByCategoryAndSex,
+  )) {
+    matchesCount[key] =
+      matchesInCategory.length >= 1 ? matchesInCategory.length : 0;
+  }
+
+  return matchesCount;
+}
+
 function displayMatchesByCategory(matches) {
   const matchesBody = document.getElementById("matches-body");
   matchesBody.innerHTML = "";
+
+  // Calcular el número de partidos por categoría
+  const matchesCount = calculateMatchesPerCategory(matches);
+
+  // Calcular total de partidos
+  const totalMatches = calculateTotalMatches(matches);
 
   const matchesByCategoryAndSex = matches.reduce((acc, match) => {
     const key = `${match.category}-${match.sex}`;
@@ -170,7 +241,9 @@ function displayMatchesByCategory(matches) {
     ([key, matchesInCategory]) => {
       const categoryRow = document.createElement("tr");
       categoryRow.classList.add("category-header");
-      categoryRow.innerHTML = `<td colspan="6">${key}</td>`;
+      categoryRow.innerHTML = `<td colspan="5">${key}
+          <span class="match-count">(${matchesCount[key]})</span>
+        </td>`;
       categoryRow.addEventListener("click", () => toggleCategoryMatches(key));
       matchesBody.appendChild(categoryRow);
 
@@ -178,7 +251,6 @@ function displayMatchesByCategory(matches) {
         const row = document.createElement("tr");
         row.classList.add("hidden-row", `${key}-matches`);
 
-        // Determine if the match should be highlighted
         const isUnprogrammed =
           match.pair1.player1 === "BYE" ||
           match.pair2.player1 === "BYE" ||
@@ -195,20 +267,20 @@ function displayMatchesByCategory(matches) {
         }
 
         row.innerHTML = `
-        <td class="overflow-cell">${match.pair1.player1 !== "BYE" ? `${match.pair1.player1} - ${match.pair1.player2}` : "BYE"}</td>
-        <td class="overflow-cell">${match.pair2.player1 !== "BYE" ? `${match.pair2.player1} - ${match.pair2.player2}` : "BYE"}</td>
-        <td>${match.round}</td>
-        <td>${isUnprogrammed ? "" : match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : "No programado"}</td>
-        ${
-          match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
-            ? `
-            <td>
-              <button class="edit-btn" data-match-index="${index}" data-category="${key}">Editar</button>
-              <button class="clear-schedule-btn" data-match-index="${index}" data-category="${key}">Borrar Horario</button>
-            </td>`
-            : `<td></td>`
-        }
-      `;
+            <td class="overflow-cell">${match.pair1.player1 !== "BYE" ? `${match.pair1.player1} - ${match.pair1.player2}` : "BYE"}</td>
+            <td class="overflow-cell">${match.pair2.player1 !== "BYE" ? `${match.pair2.player1} - ${match.pair2.player2}` : "BYE"}</td>
+            <td>${match.round}</td>
+            <td>${isUnprogrammed ? "" : match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : "No programado"}</td>
+            ${
+              match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
+                ? `
+                    <td>
+                        <button class="edit-btn" data-match-index="${index}" data-category="${key}">Editar</button>
+                        <button class="clear-schedule-btn" data-match-index="${index}" data-category="${key}">Borrar Horario</button>
+                    </td>`
+                : `<td></td>`
+            }
+        `;
         if (categoryStatesMatches[key]) {
           row.classList.remove("hidden-row");
         }
@@ -216,6 +288,9 @@ function displayMatchesByCategory(matches) {
       });
     },
   );
+
+  // Mostrar total de partidos
+  updateTotalMatches(totalMatches);
 
   // Event listeners for edit and clear buttons
   document.querySelectorAll(".edit-btn").forEach((button) => {
@@ -233,6 +308,11 @@ function displayMatchesByCategory(matches) {
       clearMatchSchedule(category, matchIndex);
     });
   });
+}
+
+function updateTotalMatches(total) {
+  const totalCountElement = document.getElementById("total-count");
+  totalCountElement.textContent = total; // Actualiza el total de partidos
 }
 
 function clearMatchSchedule(category, matchIndex) {
@@ -278,20 +358,34 @@ function generateJSON() {
     return acc;
   }, {});
 
+  const zip = new JSZip(); // Crear una nueva instancia de JSZip
+
+  // Añadir todos los partidos por categoría
   Object.entries(matchesByCategoryAndSex).forEach(
     ([key, matchesInCategory]) => {
-      const blob = new Blob([JSON.stringify(matchesInCategory, null, 2)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
+      const fileName = `${key}_matches.json`; // Nombre del archivo JSON
+      const fileContent = JSON.stringify(matchesInCategory, null, 2); // Contenido JSON
+
+      zip.file(fileName, fileContent); // Añadir el archivo JSON al ZIP
+    },
+  );
+
+  // Generar el ZIP y crear un enlace para descargarlo
+  zip
+    .generateAsync({ type: "blob" })
+    .then((content) => {
+      const url = URL.createObjectURL(content);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${key}_matches.json`;
+      link.download = "tournament_matches.zip"; // Nombre del archivo ZIP
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    },
-  );
+      URL.revokeObjectURL(url); // Liberar el objeto URL
+    })
+    .catch((error) => {
+      console.error("Error al generar el archivo ZIP:", error); // Manejo de errores
+    });
 }
 
 function setupPopup() {
@@ -345,6 +439,7 @@ function openSchedulePopup(category, matchIndex) {
 
   dayInput.addEventListener("change", updateTimes);
   timeInput.addEventListener("change", updateCourts);
+
   function updateTimes() {
     const selectedDay = dayInput.value;
     timeInput.innerHTML =
@@ -353,17 +448,14 @@ function openSchedulePopup(category, matchIndex) {
       "<option value='' selected>Selecciona una pista</option>"; // Clear courts on day change
 
     if (availabilityData[selectedDay]) {
-      // Obtener y ordenar las horas
       const sortedTimes = Object.keys(availabilityData[selectedDay]).sort(
         (a, b) => {
-          // Suponiendo que las horas están en formato HH:MM, comparar como horas
           const [aHour, aMinute] = a.split(":").map(Number);
           const [bHour, bMinute] = b.split(":").map(Number);
           return aHour - bHour || aMinute - bMinute;
         },
       );
 
-      // Agregar las horas ordenadas al menú desplegable
       sortedTimes.forEach((time) => {
         if (hasAvailableCourts(selectedDay, time)) {
           const option = document.createElement("option");
@@ -406,7 +498,7 @@ function openSchedulePopup(category, matchIndex) {
       );
 
       allCourts.sort((a, b) => {
-        const numA = parseInt(a.court.match(/\d+/), 10); // Extract numbers from string
+        const numA = parseInt(a.court.match(/\d+/), 10);
         const numB = parseInt(b.court.match(/\d+/), 10);
         return numA - numB;
       });
@@ -472,4 +564,68 @@ function openSchedulePopup(category, matchIndex) {
   };
 
   popup.style.display = "flex";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Otras inicializaciones
+  const fileInput = document.getElementById("import-zip");
+  fileInput.addEventListener("change", importMatchesFromZip);
+});
+
+function importMatchesFromZip() {
+  const fileInput = document.getElementById("import-zip");
+  const file = fileInput.files[0]; // Obtener el archivo seleccionado
+
+  if (!file) {
+    return; // Si no hay archivo seleccionado, salir de la función
+  }
+
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    const content = event.target.result;
+    JSZip.loadAsync(content) // Cargar el contenido del ZIP
+      .then((zip) => {
+        const promises = [];
+        zip.forEach((relativePath, zipEntry) => {
+          if (zipEntry.name.endsWith(".json")) {
+            // Leer cada archivo JSON en el ZIP
+            promises.push(zipEntry.async("string"));
+          }
+        });
+
+        // Limpiar los emparejamientos existentes antes de importar nuevos
+        localStorage.removeItem("tournamentMatches");
+
+        Promise.all(promises)
+          .then((filesContent) => {
+            filesContent.forEach((jsonString) => {
+              const matchData = JSON.parse(jsonString);
+              // Guarda los partidos en local storage
+              saveMatches(matchData);
+            });
+            alert("Partidos importados con éxito.");
+            displayMatchesByCategory(
+              JSON.parse(localStorage.getItem("tournamentMatches")),
+            );
+          })
+          .catch((error) => {
+            console.error("Error al leer los archivos JSON del ZIP:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error al cargar el ZIP:", error);
+      });
+  };
+
+  reader.readAsArrayBuffer(file); // Leer el archivo como un buffer de array
+}
+
+function saveMatches(matchData) {
+  // Obtener los partidos existentes o inicializar un array vacío
+  const existingMatches =
+    JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+  // Concatenar los nuevos partidos a los existentes
+  const updatedMatches = existingMatches.concat(matchData);
+  // Guardar el nuevo array en el localStorage
+  localStorage.setItem("tournamentMatches", JSON.stringify(updatedMatches));
 }

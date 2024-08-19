@@ -45,12 +45,18 @@
                         Generar Partidos
                     </button>
                     <button class="down-button" id="generate-json-btn">
-                        Generar JSON
+                        Generar ZIP
                     </button>
                     <button class="down-button" id="delete-all-btn">
                         Borrar los emparejamientos
                     </button>
+
+                    <div id="total-matches" class="total-matches">
+                        Partidos Totales:‎‎‎
+                        <span id="total-count"></span>
+                    </div>
                 </div>
+                <input type="file" id="import-zip" accept=".zip" />
             </div>
         </div>
 
@@ -68,7 +74,7 @@
                 <button id="cancel-schedule-btn">Cancelar</button>
             </div>
         </div>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
         <script src="assets/js/generarPartidos.js"></script>
     </body>
 </html>
