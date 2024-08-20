@@ -60,20 +60,34 @@
             </div>
         </div>
 
-        <!-- Popup for scheduling -->
+        <!-- Popup para programar -->
         <div id="schedule-popup" class="popup">
             <div class="popup-content">
                 <h3>Programar Partido</h3>
-                <label for="day-input">Día:</label>
-                <select id="day-input"></select>
-                <label for="time-input">Hora:</label>
-                <select id="time-input"></select>
-                <label for="court-input">Pista:</label>
-                <select id="court-input"></select>
-                <button id="save-schedule-btn">Guardar</button>
-                <button id="cancel-schedule-btn">Cancelar</button>
+
+                <div class="day-navigation">
+                    <button class="object-day-navigation" id="previous-day-btn">
+                        ◀
+                    </button>
+                    <span id="selected-day-label"></span>
+                    <button class="object-day-navigation" id="next-day-btn">
+                        ▶
+                    </button>
+                </div>
+
+                <!-- Mostrar el día aquí -->
+                <div id="availability-tables"></div>
+                <div class="buttons-box">
+                    <button class="popup-button" id="save-schedule-btn">
+                        Guardar
+                    </button>
+                    <button class="popup-button" id="cancel-schedule-btn">
+                        Cancelar
+                    </button>
+                </div>
             </div>
         </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
         <script src="assets/js/generarPartidos.js"></script>
     </body>

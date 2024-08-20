@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0; 
+    background-color: #f0f0f0;
     margin: 0;
     padding: 0;
 }
@@ -9,9 +9,29 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2em;
+    padding: 1em;
+    margin: 1em;
+    border-radius: 8px;
     background-color: #4b6c8b;
     color: white;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.menu > a {
+    margin: 1em;
+    padding: 1em;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    border: solid 1px white;
+    background-color: #92a9c8;
+    border-radius: 5px;
+    width: 10em;
 }
 
 #tournament {
@@ -19,9 +39,9 @@ header {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    margin-top: 2em;
-    padding: 1.5em;
-    width: 100%;
+    margin: 1em;
+    padding: 1em;
+
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

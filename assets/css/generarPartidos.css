@@ -1,4 +1,3 @@
-/* General styling */
 h1,
 h2 {
     text-align: center;
@@ -13,6 +12,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
+
 .down-button {
     width: 20em;
     justify-content: start;
@@ -45,7 +45,6 @@ button {
     margin: 0.5em 0.5em 0.5em 0;
     font-weight: bold;
     font-size: 0.9em;
-
     height: 80%;
     display: flex;
     justify-content: center;
@@ -130,62 +129,86 @@ tr:hover {
     padding: 20px;
     border-radius: 5px;
     color: #f0f0f0;
-    width: 300px;
     max-width: 90%;
+    height: auto;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.popup-content h3 {
-    margin-top: 0;
-    font-size: 1.2em;
+.day-navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 1em;
+    height: 2em;
+    font-weight: bold;
+    font-size: 1.5em;
 }
 
-.popup-content label {
-    display: block;
-    margin: 10px 0 5px;
+.object-day-navigation {
+    color: orange;
 }
 
-.popup-content select {
-    width: calc(100% - 16px);
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: #3b4954;
-    color: #f0f0f0;
+.day-navigation > #selected-day-label {
+    width: 6em;
+    color: orange;
 }
 
-.popup-content select:focus {
-    border-color: #ff5100;
-    outline: none;
+.buttons-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.popup-button {
+    width: 15em;
+    margin: 1em;
+    background-color: #3b4954;
+}
+/* Styles for Availability Table */
+.availability-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white; /* Fondo blanco para la tabla de disponibilidad */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil en la tabla */
 }
 
-#save-schedule-btn,
-#cancel-schedule-btn {
-    width: 45%;
-    margin: 5px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff5100bb;
-    color: #fff;
-    cursor: pointer;
+.availability-table th,
+.availability-table td {
+    padding: 10px; /* Espaciado interno generoso */
+    text-align: center; /* Alineación centrada */
+    border: 1px solid #ddd; /* Línea separadora */
+    padding: 0.5em;
 }
 
-#save-schedule-btn:hover,
-#cancel-schedule-btn:hover {
-    background-color: #ff5100;
+.hour-cell {
+    background-color: #4b6c8b; /* Color azul para el encabezado de la tabla de disponibilidad */
+    color: #fff; /* Texto en blanco */
+    font-weight: bold;
 }
 
-.unprogrammed-match {
-    border-right: 4px solid #ff0000;
+.availability-table th {
+    background-color: #4b6c8b; /* Color azul para el encabezado de la tabla de disponibilidad */
+    color: #fff; /* Texto en blanco */
 }
 
-.unprogrammed-match td {
-    color: #b0b0b0;
+.availability-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Fondo gris claro para filas pares */
 }
 
-.by-rows {
-    border-left: none;
+.availability-table tr:hover {
+    background-color: rgba(29, 29, 29, 0.1);
+}
+
+/* Estilo para las celdas deshabilitadas */
+.availability-cell.disabled-cell {
+    background-color: gray; /* Color gris para las celdas no disponibles */
+    pointer-events: none; /* Prevenir interacción */
+}
+
+/* Estilo para las celdas seleccionadas */
+.availability-cell.selected {
+    background-color: #f5a768; /* Color al ser seleccionadas */
+    color: white; /* Texto en blanco */
 }
