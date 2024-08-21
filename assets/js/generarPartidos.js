@@ -8,7 +8,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Datos de Disponibilidad en Local Storage
-const availabilityData = JSON.parse(localStorage.getItem("availabilityData"));
+let availabilityData = JSON.parse(localStorage.getItem("availabilityData"));
+
+if (!availabilityData) {
+  // Si no hay disponibilidad almacenada, agregar un día de disponibilidad vacío
+  availabilityData = {
+    ["Lunes"]: {},
+  };
+  localStorage.setItem("availabilityData", JSON.stringify(availabilityData));
+}
 
 // Definición del template de disponibilidad de horarios
 const availabilityTableTemplate = (() => {
@@ -321,25 +329,18 @@ function displayMatchesByCategory(matches) {
         row.classList.add("hidden-row", `${key}-matches`);
 
         const isUnprogrammed =
-          match.pair1.player1 === "BYE" ||
-          match.pair2.player1 === "BYE" ||
-          !match.schedule;
-        if (
-          isUnprogrammed &&
           match.pair1.player1 !== "BYE" &&
-          match.pair2.player1 !== "BYE"
-        ) {
+          match.pair2.player1 !== "BYE" &&
+          !match.schedule;
+        if (isUnprogrammed) {
           row.classList.add("unprogrammed-match");
-        }
-        if (match.pair1.player1 === "BYE" || match.pair2.player1 === "BYE") {
-          row.classList.add("by-rows");
         }
 
         row.innerHTML = `
                 <td class="overflow-cell">${match.pair1.player1 !== "BYE" ? `${match.pair1.player1} - ${match.pair1.player2}` : "BYE"}</td>
                 <td class="overflow-cell">${match.pair2.player1 !== "BYE" ? `${match.pair2.player1} - ${match.pair2.player2}` : "BYE"}</td>
                 <td>${match.round}</td>
-                <td>${isUnprogrammed ? "" : match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : "No programado"}</td>
+                <td>${isUnprogrammed ? "" : match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : ""}</td>
                 ${
                   match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
                     ? `<td>
@@ -421,6 +422,11 @@ function toggleCategoryMatches(categoryKey) {
 // Generar archivo ZIP con los partidos
 function generateJSON() {
   const matches = JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+  const availabilityData =
+    JSON.parse(localStorage.getItem("availabilityData")) || {};
+  const tournamentData =
+    JSON.parse(localStorage.getItem("tournamentData")) || [];
+
   const matchesByCategoryAndSex = matches.reduce((acc, match) => {
     const key = `${match.category}-${match.sex}`;
     (acc[key] = acc[key] || []).push(match);
@@ -429,22 +435,33 @@ function generateJSON() {
 
   const zip = new JSZip();
 
+  // Añadir partidos al ZIP
   Object.entries(matchesByCategoryAndSex).forEach(
     ([key, matchesInCategory]) => {
       const fileName = `${key}_matches.json`;
       const fileContent = JSON.stringify(matchesInCategory, null, 2);
-
       zip.file(fileName, fileContent);
     },
   );
 
+  // Añadir disponibilidad horaria al ZIP
+  const availabilityFileName = "availability_data.json";
+  const availabilityFileContent = JSON.stringify(availabilityData, null, 2);
+  zip.file(availabilityFileName, availabilityFileContent);
+
+  // Añadir inscripciones al ZIP
+  const tournamentFileName = "tournament_data.json";
+  const tournamentFileContent = JSON.stringify(tournamentData, null, 2);
+  zip.file(tournamentFileName, tournamentFileContent);
+
+  // Generar y descargar el ZIP
   zip
     .generateAsync({ type: "blob" })
     .then((content) => {
       const url = URL.createObjectURL(content);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "tournament_matches.zip";
+      link.download = "tournament_data.zip";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -471,6 +488,13 @@ function setupPopup() {
 }
 
 function openSchedulePopup(category, matchIndex) {
+  if (!availabilityData || Object.keys(availabilityData).length === 0) {
+    alert(
+      "No hay disponibilidad horaria. Por favor, agregue disponibilidad antes de programar los partidos.",
+    );
+    return;
+  }
+
   const matches = JSON.parse(localStorage.getItem("tournamentMatches")) || [];
   const matchesByCategoryAndSex = matches.reduce((acc, match) => {
     const key = `${match.category}-${match.sex}`;
@@ -542,6 +566,15 @@ function populateAvailabilityTable(day, availabilityTemplate) {
 
   const allTimes = Object.keys(availabilityTableTemplate);
 
+  // Obtener los horarios ya seleccionados
+  const matches = JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+  const selectedSchedules = matches
+    .filter((match) => match.schedule)
+    .map(
+      (match) =>
+        `${match.schedule.day}-${match.schedule.time}-${match.schedule.court}`,
+    );
+
   allTimes.forEach((time) => {
     const row = document.createElement("tr");
     row.innerHTML = `<td class="hour-cell">${time}</td>`;
@@ -554,35 +587,40 @@ function populateAvailabilityTable(day, availabilityTemplate) {
       cell.dataset.pista = pistaName;
       cell.classList.add("availability-cell");
 
+      const scheduleKey = `${day}-${time}-${pistaName}`;
+
       if (
         availabilityTemplate[time] &&
         availabilityTemplate[time].includes(pistaName)
       ) {
-        cell.addEventListener("click", () => {
-          const selectedCells = availabilityTables.querySelectorAll(
-            ".availability-cell.selected",
-          );
-          selectedCells.forEach((selectedCell) => {
-            selectedCell.classList.remove("selected");
+        if (selectedSchedules.includes(scheduleKey)) {
+          cell.classList.add("occupied-cell");
+        } else {
+          cell.addEventListener("click", () => {
+            const selectedCells = availabilityTables.querySelectorAll(
+              ".availability-cell.selected",
+            );
+            selectedCells.forEach((selectedCell) => {
+              selectedCell.classList.remove("selected");
+            });
+            cell.classList.add("selected");
+
+            const scheduleData = {
+              day: day,
+              time: time,
+              court: pistaName,
+            };
+
+            currentEditingMatch.schedule = scheduleData; // Usa la variable global
+
+            const matches =
+              JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+            localStorage.setItem("tournamentMatches", JSON.stringify(matches));
+            displayMatchesByCategory(matches);
           });
-          cell.classList.add("selected");
-
-          const scheduleData = {
-            day: day,
-            time: time,
-            court: pistaName,
-          };
-
-          currentEditingMatch.schedule = scheduleData; // Usa la variable global
-
-          const matches =
-            JSON.parse(localStorage.getItem("tournamentMatches")) || [];
-          localStorage.setItem("tournamentMatches", JSON.stringify(matches));
-          displayMatchesByCategory(matches);
-        });
+        }
       } else {
         cell.classList.add("disabled-cell");
-        cell.style.opacity = 0.5;
       }
 
       row.appendChild(cell);
@@ -617,19 +655,27 @@ function importMatchesFromZip() {
         const promises = [];
         zip.forEach((relativePath, zipEntry) => {
           if (zipEntry.name.endsWith(".json")) {
-            promises.push(zipEntry.async("string"));
+            promises.push(
+              zipEntry.async("string").then((fileContent) => {
+                return { name: zipEntry.name, content: fileContent };
+              }),
+            );
           }
         });
 
-        localStorage.removeItem("tournamentMatches");
-
         Promise.all(promises)
           .then((filesContent) => {
-            filesContent.forEach((jsonString) => {
-              const matchData = JSON.parse(jsonString);
-              saveMatches(matchData);
+            filesContent.forEach(({ name, content }) => {
+              const data = JSON.parse(content);
+              if (name.includes("matches")) {
+                saveMatches(data);
+              } else if (name === "availability_data.json") {
+                localStorage.setItem("availabilityData", JSON.stringify(data));
+              } else if (name === "tournament_data.json") {
+                localStorage.setItem("tournamentData", JSON.stringify(data));
+              }
             });
-            alert("Partidos importados con éxito.");
+            alert("Datos importados con éxito.");
             displayMatchesByCategory(
               JSON.parse(localStorage.getItem("tournamentMatches")),
             );

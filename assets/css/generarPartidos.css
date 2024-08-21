@@ -109,6 +109,11 @@ tr:hover {
     text-overflow: ellipsis;
 }
 
+.unprogrammed-match {
+    border-right: solid 5px red;
+    color: rgba(255, 255, 255, 0.4);
+}
+
 /* Popup styles */
 .popup {
     position: fixed;
@@ -205,6 +210,11 @@ tr:hover {
 .availability-cell.disabled-cell {
     background-color: gray; /* Color gris para las celdas no disponibles */
     pointer-events: none; /* Prevenir interacción */
+}
+
+.occupied-cell {
+    background-color: #f5a768;
+    opacity: 0.7;
 }
 
 /* Estilo para las celdas seleccionadas */

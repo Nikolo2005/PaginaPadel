@@ -50,8 +50,7 @@ function clearAvailabilityData() {
 }
 
 function clearAvailabilityTables() {
-  const availabilityTables = document.getElementById("availability-tables");
-  availabilityTables.innerHTML = "";
+  document.getElementById("availability-tables").innerHTML = "";
 }
 
 function addDay() {
@@ -69,29 +68,15 @@ function addDay() {
     return;
   }
 
-  const tableContainer = document.createElement("div");
-  tableContainer.innerHTML = `
-    <h3>${day} <button onclick="removeDay('${day}')">Eliminar Día</button></h3>
-    <table id="availability-${day}">
-      <thead>
-        <tr>
-          <th>Hora</th>
-          ${Array.from({ length: 6 }, (_, i) => `<th class="pista-cell">Pista ${i + 1}</th>`).join("")}
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  `;
-  availabilityTables.appendChild(tableContainer);
+  addDayElement(day);
   populateAvailabilityTable(day, availabilityTableTemplate);
   updateLocalStorage(day);
 
   daySelect.value = "";
-  addAvailabilityListeners();
 }
 
 function updateLocalStorage(day) {
-  let availabilityData =
+  const availabilityData =
     JSON.parse(localStorage.getItem("availabilityData")) || {};
   availabilityData[day] = availabilityData[day] || {};
   localStorage.setItem("availabilityData", JSON.stringify(availabilityData));
@@ -100,7 +85,7 @@ function updateLocalStorage(day) {
 function removeDay(day) {
   if (confirm(`¿Estás seguro de que deseas eliminar el día ${day}?`)) {
     document.querySelector(`#availability-${day}`).parentElement.remove();
-    let availabilityData =
+    const availabilityData =
       JSON.parse(localStorage.getItem("availabilityData")) || {};
     delete availabilityData[day];
     localStorage.setItem("availabilityData", JSON.stringify(availabilityData));
@@ -177,24 +162,6 @@ function addClickListener(cell, day, value, type) {
   });
 }
 
-function addAvailabilityListeners() {
-  document.querySelectorAll(".availability-cell").forEach((cell) => {
-    cell.removeEventListener("click", availabilityCellClickHandler);
-    cell.addEventListener("click", availabilityCellClickHandler);
-  });
-}
-
-function availabilityCellClickHandler() {
-  const cell = this;
-  cell.classList.toggle("selected");
-  updateAvailabilityData(
-    cell.dataset.day,
-    cell.dataset.time,
-    cell.dataset.pista,
-    cell.classList.contains("selected"),
-  );
-}
-
 function loadStoredData() {
   const availabilityData =
     JSON.parse(localStorage.getItem("availabilityData")) || {};
@@ -202,7 +169,6 @@ function loadStoredData() {
     addDayElement(day);
     populateAvailabilityTable(day, availabilityTableTemplate);
     restoreAvailability(day, availabilityData[day]);
-    addAvailabilityListeners();
   });
 }
 
@@ -225,7 +191,7 @@ function addDayElement(day) {
 }
 
 function updateAvailabilityData(day, time, pista, isChecked) {
-  let availabilityData =
+  const availabilityData =
     JSON.parse(localStorage.getItem("availabilityData")) || {};
   availabilityData[day] = availabilityData[day] || {};
   availabilityData[day][time] = availabilityData[day][time] || [];
