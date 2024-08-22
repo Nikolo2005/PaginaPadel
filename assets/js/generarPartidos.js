@@ -118,23 +118,30 @@ function deleteAllData() {
 
 // Generar partidos
 function generateMatches() {
-  const storedData = JSON.parse(localStorage.getItem("tournamentData"));
-  if (!storedData || storedData.length < 2) {
-    alert("Debe haber al menos dos parejas para generar partidos.");
-    return;
+  try {
+    const storedData = JSON.parse(localStorage.getItem("tournamentData"));
+    if (!storedData || storedData.length < 2) {
+      alert("Debe haber al menos dos parejas para generar partidos.");
+      return;
+    }
+
+    const matches = createMatches(storedData);
+    const consolationMatches = createConsolationMatches(matches);
+    const allMatches = [...matches, ...consolationMatches];
+
+    if (containsInvalidMatches(allMatches)) {
+      alert("No se pueden generar partidos válidos.");
+      return;
+    }
+
+    localStorage.setItem("tournamentMatches", JSON.stringify(allMatches));
+    displayMatchesByCategory(allMatches);
+  } catch (error) {
+    console.error("Error generating matches:", error);
+    alert(
+      "Ocurrió un error al generar los partidos. Por favor, inténtelo de nuevo.",
+    );
   }
-
-  const matches = createMatches(storedData);
-  const consolationMatches = createConsolationMatches(matches);
-  const allMatches = [...matches, ...consolationMatches];
-
-  if (containsInvalidMatches(allMatches)) {
-    alert("No se pueden generar partidos válidos.");
-    return;
-  }
-
-  localStorage.setItem("tournamentMatches", JSON.stringify(allMatches));
-  displayMatchesByCategory(allMatches);
 }
 
 // Crear partidos

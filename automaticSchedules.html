@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Open T</title>
+        <link rel="stylesheet" href="assets/css/index.css" />
+        <link rel="stylesheet" href="assets/css/sidebar.css" />
+        <link rel="stylesheet" href="assets/css/automaticSchedules.css" />
+        <link rel="icon" href="assets/img/favicon.png" type="image/png" />
+    </head>
+
+    <body>
+        <div class="sidebar">
+            <img src="assets/img/logo.png" class="sidebar-image" />
+            <a href="index.html"><button>Inicio</button></a>
+            <a href="disponibilidad.html"><button>Pistas/Horarios</button></a>
+            <a href="inscripciones.html"><button>Inscripciones</button></a>
+            <a href="generarPartidos.html"><button>Partidos</button></a>
+            <a href="automaticSchedules.html"
+                ><button class="active-button">Horarios Automáticos</button></a
+            >
+            <a href="generarCuadros.html"><button>Generar Cuadro</button></a>
+        </div>
+
+        <div class="content">
+            <div class="container">
+                <h2>Horarios Automáticos</h2>
+                <div class="day-navigation">
+                    <button id="previous-day-btn">◀</button>
+                    <span id="selected-day-label"></span>
+                    <button id="next-day-btn">▶</button>
+                </div>
+
+                <div class="auto-content-box">
+                    <div class="auto-content-sub-box">
+                        <h2>Colores por Ronda</h2>
+                        <div class="opt-rounds">
+                            <label
+                                ><input type="radio" name="round" value="32s" />
+                                🟥 Treintaidosavos</label
+                            >
+                            <label
+                                ><input type="radio" name="round" value="16s" />
+                                🟧 Dieciseisavos</label
+                            >
+                            <label
+                                ><input type="radio" name="round" value="8s" />
+                                🟨 Octavos</label
+                            >
+                            <label
+                                ><input type="radio" name="round" value="4s" />
+                                🟩 Cuartos</label
+                            >
+                            <label
+                                ><input type="radio" name="round" value="2s" />
+                                🟦 Semifinal</label
+                            >
+                            <label
+                                ><input type="radio" name="round" value="1s" />
+                                🟪 Final</label
+                            >
+                        </div>
+                    </div>
+                    <div
+                        class="auto-content-sub-box"
+                        id="availability-tables"
+                    ></div>
+                    <div class="auto-content-sub-box">
+                        <h2>Información de Torneo</h2>
+                        <h3>
+                            Horarios ocupados:
+                            <span id="num-horarios-ocupados"></span>/<span
+                                id="num-horarios-disponibles"
+                            ></span>
+                        </h3>
+                        <h3>
+                            Número de Parejas: <span id="num-parejas"></span>
+                        </h3>
+                        <h3>
+                            Número de Partidos: <span id="num-partidos"></span>
+                        </h3>
+                        <h2>Número de Rondas</h2>
+                        <h3>
+                            Número de rondas "32s":
+                            <span id="num-32s-cells"></span> /
+                            <span id="num-32s"></span>
+                        </h3>
+                        <h3>
+                            Número de rondas "16s":
+                            <span id="num-16s-cells"></span> /
+                            <span id="num-16s"></span>
+                        </h3>
+                        <h3>
+                            Número de rondas "Octavos":
+                            <span id="num-8s-cells"></span> /
+                            <span id="num-8s"></span>
+                        </h3>
+                        <h3>
+                            Número de rondas "Cuartos":
+                            <span id="num-4s-cells"></span> /
+                            <span id="num-4s"></span>
+                        </h3>
+                        <h3>
+                            Número de rondas "Semifinales":
+                            <span id="num-2s-cells"></span> /
+                            <span id="num-2s"></span>
+                        </h3>
+                        <h3>
+                            Número de rondas "Finales":
+                            <span id="num-1s-cells"></span> /
+                            <span id="num-1s"></span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="assets/js/automaticSchedules.js"></script>
+    </body>
+</html>
