@@ -10,62 +10,70 @@ document.addEventListener("DOMContentLoaded", () => {
   loadCellDataFromLocalStorage();
   deselectRoundInputs();
   updateRoundCellCounts();
+  document
+    .getElementById("generateHourMatches")
+    .addEventListener("click", generateHourMatches);
 });
+
+function safeParseJSON(jsonString) {
+  try {
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error("Failed to parse JSON:", error);
+    return null;
+  }
+}
+
+function updateElementTextContent(elementId, newText) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.textContent = newText;
+  }
+}
 
 function updateTournamentData() {
   const tournamentData =
-    JSON.parse(localStorage.getItem("tournamentData")) || [];
-  document.getElementById("num-parejas").textContent = tournamentData.length;
+    safeParseJSON(localStorage.getItem("tournamentData")) || [];
+  updateElementTextContent("num-parejas", tournamentData.length);
 }
 
 function updateTournamentMatches() {
   const tournamentMatches =
-    JSON.parse(localStorage.getItem("tournamentMatches")) || [];
-  document.getElementById("num-partidos").textContent =
-    tournamentMatches.length;
+    safeParseJSON(localStorage.getItem("tournamentMatches")) || [];
+  updateElementTextContent("num-partidos", tournamentMatches.length);
 }
 
 function updateAvailabilityData() {
   const availabilityData =
-    JSON.parse(localStorage.getItem("availabilityData")) || {};
+    safeParseJSON(localStorage.getItem("availabilityData")) || {};
   let availableSlots = 0;
 
   Object.values(availabilityData).forEach((day) => {
     Object.values(day).forEach((pistas) => {
-      availableSlots += pistas.length;
+      availableSlots += Object.keys(pistas).length;
     });
   });
 
-  document.getElementById("num-horarios-disponibles").textContent =
-    availableSlots;
+  updateElementTextContent("num-horarios-disponibles", availableSlots);
 }
 
 function updateOccupiedSlots() {
-  const availabilityData =
-    JSON.parse(localStorage.getItem("availabilityData")) || {};
   const tournamentMatches =
-    JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+    safeParseJSON(localStorage.getItem("tournamentMatches")) || [];
   let occupiedSlots = 0;
 
   tournamentMatches.forEach((match) => {
     if (match.schedule) {
-      const { day, time, court } = match.schedule;
-      if (
-        availabilityData[day] &&
-        availabilityData[day][time] &&
-        availabilityData[day][time].includes(court)
-      ) {
-        occupiedSlots++;
-      }
+      occupiedSlots++;
     }
   });
 
-  document.getElementById("num-horarios-ocupados").textContent = occupiedSlots;
+  updateElementTextContent("num-horarios-ocupados", occupiedSlots);
 }
 
 function updateMatchRounds() {
   const tournamentMatches =
-    JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+    safeParseJSON(localStorage.getItem("tournamentMatches")) || [];
 
   const rounds = {
     "Treintaidosavos de Final": "num-32s",
@@ -78,13 +86,13 @@ function updateMatchRounds() {
 
   Object.keys(rounds).forEach((round) => {
     const count = tournamentMatches.filter(
-      (match) => match.round === round,
+      (match) => match.round === round && !hasBye(match),
     ).length;
-    document.getElementById(rounds[round]).textContent = count;
+    updateElementTextContent(rounds[round], count);
   });
 }
 
-let availabilityData = JSON.parse(localStorage.getItem("availabilityData"));
+let availabilityData = safeParseJSON(localStorage.getItem("availabilityData"));
 
 if (!availabilityData) {
   availabilityData = {
@@ -134,24 +142,47 @@ const roundColors = {
   "1s": "rgb(139, 0, 255)", // Purple
 };
 
+const roundMapping = {
+  "Treintaidosavos de Final": "32s",
+  "Dieciseisavos de Final": "16s",
+  "Octavos de Final": "8s",
+  "Cuartos de Final": "4s",
+  Semifinal: "2s",
+  Final: "1s",
+};
+
 function setupAvailabilityDays() {
   updateSelectedDay();
 }
 
-function addEventListeners() {
-  document.getElementById("previous-day-btn").addEventListener("click", () => {
-    if (currentDayIndex > 0) {
-      currentDayIndex--;
-      updateSelectedDay();
-    }
-  });
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
 
-  document.getElementById("next-day-btn").addEventListener("click", () => {
-    if (currentDayIndex < availableDays.length - 1) {
-      currentDayIndex++;
-      updateSelectedDay();
-    }
-  });
+function addEventListeners() {
+  document.getElementById("previous-day-btn").addEventListener(
+    "click",
+    debounce(() => {
+      if (currentDayIndex > 0) {
+        currentDayIndex--;
+        updateSelectedDay();
+      }
+    }, 300),
+  );
+
+  document.getElementById("next-day-btn").addEventListener(
+    "click",
+    debounce(() => {
+      if (currentDayIndex < availableDays.length - 1) {
+        currentDayIndex++;
+        updateSelectedDay();
+      }
+    }, 300),
+  );
 }
 
 function updateSelectedDay() {
@@ -239,7 +270,7 @@ function deselectRoundInputs() {
 }
 
 function saveCellDataToLocalStorage(day, time, pista, round) {
-  let cellData = JSON.parse(localStorage.getItem("cellData")) || {};
+  let cellData = safeParseJSON(localStorage.getItem("cellData")) || {};
   if (!cellData[day]) {
     cellData[day] = {};
   }
@@ -251,7 +282,7 @@ function saveCellDataToLocalStorage(day, time, pista, round) {
 }
 
 function removeCellDataFromLocalStorage(day, time, pista) {
-  let cellData = JSON.parse(localStorage.getItem("cellData")) || {};
+  let cellData = safeParseJSON(localStorage.getItem("cellData")) || {};
   if (cellData[day] && cellData[day][time] && cellData[day][time][pista]) {
     delete cellData[day][time][pista];
     if (Object.keys(cellData[day][time]).length === 0) {
@@ -265,7 +296,7 @@ function removeCellDataFromLocalStorage(day, time, pista) {
 }
 
 function loadCellDataFromLocalStorage() {
-  const cellData = JSON.parse(localStorage.getItem("cellData")) || {};
+  const cellData = safeParseJSON(localStorage.getItem("cellData")) || {};
   Object.keys(cellData).forEach((day) => {
     Object.keys(cellData[day]).forEach((time) => {
       Object.keys(cellData[day][time]).forEach((pista) => {
@@ -283,7 +314,7 @@ function loadCellDataFromLocalStorage() {
 }
 
 function updateRoundCellCounts() {
-  const cellData = JSON.parse(localStorage.getItem("cellData")) || {};
+  const cellData = safeParseJSON(localStorage.getItem("cellData")) || {};
   const roundCounts = {
     "32s": 0,
     "16s": 0,
@@ -322,4 +353,83 @@ function updateRoundCellCountElement(elementId, newCount) {
     void element.offsetWidth; // Trigger reflow to restart the animation
     element.classList.add("flash");
   }
+}
+
+function extractRoundTimeRanges(cellData) {
+  const roundTimeRanges = {};
+
+  Object.keys(cellData).forEach((day) => {
+    Object.keys(cellData[day]).forEach((time) => {
+      Object.keys(cellData[day][time]).forEach((pista) => {
+        const round = cellData[day][time][pista];
+        if (!roundTimeRanges[round]) {
+          roundTimeRanges[round] = [];
+        }
+        roundTimeRanges[round].push({ day, time, pista });
+      });
+    });
+  });
+
+  console.log("Extracted Round Time Ranges:", roundTimeRanges);
+  return roundTimeRanges;
+}
+
+function generateHourMatches() {
+  const tournamentMatches =
+    safeParseJSON(localStorage.getItem("tournamentMatches")) || [];
+  const availabilityData =
+    safeParseJSON(localStorage.getItem("availabilityData")) || {};
+  const cellData = safeParseJSON(localStorage.getItem("cellData")) || {};
+  const roundTimeRanges = extractRoundTimeRanges(cellData);
+
+  console.log("Tournament Matches:", tournamentMatches);
+  console.log("Availability Data:", availabilityData);
+  console.log("Round Time Ranges:", roundTimeRanges);
+
+  // Eliminar horarios asignados previamente
+  tournamentMatches.forEach((match) => {
+    match.schedule = null;
+  });
+
+  tournamentMatches.forEach((match) => {
+    if (!hasBye(match)) {
+      const normalizedRound = roundMapping[match.round];
+      const allowedTimes = roundTimeRanges[normalizedRound] || [];
+      console.log(
+        `Processing match: ${JSON.stringify(match)} with allowed times: ${allowedTimes}`,
+      );
+      let matchScheduled = false;
+      for (const { day, time, pista } of allowedTimes) {
+        if (availabilityData[day] && availabilityData[day][time]) {
+          const isOccupied = tournamentMatches.some(
+            (m) =>
+              m.schedule &&
+              m.schedule.day === day &&
+              m.schedule.time === time &&
+              m.schedule.court === pista,
+          );
+
+          if (!isOccupied) {
+            match.schedule = { day, time, court: pista };
+            console.log(`Assigned schedule to match: ${JSON.stringify(match)}`);
+            matchScheduled = true;
+            break;
+          }
+        }
+      }
+      if (!matchScheduled) {
+        console.warn(
+          `No available slot found for match: ${JSON.stringify(match)}`,
+        );
+      }
+    }
+  });
+
+  localStorage.setItem("tournamentMatches", JSON.stringify(tournamentMatches));
+  updateOccupiedSlots();
+  loadCellDataFromLocalStorage();
+}
+
+function hasBye(match) {
+  return match.pair1.player1 === "BYE" || match.pair2.player1 === "BYE";
 }
