@@ -16,14 +16,14 @@
                 <a href="generarPartidos.html">Partidos</a>
                 <a href="generarCuadros.html">Generar Cuadro</a>
             </div>
-            <h3>Selecciona el archivo con los partidos</h3>
-            <input type="file" id="fileInput" />
-            <button id="downloadPdf">Descargar PDF</button>
+            <h3>Selecciona el archivo ZIP con los partidos</h3>
+            <input type="file" id="fileInputZip" accept=".zip" />
         </header>
-        <div id="tournament"></div>
+        <div id="tournament-container"></div>
 
-        <script src="assets/js/generarCuadros.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+        <script src="assets/js/generarCuadros.js"></script>
     </body>
 </html>
