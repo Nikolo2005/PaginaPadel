@@ -92,7 +92,7 @@ header {
 
 .pair {
     position: relative;
-    width: 130%;
+    width: 100%;
     transition: background-color 0.3s;
 }
 

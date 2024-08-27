@@ -1,10 +1,19 @@
-document.addEventListener("DOMContentLoaded", function () {
-  function isMobileDevice() {
-    return /Mobi|Android/i.test(navigator.userAgent);
-  }
+function isMobileDevice() {
+  // Verificar el user agent
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const isMobileUserAgent =
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+      userAgent.toLowerCase(),
+    );
 
-  if (isMobileDevice()) {
-    document.getElementById("content").classList.add("hidden");
-    document.getElementById("mobile-warning").classList.remove("hidden");
-  }
-});
+  // Verificar el tamaño de la pantalla
+  const isMobileScreenSize = window.matchMedia("(max-width: 767px)").matches;
+
+  return isMobileUserAgent || isMobileScreenSize;
+}
+
+if (isMobileDevice()) {
+  document.getElementById("mobile-warning").classList.remove("hidden");
+} else {
+  document.getElementById("mobile-warning").classList.add("hidden");
+}

@@ -6,7 +6,6 @@ h2 {
 
 .container > img {
     width: 90%;
-
     margin: 0 auto;
     text-align: center;
     justify-content: center;
@@ -18,20 +17,26 @@ h2 {
 
 #mobile-warning {
     position: fixed;
-    top: 0;
-    left: 0;
+    text-align: center;
     width: 100%;
     height: 100%;
     background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
     z-index: 1000;
-    color: black;
 }
 
-#mobile-warning > h1 {
-    color: red;
+.message {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    justify-content: center;
+    color: black;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.message > h1 {
+    color: #f28123;
+    border: 2px solid #f28123;
 }
