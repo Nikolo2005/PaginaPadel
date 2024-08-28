@@ -25,9 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("total-rounds-count").textContent = new Set(
     tournamentMatches.map((match) => match.round),
   ).size;
-  document.getElementById("total-players-count").textContent = totalPairs.size;
-  document.getElementById("total-pairs-count").textContent =
-    totalPairs.size / 2;
+  document.getElementById("total-players-count").textContent =
+    totalPairs.size * 2;
+  document.getElementById("total-pairs-count").textContent = totalPairs.size;
   document.getElementById("total-byes-count").textContent = totalByes;
 });
 
