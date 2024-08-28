@@ -41,30 +41,44 @@
                 </div>
 
                 <div class="down-options">
-                    <button class="down-button" id="generate-matches-btn">
+                    <button
+                        class="down-button down-element"
+                        id="generate-matches-btn"
+                    >
                         Generar Partidos
                     </button>
                     <button
                         onclick="window.location.href='automaticSchedules.html';"
-                        class="down-button"
+                        class="down-button down-element"
                         id="automatic-schedule"
                     >
                         Horarios Automáticos
                     </button>
-                    <button class="down-button" id="generate-json-btn">
+                    <button
+                        class="down-button down-element"
+                        id="generate-json-btn"
+                    >
                         Generar ZIP
                     </button>
+                    <input
+                        type="file"
+                        id="import-zip"
+                        class="down-element"
+                        accept=".zip"
+                    />
 
-                    <button class="down-button" id="delete-all-btn">
+                    <button
+                        class="down-button down-element"
+                        id="delete-all-btn"
+                    >
                         Borrar los emparejamientos
                     </button>
 
-                    <div id="total-matches" class="total-matches">
+                    <div id="total-matches " class="down-element total-matches">
                         Partidos Totales:‎‎‎
                         <span id="total-count"></span>
                     </div>
                 </div>
-                <input type="file" id="import-zip" accept=".zip" />
             </div>
         </div>
 
