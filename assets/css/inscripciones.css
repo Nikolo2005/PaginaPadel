@@ -10,28 +10,31 @@ form {
 }
 
 #tournament-form {
-    margin-top: 2em;
-    background-color: #4b6c8b;
-    padding: 1.5em;
-    border-radius: 1em;
-    box-shadow: 5px 5px 5px #395269;
     text-align: center;
-    align-items: end;
+    align-items: center;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-    gap: 1em;
+    grid-template-rows: 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;
 
     grid-template-areas:
-        "name1 name2"
-        "name1-form name2-form"
-        "category sex"
-        "category-form sex-form"
-        "button button ";
+        "title title"
+        "name1 name1"
+        "name1-form name1-form"
+        "name2 name2"
+        "name2-form name2-form"
+        "category category"
+        "category-form category-form "
+        "sex sex"
+        "sex-form sex-form"
+        "button button";
 }
 
 #tournament-form > .player1-title {
     grid-area: name1;
+}
+
+#tournament-form > .tittle {
+    grid-area: title;
 }
 
 #tournament-form > #player1 {
@@ -64,7 +67,7 @@ form {
 
 #tournament-form > .add-button {
     margin: 0 auto;
-    width: 30%;
+    width: 100%;
     grid-area: button;
 }
 
@@ -151,4 +154,20 @@ tr:hover {
 
 .hidden-row {
     display: none;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+}
+
+.inscripciones-container {
+    width: auto;
+    max-width: 13%;
+    background-color: #4b6c8b;
+    margin-left: 2em;
+    padding: 1.2em;
+    box-shadow: 5px 10px 15px #4b6c8b;
+    border-radius: 0.4em;
+    overflow-y: auto;
 }

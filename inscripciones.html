@@ -4,8 +4,9 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Open T</title>
-        <link rel="stylesheet" href="assets/css/sidebar.css" />
         <link rel="stylesheet" href="assets/css/inscripciones.css" />
+        <link rel="stylesheet" href="assets/css/sidebar.css" />
+
         <link rel="icon" href="assets/img/favicon.png" type="image/png" />
     </head>
     <body>
@@ -22,9 +23,30 @@
 
         <div class="content">
             <div class="container">
+                <div id="tournament-table">
+                    <h2>Parejas por categorías</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pareja</th>
+                                <th>Categoría</th>
+                                <th>Género</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tournament-body">
+                            <!-- Aquí se mostrarán las parejas del torneo -->
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <button id="delete-all-btn">Borrar todas las parejas</button>
+            </div>
+
+            <div class="inscripciones-container">
                 <div id="form-container">
-                    <h2>Inscripciones de la prueba</h2>
                     <form id="tournament-form">
+                        <h2 class="tittle">Inscripciones de la prueba</h2>
                         <label for="player1" class="player1-title"
                             >Jugador 1:</label
                         >
@@ -53,26 +75,6 @@
                         </button>
                     </form>
                 </div>
-            </div>
-            <div class="container">
-                <div id="tournament-table">
-                    <h2>Parejas por categorías</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Pareja</th>
-                                <th>Categoría</th>
-                                <th>Género</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tournament-body">
-                            <!-- Aquí se mostrarán las parejas del torneo -->
-                        </tbody>
-                    </table>
-                </div>
-                <br />
-                <button id="delete-all-btn">Borrar todas las parejas</button>
             </div>
         </div>
 

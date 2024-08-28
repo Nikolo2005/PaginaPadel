@@ -8,6 +8,24 @@ document.addEventListener("DOMContentLoaded", () => {
 // Añadir eventos a los botones
 function addEventListeners() {
   document
+    .getElementById("delete-schedules-btn")
+    .addEventListener("click", () => {
+      if (confirm("¿Estás seguro de que deseas borrar todos los horarios?")) {
+        let tournamentMatches =
+          JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+        tournamentMatches.forEach((match) => {
+          match.schedule = null;
+        });
+        localStorage.setItem(
+          "tournamentMatches",
+          JSON.stringify(tournamentMatches),
+        );
+        alert("Todos los horarios han sido borrados.");
+        location.reload(); // Recargar la página para reflejar los cambios
+      }
+    });
+
+  document
     .getElementById("delete-all-btn")
     .addEventListener("click", deleteAllData);
   document
@@ -21,6 +39,7 @@ function addEventListeners() {
         generateMatches();
       }
     });
+
   document
     .getElementById("generate-json-btn")
     .addEventListener("click", generateJSON);
@@ -455,6 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Funciones adicionales para importar y guardar partidos
 function importMatchesFromZip() {
+  localStorage.removeItem("tournamentMatches");
   const fileInput = document.getElementById("import-zip");
   const file = fileInput.files[0]; // Obtener el archivo seleccionado
 
@@ -490,7 +510,7 @@ function importMatchesFromZip() {
                 localStorage.setItem("tournamentData", JSON.stringify(data));
               }
             });
-            alert("Datos importados con éxito.");
+
             displayMatchesByCategory(
               JSON.parse(localStorage.getItem("tournamentMatches")),
             );

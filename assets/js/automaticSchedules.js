@@ -428,6 +428,7 @@ function generateHourMatches() {
   localStorage.setItem("tournamentMatches", JSON.stringify(tournamentMatches));
   updateOccupiedSlots();
   loadCellDataFromLocalStorage();
+  alert("Todos los horarios se han generado correctamente.");
 }
 
 function hasBye(match) {

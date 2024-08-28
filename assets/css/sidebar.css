@@ -10,7 +10,8 @@ body {
 }
 
 .sidebar {
-    width: 13%;
+    width: auto;
+    max-width: 11%;
     background-color: #4b6c8b;
     margin: 1em;
     padding: 1.2em;
@@ -41,7 +42,6 @@ body {
     width: 100%;
     padding: 10px;
     background-color: #bebebe;
-
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -55,23 +55,20 @@ body {
 
 .content {
     width: 100%;
-    margin-top: 1em;
-    padding: 0 1em 1em 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 1em 1em 1em 1em;
     overflow-y: auto;
 }
 
 .container {
+    overflow: scroll;
     display: flex;
     flex-direction: column;
-    margin-bottom: 1.5em;
     padding: 1.5em;
     width: 100%;
+    height: 100%;
     background-color: #88b0d6;
     border-radius: 0.4em;
-    box-shadow: 10px 15px 20px #4b6c8b;
+    box-shadow: 5px 10px 15px #4b6c8b;
     box-sizing: border-box;
 }
 

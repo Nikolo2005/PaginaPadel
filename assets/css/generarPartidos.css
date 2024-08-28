@@ -26,8 +26,8 @@ button {
     background-color: #2a353c;
 }
 
-.down-element {
-    width: 16.6%;
+.right-element {
+    width: auto;
     margin: 0.5em;
     justify-content: center;
     padding: 1em;
@@ -41,14 +41,31 @@ button {
     transition: background-color 0.3s ease;
 }
 
-.total-matches {
+.right-options {
+    width: auto;
+    max-width: 12%;
+    border-radius: 0.4em;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 1em;
+    padding: 0.5em;
+    border: none;
     background-color: #4b6c8b;
+    box-shadow: 5px 10px 15px #4b6c8b;
+}
+.info-matches {
+    text-align: start;
+    border: none;
+    background-color: #4b6c8b;
+    font-size: 1em;
+    padding: 0;
 }
 
 /* Table styles */
 table {
     margin: 0 auto;
-    width: 99%;
+    width: 100%;
     border: solid 2px white;
     border-collapse: collapse;
     margin-top: 20px;
@@ -86,14 +103,6 @@ tr:hover {
     background-color: rgba(29, 29, 29, 0.5);
     font-weight: bold;
     text-align: center;
-}
-
-.down-options {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-    justify-content: center;
 }
 
 .overflow-cell {
