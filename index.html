@@ -8,24 +8,48 @@
         <link rel="stylesheet" href="assets/css/index.css" />
 
         <link rel="icon" href="assets/img/favicon.png" type="image/png" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap"
+            rel="stylesheet"
+        />
     </head>
 
     <body>
-        <div class="sidebar">
-            <img src="assets/img/logo.png" class="sidebar-image" />
-            <a href="index.html"
-                ><button class="active-button">Inicio</button></a
-            >
-            <a href="disponibilidad.html"><button>Pistas/Horarios</button></a>
-            <a href="inscripciones.html"><button>Inscripciones</button></a>
-            <a href="generarPartidos.html"><button>Partidos</button></a>
-            <a href="generarCuadros.html"><button>Generar Cuadro</button></a>
-        </div>
-
         <div class="content">
             <div class="container">
-                <h1>Organizador de Torneos de Pádel</h1>
-                <img src="assets/img/schema.png" />
+                <div class="image-container">
+                    <h1 class="concert-one-regular">
+                        Administrador de Torneos
+                    </h1>
+                    <div class="start-btn-content">
+                        <div class="center">
+                            <button
+                                class="btn"
+                                onclick="location.href='disponibilidad.html'"
+                            >
+                                <svg
+                                    width="180px"
+                                    height="60px"
+                                    viewBox="0 0 180 60"
+                                    class="border"
+                                >
+                                    <polyline
+                                        points="179,1 179,59 1,59 1,1 179,1"
+                                        class="bg-line"
+                                    ></polyline>
+                                    <polyline
+                                        points="179,1 179,59 1,59 1,1 179,1"
+                                        class="hl-line"
+                                    ></polyline>
+                                </svg>
+                                <span>EMPEZAR</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="mobile-warning" class="hidden">

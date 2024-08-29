@@ -214,19 +214,25 @@ function createMatches(pairs) {
 
 // Crear partidos de consolación
 function createConsolationMatches(matches) {
+  // Inicializa un array vacío para almacenar los partidos de consolación
   const consolationMatches = [];
+
+  // Agrupa los partidos por categoría y sexo
   const matchesByCategoryAndSex = matches.reduce((acc, match) => {
     const key = `${match.category}-${match.sex}`;
     (acc[key] = acc[key] || []).push(match);
     return acc;
   }, {});
 
+  // Itera sobre cada grupo de partidos por categoría y sexo
   Object.entries(matchesByCategoryAndSex).forEach(
     ([key, matchesInCategory]) => {
+      // Calcula el número de partidos de consolación
       const numConsolationMatches = Math.floor(matchesInCategory.length / 2);
       let numMatches = numConsolationMatches + 1;
       let roundNumber = Math.ceil(Math.log2(numMatches));
 
+      // Crea los partidos de consolación
       for (let i = 0; i < numConsolationMatches; i++) {
         const consolationMatch = {
           pair1: { player1: "", player2: "" },
@@ -245,6 +251,7 @@ function createConsolationMatches(matches) {
     },
   );
 
+  // Devuelve el array de partidos de consolación
   return consolationMatches;
 }
 

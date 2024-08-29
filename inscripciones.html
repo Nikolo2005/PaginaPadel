@@ -6,7 +6,6 @@
         <title>Open T</title>
         <link rel="stylesheet" href="assets/css/inscripciones.css" />
         <link rel="stylesheet" href="assets/css/sidebar.css" />
-
         <link rel="icon" href="assets/img/favicon.png" type="image/png" />
     </head>
     <body>
@@ -24,7 +23,13 @@
         <div class="content">
             <div class="container">
                 <div id="tournament-table">
-                    <h2>Parejas por categorías</h2>
+                    <h2>Parejas</h2>
+                    <div class="table-header">
+                        <button id="open-popup-btn" class="add-button">
+                            Agregar Pareja
+                        </button>
+                    </div>
+
                     <table>
                         <thead>
                             <tr>
@@ -42,39 +47,41 @@
                 <br />
                 <button id="delete-all-btn">Borrar todas las parejas</button>
             </div>
+        </div>
 
-            <div class="inscripciones-container">
-                <div id="form-container">
-                    <form id="tournament-form">
-                        <h2 class="tittle">Inscripciones de la prueba</h2>
-                        <label for="player1" class="player1-title"
-                            >Jugador 1:</label
-                        >
-                        <input type="text" id="player1" required />
-                        <label for="player2" class="player2-title"
-                            >Jugador 2:</label
-                        >
-                        <input type="text" id="player2" required />
-                        <label for="category" class="category-title"
-                            >Categoría:</label
-                        >
-                        <select id="category" required>
-                            <option value="primera">Primera</option>
-                            <option value="segunda">Segunda</option>
-                            <option value="tercera">Tercera</option>
-                            <option value="cuarta">Cuarta</option>
-                        </select>
-                        <label for="sex" class="sex-title">Género:</label>
-                        <select id="sex" required>
-                            <option value="masculino">Masculino</option>
-                            <option value="femenino">Femenino</option>
-                            <option value="mixto">Mixto</option>
-                        </select>
-                        <button type="submit" class="add-button">
-                            Agregar Pareja
-                        </button>
-                    </form>
-                </div>
+        <div id="popup-form" class="popup">
+            <div class="popup-content">
+                <h2 class="tittle">Inscripción</h2>
+
+                <span class="close-btn">&times;</span>
+                <form id="tournament-form">
+                    <label for="player1" class="player1-title"
+                        >Jugador 1:</label
+                    >
+                    <input type="text" id="player1" required />
+                    <label for="player2" class="player2-title"
+                        >Jugador 2:</label
+                    >
+                    <input type="text" id="player2" alt="asdas" required />
+                    <label for="category" class="category-title"
+                        >Categoría:</label
+                    >
+                    <select id="category" required>
+                        <option value="primera">Primera</option>
+                        <option value="segunda">Segunda</option>
+                        <option value="tercera">Tercera</option>
+                        <option value="cuarta">Cuarta</option>
+                    </select>
+                    <label for="sex" class="sex-title">Género:</label>
+                    <select id="sex" required>
+                        <option value="masculino">Masculino</option>
+                        <option value="femenino">Femenino</option>
+                        <option value="mixto">Mixto</option>
+                    </select>
+                    <button type="submit" class="add-button">
+                        Agregar Pareja
+                    </button>
+                </form>
             </div>
         </div>
 

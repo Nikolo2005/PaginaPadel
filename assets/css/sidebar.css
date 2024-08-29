@@ -13,11 +13,9 @@ body {
     width: auto;
     max-width: 11%;
     background-color: #4b6c8b;
-    margin: 1em;
     padding: 1.2em;
-    box-shadow: 5px 10px 15px #4b6c8b;
-    border-radius: 0.4em;
     overflow-y: auto;
+    border-right: 2px solid #3a5669;
 }
 
 .sidebar-image {
@@ -55,7 +53,7 @@ body {
 
 .content {
     width: 100%;
-    padding: 1em 1em 1em 1em;
+
     overflow-y: auto;
 }
 
@@ -63,82 +61,10 @@ body {
     overflow: scroll;
     display: flex;
     flex-direction: column;
-    padding: 1.5em;
+    padding: 1em;
     width: 100%;
     height: 100%;
-    background-color: #88b0d6;
-    border-radius: 0.4em;
-    box-shadow: 5px 10px 15px #4b6c8b;
+    background: linear-gradient(135deg, #88b0d6, #364858);
+
     box-sizing: border-box;
-}
-
-@media screen and (max-width: 767px) {
-    body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        background-color: #f4f4f9;
-        color: #f4f4f9;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        overflow: hidden;
-    }
-    .sidebar {
-        width: auto;
-
-        background-color: #4b6c8b;
-        margin: 1em;
-        padding: 1.2em;
-        box-shadow: 5px 10px 15px #4b6c8b;
-        border-radius: 0.4em;
-        overflow-y: auto;
-    }
-
-    .sidebar button {
-        width: 100%;
-        padding: 10px;
-        background-color: #f4f4f9;
-        color: #4b6c8b;
-        font-weight: bold;
-        font-size: 0.9em;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-bottom: 10px;
-        transition: background-color 0.3s ease;
-    }
-
-    .sidebar .active-button {
-        width: 100%;
-        padding: 10px;
-        background-color: #bebebe;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-bottom: 10px;
-        transition: background-color 0.3s ease;
-    }
-
-    .sidebar button:hover {
-        background-color: #bebebe;
-    }
-
-    .content {
-        width: auto;
-        margin: 1em;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        box-shadow: 10px 15px 20px #4b6c8b;
-        align-items: center;
-    }
-
-    .container {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        background-color: #88b0d6;
-        border-radius: 0.4em;
-        box-sizing: border-box;
-    }
 }

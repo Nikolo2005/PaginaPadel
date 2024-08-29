@@ -16,6 +16,11 @@ function addEventListeners() {
   document
     .getElementById("delete-all-btn")
     .addEventListener("click", deleteAllData);
+  document
+    .getElementById("open-popup-btn")
+    .addEventListener("click", openPopup);
+  document.querySelector(".close-btn").addEventListener("click", closePopup);
+  window.addEventListener("click", outsideClick);
 }
 
 function addPair(event) {
@@ -26,6 +31,7 @@ function addPair(event) {
   displayPairsByCategory(pairs);
   resetPairInputs();
   animateAddButton();
+  closePopup();
 }
 
 function getPairFromForm() {
@@ -122,11 +128,11 @@ function createPairRow(tournamentBody, pair, key, isCollapsed) {
   if (isCollapsed) row.classList.add("hidden-row");
 
   row.innerHTML = `
-    <td class="overflow-cell">${pair.player1} - ${pair.player2}</td>
-    <td>${pair.category}</td>
-    <td>${pair.sex}</td>
-    <td><button class="delete-button" onclick="deletePair('${pair.id}')"><i class="fas fa-trash"></i>Eliminar</button></td>
-  `;
+        <td class="overflow-cell">${pair.player1} - ${pair.player2}</td>
+        <td>${pair.category}</td>
+        <td>${pair.sex}</td>
+        <td><button class="delete-button" onclick="deletePair('${pair.id}')"><i class="fas fa-trash"></i>Eliminar</button></td>
+    `;
   tournamentBody.appendChild(row);
 }
 
@@ -150,5 +156,19 @@ function deletePair(pairId) {
     const pairs = getStoredPairs().filter((pair) => pair.id !== pairId);
     localStorage.setItem("tournamentData", JSON.stringify(pairs));
     displayPairsByCategory(pairs);
+  }
+}
+
+function openPopup() {
+  document.getElementById("popup-form").style.display = "block";
+}
+
+function closePopup() {
+  document.getElementById("popup-form").style.display = "none";
+}
+
+function outsideClick(event) {
+  if (event.target == document.getElementById("popup-form")) {
+    closePopup();
   }
 }
