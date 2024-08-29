@@ -132,6 +132,22 @@ function addHoverAndClickListeners(day) {
     addHoverListener(cell, `#availability-${day} [data-pista="${pista}"]`);
     addClickListener(cell, day, pista, "pista");
   });
+
+  // Add click listeners to availability cells
+  const availabilityCells = document.querySelectorAll(
+    `#availability-${day} .availability-cell`,
+  );
+  availabilityCells.forEach((cell) => {
+    cell.addEventListener("click", () => {
+      const isSelected = cell.classList.toggle("selected");
+      updateAvailabilityData(
+        day,
+        cell.dataset.time,
+        cell.dataset.pista,
+        isSelected,
+      );
+    });
+  });
 }
 
 function addHoverListener(cell, selector) {
