@@ -1,6 +1,6 @@
 :root {
-    --color-primary: #4b6c8b; /* Color principal para la barra de carga */
-    --color-opposite: #f28123; /* Color opuesto para el borde */
+    --color-primary: #f5a768; /* Color principal para la barra de carga */
+    --color-opposite: #4b6c8b; /* Color opuesto para el borde */
 }
 
 h1,
@@ -157,5 +157,5 @@ svg {
     background-color: var(--color-primary);
     width: 100%;
     height: 100%;
-    animation: loading 5s steps(40) infinite;
+    animation: loading 2s steps(500) infinite;
 }
