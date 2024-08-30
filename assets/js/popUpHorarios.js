@@ -142,10 +142,7 @@ function populateAvailabilityTable(day, availabilityTemplate) {
   table.appendChild(tbody);
 
   const header = document.createElement("tr");
-  header.innerHTML =
-    "<th>Hora</th><th>Pista 1</th><th>Pista 2</th><th>Pista 3</th><th>Pista 4</th><th>Pista 5</th><th>Pista 6</th>";
-  tbody.appendChild(header);
-
+  header.innerHTML = "<th>Hora</th>";
   const allTimes = Object.keys(availabilityTableTemplate);
 
   // Obtener los horarios ya seleccionados
@@ -157,12 +154,30 @@ function populateAvailabilityTable(day, availabilityTemplate) {
         `${match.schedule.day}-${match.schedule.time}-${match.schedule.court}`,
     );
 
+  // Filtrar las pistas disponibles
+  const availablePistas = Array.from(
+    { length: 6 },
+    (_, i) => `Pista ${i + 1}`,
+  ).filter((pista) =>
+    allTimes.some((time) => availabilityTemplate[time]?.includes(pista)),
+  );
+
+  if (availablePistas.length === 0) {
+    availabilityTables.innerHTML =
+      "<p>No hay disponibilidad seleccionada para este día.</p>";
+    return;
+  }
+
+  availablePistas.forEach((pista) => {
+    header.innerHTML += `<th>${pista}</th>`;
+  });
+  tbody.appendChild(header);
+
   allTimes.forEach((time) => {
     const row = document.createElement("tr");
     row.innerHTML = `<td class="hour-cell">${time}</td>`;
 
-    for (let i = 1; i <= 6; i++) {
-      const pistaName = `Pista ${i}`;
+    availablePistas.forEach((pistaName) => {
       const cell = document.createElement("td");
       cell.dataset.day = day;
       cell.dataset.time = time;
@@ -206,7 +221,7 @@ function populateAvailabilityTable(day, availabilityTemplate) {
       }
 
       row.appendChild(cell);
-    }
+    });
 
     tbody.appendChild(row);
   });

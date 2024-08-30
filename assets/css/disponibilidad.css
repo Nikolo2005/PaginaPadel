@@ -102,7 +102,7 @@ select {
 button {
     width: auto;
     padding: 5px;
-    background-color: #586f7c;
+    background-color: #ff5100bb;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -155,7 +155,7 @@ button {
 }
 
 .navigation-buttons button {
-    background-color: #586f7c;
+    background-color: grey;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -165,7 +165,7 @@ button {
 }
 
 .navigation-buttons button:hover {
-    background-color: #4b6c8b;
+    background-color: darksalmon;
 }
 
 .navigation-buttons {

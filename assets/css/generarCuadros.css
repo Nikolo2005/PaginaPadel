@@ -148,6 +148,7 @@ header {
     left: 100%;
     width: 1.4em;
     height: 0.2em;
+    border-radius: 0 0.1em 0.1em 0;
     background-color: black;
     top: 50%;
     transform: translateY(-50%);
@@ -165,8 +166,9 @@ header {
 
 .vertical-connector {
     position: absolute;
-    right: 108%;
+    right: 107.9%;
     width: 0.2em;
+    border-radius: 0.1em;
     background-color: black;
     top: 50%;
     transform: translateY(-50%);
