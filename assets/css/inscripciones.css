@@ -4,6 +4,11 @@ h2 {
     color: #f0f0f0;
 }
 
+.inscriptions-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
 form {
     display: grid;
     gap: 10px;
