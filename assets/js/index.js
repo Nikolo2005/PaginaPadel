@@ -6,7 +6,7 @@ document.getElementById("startButton").addEventListener("click", function () {
 
   setTimeout(function () {
     location.href = "disponibilidad.html";
-  }, 1300); // Simula una espera de 3 segundos antes de redirigir
+  }, 2500); // Simula una espera de 2.5 segundos antes de redirigir
 });
 
 function isMobileDevice() {
