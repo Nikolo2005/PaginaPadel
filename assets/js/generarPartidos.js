@@ -37,7 +37,6 @@ function addEventListeners() {
         )
       ) {
         generateMatches();
-        location.reload();
       }
     });
 
@@ -79,7 +78,6 @@ function deleteAllData() {
     localStorage.removeItem("tournamentMatches");
     document.getElementById("matches-body").innerHTML = "";
     updateTotalMatches(0);
-    location.reload();
   }
 }
 
@@ -348,7 +346,11 @@ function displayMatchesByCategory(matches) {
                   match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
                     ? `<td>
                         <button class="edit-btn" data-match-index="${index}" data-category="${key}">Editar</button>
-                        <button class="clear-schedule-btn" data-match-index="${index}" data-category="${key}">Borrar Horario</button>
+                        ${
+                          match.schedule
+                            ? `<button class="clear-schedule-btn" data-match-index="${index}" data-category="${key}">Borrar Horario</button>`
+                            : ""
+                        }
                     </td>`
                     : `<td></td>`
                 }
@@ -373,9 +375,15 @@ function displayMatchesByCategory(matches) {
 
   document.querySelectorAll(".clear-schedule-btn").forEach((button) => {
     button.addEventListener("click", (event) => {
-      const matchIndex = event.target.getAttribute("data-match-index");
-      const category = event.target.getAttribute("data-category");
-      clearMatchSchedule(category, matchIndex);
+      if (
+        confirm(
+          "¿Estás seguro de que deseas borrar el horario de este partido?",
+        )
+      ) {
+        const matchIndex = event.target.getAttribute("data-match-index");
+        const category = event.target.getAttribute("data-category");
+        clearMatchSchedule(category, matchIndex);
+      }
     });
   });
 }
@@ -534,7 +542,6 @@ function importMatchesFromZip() {
   };
 
   reader.readAsArrayBuffer(file); // Leer el archivo como un buffer de array
-  location.reload();
 }
 
 function saveMatches(matchData) {

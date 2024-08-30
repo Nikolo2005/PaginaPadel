@@ -12,18 +12,19 @@ form {
 #tournament-form {
     text-align: center;
     align-items: center;
+
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-areas:
-        "title "
-        "name1-form"
-        "name2-form"
-        "category"
-        "category-form"
-        "sex"
-        "sex-form"
-        "button";
+        "title title"
+        "name1-form name1-form"
+        "name2-form name2-form"
+        "category category"
+        "category-form category-form"
+        "sex sex"
+        "sex-form sex-form"
+        "add-button close-btn";
 }
 
 #tournament-form > .tittle {
@@ -53,11 +54,14 @@ form {
 #tournament-form > #sex {
     grid-area: sex-form;
 }
+#tournament-form > .close-btn {
+    width: 100%;
+    grid-area: close-btn;
+}
 
 #tournament-form > .add-button {
-    margin: 0 auto;
     width: 100%;
-    grid-area: button;
+    grid-area: add-button;
 }
 
 label {
@@ -86,6 +90,7 @@ button {
 }
 
 button.delete-button {
+    padding: 0.5em;
     background-color: #d9534f;
     display: flex;
     align-items: center;
@@ -104,6 +109,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     background-color: #4b6c8b;
+    border: 1px solid #adadb2;
     color: #f0f0f0;
 }
 
@@ -112,7 +118,7 @@ td {
     padding: 0.2em;
     padding-left: 0.5em;
     text-align: left;
-    border: 1px solid #adadb2;
+    border-bottom: 1px solid #adadb2;
 }
 
 #tournament-body > tr:hover {
@@ -202,21 +208,6 @@ td {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-/* The close button */
-.close-btn {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close-btn:hover,
-.close-btn:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
 }
 
 /* Disable scroll on body when popup is open */

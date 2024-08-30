@@ -130,7 +130,7 @@ function createPairRow(tournamentBody, pair, key, isCollapsed) {
         <td class="overflow-cell">${pair.player1} - ${pair.player2}</td>
         <td>${pair.category}</td>
         <td>${pair.sex}</td>
-        <td><button class="delete-button" onclick="deletePair('${pair.id}')"><i class="fas fa-trash"></i>Eliminar</button></td>
+        <td><button class="delete-button" onclick="deletePair('${pair.id}')"><i class="fas fa-trash"></i>Borrar</button></td>
     `;
   tournamentBody.appendChild(row);
 }

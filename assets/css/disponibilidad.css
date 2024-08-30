@@ -31,7 +31,7 @@
 
 #availability-tables table {
     margin: 0 auto;
-    width: 80%;
+    width: 100%;
     border-collapse: collapse;
 }
 
@@ -63,9 +63,9 @@
 
 #delete-all-btn {
     background-color: #d9534f;
-    width: 100%;
+    width: 20%;
+    height: 2em;
     margin: 0 auto;
-    margin-top: 0.3em;
 }
 
 #delete-all-btn:hover {
@@ -103,7 +103,6 @@ button {
     width: auto;
     padding: 5px;
     background-color: #586f7c;
-
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -134,4 +133,78 @@ button {
 
 .availability-cell.preview {
     background-color: rgba(245, 167, 104, 0.5);
+}
+
+.container-availability {
+    margin: 0 auto;
+    width: 80%;
+}
+
+#navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 45%;
+    left: 15%;
+    right: 0;
+    transform: translateY(-50%);
+    pointer-events: none; /* Allow clicks to pass through */
+    margin: 0 auto;
+    width: 75%;
+    height: 20%;
+}
+
+.navigation-buttons button {
+    background-color: #586f7c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    font-size: 1.5em;
+}
+
+.navigation-buttons button:hover {
+    background-color: #4b6c8b;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid black;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    background-color: #4b6c8b;
+}
+
+.table-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.table-container table {
+    flex-grow: 1;
+}
+
+.delete-day-btn {
+    position: absolute;
+    right: -2em;
+    top: 3.3em;
+    bottom: 0;
+    width: 2em;
+    border: solid 1px darkred;
+    border-radius: 0px 5px 5px 0px;
+    background-color: #d9534f;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.delete-day-btn:hover {
+    background-color: #c9302c;
 }

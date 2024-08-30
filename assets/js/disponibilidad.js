@@ -26,6 +26,9 @@ const availabilityTableTemplate = (() => {
   return Object.fromEntries(hours.map((hour) => [hour, pistas]));
 })();
 
+let currentDayIndex = 0;
+let addedDays = [];
+
 document.addEventListener("DOMContentLoaded", () => {
   loadStoredData();
   document
@@ -42,6 +45,8 @@ function deleteAllData() {
   ) {
     clearAvailabilityData();
     clearAvailabilityTables();
+    addedDays = [];
+    currentDayIndex = 0;
   }
 }
 
@@ -72,6 +77,10 @@ function addDay() {
   populateAvailabilityTable(day, availabilityTableTemplate);
   updateLocalStorage(day);
 
+  addedDays.push(day);
+  currentDayIndex = addedDays.length - 1;
+  updateDayVisibility();
+
   daySelect.value = "";
 }
 
@@ -89,6 +98,12 @@ function removeDay(day) {
       JSON.parse(localStorage.getItem("availabilityData")) || {};
     delete availabilityData[day];
     localStorage.setItem("availabilityData", JSON.stringify(availabilityData));
+
+    addedDays = addedDays.filter((d) => d !== day);
+    if (currentDayIndex >= addedDays.length) {
+      currentDayIndex = addedDays.length - 1;
+    }
+    updateDayVisibility();
   }
 }
 
@@ -185,16 +200,27 @@ function loadStoredData() {
     addDayElement(day);
     populateAvailabilityTable(day, availabilityTableTemplate);
     restoreAvailability(day, availabilityData[day]);
+    addedDays.push(day);
   });
+  updateDayVisibility();
 }
 
 function addDayElement(day) {
   const availabilityTables = document.getElementById("availability-tables");
   const tableContainer = document.createElement("div");
+  tableContainer.classList.add("table-container");
   tableContainer.innerHTML = `
-    <h3>${day} <button onclick="removeDay('${day}')">Eliminar Día</button></h3>
+    <div class="navigation-buttons">
+
+      <button id="prev-day-btn" onclick="showPreviousDay()">&#9664;</button>
+
+      <button id="next-day-btn" onclick="showNextDay()">&#9654;</button>
+    </div>
     <table id="availability-${day}">
       <thead>
+        <tr>
+          <th colspan="7">${day}</th>
+        </tr>
         <tr>
           <th>Hora</th>
           ${Array.from({ length: 6 }, (_, i) => `<th class="pista-cell">Pista ${i + 1}</th>`).join("")}
@@ -202,6 +228,7 @@ function addDayElement(day) {
       </thead>
       <tbody></tbody>
     </table>
+    <button class="delete-day-btn" onclick="removeDay('${day}')">X</button>
   `;
   availabilityTables.appendChild(tableContainer);
 }
@@ -235,5 +262,28 @@ function restoreAvailability(day, dayData) {
     if (dayData[time]?.includes(pista)) {
       cell.classList.add("selected");
     }
+  });
+}
+
+function showPreviousDay() {
+  if (currentDayIndex > 0) {
+    currentDayIndex--;
+    updateDayVisibility();
+  }
+}
+
+function showNextDay() {
+  if (currentDayIndex < addedDays.length - 1) {
+    currentDayIndex++;
+    updateDayVisibility();
+  }
+}
+
+function updateDayVisibility() {
+  const availabilityTables = document.getElementById(
+    "availability-tables",
+  ).children;
+  Array.from(availabilityTables).forEach((table, index) => {
+    table.style.display = index === currentDayIndex ? "flex" : "none";
   });
 }

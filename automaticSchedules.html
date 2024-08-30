@@ -17,14 +17,24 @@
             <a href="disponibilidad.html"><button>Pistas/Horarios</button></a>
             <a href="inscripciones.html"><button>Inscripciones</button></a>
             <a href="generarPartidos.html"><button>Partidos</button></a>
-            <a href="automaticSchedules.html"
-                ><button class="active-button">Horarios Automáticos</button></a
-            >
             <a href="generarCuadros.html"><button>Generar Cuadro</button></a>
         </div>
 
         <div class="content">
             <div class="container">
+                <button id="animated-back-btn" class="animated-back-btn">
+                    ◀ Volver
+                </button>
+
+                <style></style>
+
+                <script>
+                    document
+                        .getElementById("animated-back-btn")
+                        .addEventListener("click", function () {
+                            window.history.back();
+                        });
+                </script>
                 <h2>Horarios Automáticos</h2>
                 <div class="day-navigation">
                     <button id="previous-day-btn">◀</button>
@@ -60,7 +70,6 @@
                                 ><input type="radio" name="round" value="1s" />
                                 🟪 Final</label
                             >
-
                             <button id="generateHourMatches">
                                 Generar Horarios
                             </button>

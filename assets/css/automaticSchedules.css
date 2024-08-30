@@ -1,14 +1,69 @@
+.container {
+    overflow: hidden;
+}
 h2 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-top: 0;
     text-shadow: 2px 2px 4px #000000;
 }
 
+/*Boton animado ir hacia atras*/
+.animated-back-btn {
+    width: 10em;
+    background-color: #ff6347;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition:
+        background-color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        opacity 0.3s ease;
+}
+
+.animated-back-btn:hover {
+    background-color: #ff4500;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+    animation: pulse 1s infinite;
+}
+
+.animated-back-btn:active {
+    transform: scale(0.95) rotate(-5deg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+/*Boton animado ir hacia atras fin*/
+
 .day-navigation {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+    margin: 1em;
+    height: 2em;
+    font-weight: bold;
+    font-size: 1.5em;
 }
 
 .day-navigation button {
@@ -28,7 +83,7 @@ h2 {
 }
 .auto-content-sub-box {
     min-width: 25%;
-    margin: 1.5em;
+    margin: 1em;
     padding: 1.5em;
     text-align: center;
     justify-content: center;
@@ -57,17 +112,42 @@ h2 {
 }
 
 #generateHourMatches {
-    margin-top: 20px;
-    padding: 10px;
+    margin: 2em auto;
+
+    width: 80%;
+    padding: 0.75em;
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 2px solid #4b6c8b;
+    color: #4b6c8b;
     font-weight: bold;
+    transition:
+        background-color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 #generateHourMatches:hover {
     background-color: #4caf50;
     color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: pulse 1s infinite;
+    border: 2px solid #388e3c;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 table {
