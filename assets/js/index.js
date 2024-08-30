@@ -1,3 +1,14 @@
+document.getElementById("startButton").addEventListener("click", function () {
+  var loaderContainer = document.getElementById("loaderContainer");
+  var mainContent = document.getElementById("mainContent");
+
+  loaderContainer.style.display = "flex";
+
+  setTimeout(function () {
+    location.href = "disponibilidad.html";
+  }, 1300); // Simula una espera de 3 segundos antes de redirigir
+});
+
 function isMobileDevice() {
   // Verificar el user agent
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;

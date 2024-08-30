@@ -44,15 +44,12 @@ button {
 .right-options {
     width: auto;
     max-width: 12%;
-    border-radius: 0.4em;
     display: flex;
     flex-direction: column;
     text-align: center;
-    margin: 1em;
     padding: 0.5em;
-    border: none;
+    border-left: 2px solid #3a5669;
     background-color: #4b6c8b;
-    box-shadow: 5px 10px 15px #4b6c8b;
 }
 .info-matches {
     text-align: start;

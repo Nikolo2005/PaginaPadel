@@ -15,10 +15,15 @@
             href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap"
             rel="stylesheet"
         />
+        <style></style>
     </head>
 
     <body>
-        <div class="content">
+        <div class="loader-container" id="loaderContainer">
+            <div class="loader-text">Cargando configuración...</div>
+            <div class="loader"></div>
+        </div>
+        <div class="content" id="mainContent">
             <div class="container">
                 <div class="image-container">
                     <h1 class="concert-one-regular">
@@ -26,10 +31,7 @@
                     </h1>
                     <div class="start-btn-content">
                         <div class="center">
-                            <button
-                                class="btn"
-                                onclick="location.href='disponibilidad.html'"
-                            >
+                            <button class="btn" id="startButton">
                                 <svg
                                     width="180px"
                                     height="60px"
@@ -61,6 +63,7 @@
                 </p>
             </div>
         </div>
+        <script></script>
         <script src="assets/js/index.js"></script>
     </body>
 </html>
