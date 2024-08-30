@@ -24,7 +24,35 @@
         <div class="content">
             <div class="container">
                 <div id="tournament-matches">
-                    <h2>Emparejamiento de Jugadores</h2>
+                    <h2>Partidos</h2>
+                    <div class="menu-actions">
+                        <button class="up-element" id="generate-matches-btn">
+                            Generar Partidos
+                        </button>
+                        <button
+                            onclick="window.location.href='automaticSchedules.html';"
+                            class="up-element"
+                            id="automatic-schedule"
+                        >
+                            Horarios Automáticos
+                        </button>
+                        <button class="up-element" id="generate-json-btn">
+                            Generar ZIP
+                        </button>
+
+                        <input
+                            type="file"
+                            id="import-zip"
+                            class="up-element"
+                            accept=".zip"
+                        />
+                        <button class="up-element" id="delete-schedules-btn">
+                            Borrar horarios
+                        </button>
+                        <button class="up-element" id="delete-all-btn">
+                            Borrar emparejamientos
+                        </button>
+                    </div>
                     <table>
                         <thead>
                             <tr>
@@ -43,33 +71,6 @@
             </div>
         </div>
         <div class="right-options">
-            <h2>Opciones</h2>
-            <button class="down-button right-element" id="generate-matches-btn">
-                Generar Partidos
-            </button>
-            <button
-                onclick="window.location.href='automaticSchedules.html';"
-                class="down-button right-element"
-                id="automatic-schedule"
-            >
-                Horarios Automáticos
-            </button>
-            <button class="down-button right-element" id="generate-json-btn">
-                Generar ZIP
-            </button>
-
-            <input
-                type="file"
-                id="import-zip"
-                class="right-element"
-                accept=".zip"
-            />
-            <button class="down-button right-element" id="delete-schedules-btn">
-                Borrar horarios
-            </button>
-            <button class="down-button right-element" id="delete-all-btn">
-                Borrar emparejamientos
-            </button>
             <h2>Información</h2>
             <div id="total-matches" class="right-element info-matches">
                 Nº de Partidos:‎‎‎

@@ -20,30 +20,39 @@ button {
     border: solid 1px #3b4954;
 }
 
-.down-button:hover,
-.clear-schedule-btn:hover,
-.edit-btn:hover {
-    background-color: #2a353c;
+.menu-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    border-radius: 10px 10px 0 0;
+    border: 1px solid #adadb2;
+    border-bottom: none;
+    background-color: #4b6c8b;
+    padding: 0.5em;
 }
 
-.right-element {
+.up-element {
     width: auto;
-    margin: 0.5em;
+    margin: 0 0.5em 0 0;
     justify-content: center;
     padding: 1em;
-    background-color: #586f7c;
-    color: #fff;
+    background-color: white;
+    color: #4b6c8b;
     font-weight: bold;
-    font-size: 0.9em;
-    border: solid 1px #3b4954;
+    font-size: 0.8em;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease-in;
+}
+
+.up-element:hover {
+    background-color: #bebebe;
+    f
 }
 
 .right-options {
     width: auto;
-    max-width: 12%;
+    max-width: 13%;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -55,8 +64,9 @@ button {
     text-align: start;
     border: none;
     background-color: #4b6c8b;
-    font-size: 1em;
-    padding: 0;
+    width: 100em;
+    font-size: 1.2em;
+    padding: 0 1em 0 1em;
 }
 
 /* Table styles */
@@ -64,7 +74,6 @@ table {
     margin: 0 auto;
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
     background-color: #4b6c8b;
     color: #f0f0f0;
 }

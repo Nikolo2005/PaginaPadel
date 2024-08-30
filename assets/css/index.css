@@ -68,7 +68,7 @@ h2 {
     height: 60px;
     cursor: pointer;
     background: transparent;
-    border: 1px solid #91c9ff;
+    border: 1px solid whitesmoke;
     outline: none;
     transition: 1s ease-in-out;
 }
@@ -96,7 +96,7 @@ svg {
 .btn span {
     color: white;
     font-size: 2em;
-    font-weight: 200;
+    font-weight: bold;
 }
 
 .center {
