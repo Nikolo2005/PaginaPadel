@@ -58,7 +58,7 @@ body {
 }
 
 .container {
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     padding: 1em;
