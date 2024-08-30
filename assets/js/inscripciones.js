@@ -164,10 +164,18 @@ function openPopup() {
 
 function closePopup() {
   document.getElementById("popup-form").style.display = "none";
+  resetPopupInputs();
 }
 
 function outsideClick(event) {
   if (event.target == document.getElementById("popup-form")) {
     closePopup();
+    resetPopupInputs();
   }
+}
+
+function resetPopupInputs() {
+  ["player1", "player2", "category", "sex"].forEach(
+    (id) => (document.getElementById(id).value = ""),
+  );
 }
