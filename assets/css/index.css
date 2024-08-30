@@ -11,7 +11,7 @@ h2 {
 
 .image-container {
     height: 100%;
-    background-image: url("../img/schema.png");
+    background-image: url("../img/schema.svg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

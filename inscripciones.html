@@ -24,9 +24,15 @@
             <div class="container">
                 <div id="tournament-table">
                     <h2>Parejas</h2>
-                    <div class="table-header">
-                        <button id="open-popup-btn" class="add-button">
+                    <div class="menu-actions">
+                        <button
+                            id="open-popup-btn"
+                            class="add-button up-element"
+                        >
                             Agregar Pareja
+                        </button>
+                        <button id="delete-all-btn" class="up-element">
+                            Borrar todas las parejas
                         </button>
                     </div>
 
@@ -44,8 +50,6 @@
                         </tbody>
                     </table>
                 </div>
-                <br />
-                <button id="delete-all-btn">Borrar todas las parejas</button>
             </div>
         </div>
 
@@ -53,18 +57,22 @@
             <div class="popup-content">
                 <h2 class="tittle">Inscripción</h2>
 
-                <span class="close-btn">&times;</span>
                 <form id="tournament-form">
-                    <label for="player1" class="player1-title"
-                        >Jugador 1:</label
-                    >
-                    <input type="text" id="player1" required />
-                    <label for="player2" class="player2-title"
-                        >Jugador 2:</label
-                    >
-                    <input type="text" id="player2" alt="asdas" required />
+                    <span class="close-btn">&times;</span>
+                    <input
+                        type="text"
+                        id="player1"
+                        placeholder="Nombre del Jugador 1"
+                        required
+                    />
+                    <input
+                        type="text"
+                        id="player2"
+                        placeholder="Nombre del Jugador 2"
+                        required
+                    />
                     <label for="category" class="category-title"
-                        >Categoría:</label
+                        >Categoría</label
                     >
                     <select id="category" required>
                         <option value="primera">Primera</option>
@@ -72,7 +80,7 @@
                         <option value="tercera">Tercera</option>
                         <option value="cuarta">Cuarta</option>
                     </select>
-                    <label for="sex" class="sex-title">Género:</label>
+                    <label for="sex" class="sex-title">Género</label>
                     <select id="sex" required>
                         <option value="masculino">Masculino</option>
                         <option value="femenino">Femenino</option>

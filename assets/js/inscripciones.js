@@ -31,7 +31,6 @@ function addPair(event) {
   displayPairsByCategory(pairs);
   resetPairInputs();
   animateAddButton();
-  closePopup();
 }
 
 function getPairFromForm() {

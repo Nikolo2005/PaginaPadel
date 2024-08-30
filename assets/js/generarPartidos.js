@@ -37,6 +37,7 @@ function addEventListeners() {
         )
       ) {
         generateMatches();
+        location.reload();
       }
     });
 
@@ -78,6 +79,7 @@ function deleteAllData() {
     localStorage.removeItem("tournamentMatches");
     document.getElementById("matches-body").innerHTML = "";
     updateTotalMatches(0);
+    location.reload();
   }
 }
 
@@ -532,6 +534,7 @@ function importMatchesFromZip() {
   };
 
   reader.readAsArrayBuffer(file); // Leer el archivo como un buffer de array
+  location.reload();
 }
 
 function saveMatches(matchData) {

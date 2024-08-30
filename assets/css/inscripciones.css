@@ -13,24 +13,17 @@ form {
     text-align: center;
     align-items: center;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;
-
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-areas:
-        "title title"
-        "name1 name1"
-        "name1-form name1-form"
-        "name2 name2"
-        "name2-form name2-form"
-        "category category"
-        "category-form category-form "
-        "sex sex"
-        "sex-form sex-form"
-        "button button";
-}
-
-#tournament-form > .player1-title {
-    grid-area: name1;
+        "title "
+        "name1-form"
+        "name2-form"
+        "category"
+        "category-form"
+        "sex"
+        "sex-form"
+        "button";
 }
 
 #tournament-form > .tittle {
@@ -39,10 +32,6 @@ form {
 
 #tournament-form > #player1 {
     grid-area: name1-form;
-}
-
-#tournament-form > .player2-title {
-    grid-area: name2;
 }
 
 #tournament-form > #player2 {
@@ -92,7 +81,6 @@ button {
     background-color: #ff5100bb;
     color: #fff;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.5s ease;
 }
@@ -112,24 +100,10 @@ button.delete-button:hover {
     background-color: #c9302c;
 }
 
-#delete-all-btn {
-    background-color: #d9534f;
-    width: 100%;
-    margin: 0 auto;
-    margin-top: 0.3em;
-    border-radius: 0 0 7px 7px;
-}
-
-#delete-all-btn:hover {
-    background-color: #c9302c;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
     background-color: #4b6c8b;
-
     color: #f0f0f0;
 }
 
@@ -141,28 +115,33 @@ td {
     border: 1px solid #adadb2;
 }
 
-tr:hover {
+#tournament-body > tr:hover {
     background-color: rgba(29, 29, 29, 0.5);
 }
 
-.table-header {
+.menu-actions {
     display: flex;
     flex-direction: row;
-    justify-content: start;
-    height: 2em;
-    margin: 0;
-    padding: 0;
-}
-
-.table-header > h2 {
-    margin: 0;
-    justifu-content: center;
-}
-
-.table-header > .add-button {
-    margin: 0;
+    justify-content: left;
+    border-radius: 10px 10px 0 0;
+    border: 1px solid #adadb2;
+    border-bottom: none;
+    background-color: #4b6c8b;
     padding: 0.5em;
-    background-color: green;
+}
+
+.up-element {
+    width: auto;
+    margin: 0 0.5em 0 0;
+    justify-content: center;
+    padding: 1em;
+    background-color: white;
+    color: #4b6c8b;
+    font-weight: bold;
+    font-size: 0.8em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in;
 }
 
 .table-header > .add-button:hover {
@@ -178,6 +157,7 @@ tr:hover {
 
 .hidden-row {
     display: none;
+    transition: display 0.5s ease;
 }
 
 .content {
@@ -211,7 +191,7 @@ tr:hover {
 
 /* Popup content */
 .popup-content {
-    background-color: #4b6c8b;
+    background: linear-gradient(135deg, #4b6c8b, #6786a4);
     margin: auto; /* Centered */
     padding: 20px;
     border: 1px solid #888;
