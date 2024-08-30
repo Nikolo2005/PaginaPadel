@@ -37,12 +37,13 @@ function addEventListeners() {
         )
       ) {
         generateMatches();
+        location.reload();
       }
     });
 
   document
     .getElementById("generate-json-btn")
-    .addEventListener("click", generateJSON);
+    .addEventListener("click", generateZIP);
 
   // Navegación de días
   document.getElementById("previous-day-btn").addEventListener("click", () => {
@@ -78,6 +79,7 @@ function deleteAllData() {
     localStorage.removeItem("tournamentMatches");
     document.getElementById("matches-body").innerHTML = "";
     updateTotalMatches(0);
+    location.reload();
   }
 }
 
@@ -431,7 +433,7 @@ function toggleCategoryMatches(categoryKey) {
 }
 
 // Generar archivo ZIP con los partidos
-function generateJSON() {
+function generateZIP() {
   const matches = JSON.parse(localStorage.getItem("tournamentMatches")) || [];
   const availabilityData =
     JSON.parse(localStorage.getItem("availabilityData")) || {};
@@ -539,6 +541,7 @@ function importMatchesFromZip() {
       .catch((error) => {
         console.error("Error al cargar el ZIP:", error);
       });
+    location.reload();
   };
 
   reader.readAsArrayBuffer(file); // Leer el archivo como un buffer de array
