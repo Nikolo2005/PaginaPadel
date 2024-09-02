@@ -272,9 +272,13 @@ function addDragAndDropListeners() {
 }
 
 function handleDragStart(e) {
-  draggedElement = e.target;
-  e.target.classList.add("dragging");
-  e.dataTransfer.effectAllowed = "move";
+  if (e.target.classList.contains("table-container")) {
+    draggedElement = e.target;
+    e.target.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+  } else {
+    e.preventDefault();
+  }
 }
 
 function handleDragOver(e) {

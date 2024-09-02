@@ -50,8 +50,7 @@ button {
 }
 
 .right-options {
-    width: auto;
-    max-width: 13%;
+    width: 13%;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -63,8 +62,6 @@ button {
     text-align: start;
     border: none;
     background-color: #4b6c8b;
-    width: 100em;
-    font-size: 1.2em;
     padding: 0 1em 0 1em;
 }
 

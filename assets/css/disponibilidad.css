@@ -166,6 +166,13 @@ button {
     transition: background-color 0.5s ease;
 }
 
+.delete-day-btn {
+    background-color: #da5c58;
+}
+.delete-day-btn:hover {
+    background-color: #962422;
+}
+
 .availability-cell {
     cursor: pointer;
     background-color: #ffffff;
