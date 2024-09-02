@@ -25,21 +25,26 @@
             <div class="container">
                 <div class="container-availability">
                     <h2>Disponibilidad horaria</h2>
-
-                    <select id="day-select">
-                        <option value="" disabled selected>
-                            Selecciona un día
-                        </option>
-                        <option value="Lunes">Lunes</option>
-                        <option value="Martes">Martes</option>
-                        <option value="Miércoles">Miércoles</option>
-                        <option value="Jueves">Jueves</option>
-                        <option value="Viernes">Viernes</option>
-                        <option value="Sábado">Sábado</option>
-                        <option value="Domingo">Domingo</option>
-                    </select>
-                    <button id="add-day-btn">AGREGAR DIA</button>
-                    <button id="delete-all-btn">Borrar todos los días</button>
+                    <div class="menu-actions">
+                        <select id="day-select" class="menu-element">
+                            <option value="" disabled selected>
+                                Selecciona un día
+                            </option>
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miércoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                            <option value="Sábado">Sábado</option>
+                            <option value="Domingo">Domingo</option>
+                        </select>
+                        <button id="add-day-btn" class="menu-element">
+                            Agregar día
+                        </button>
+                        <button id="delete-all-btn" class="menu-element">
+                            Borrar todos los días
+                        </button>
+                    </div>
 
                     <!-- Sección de la tabla de disponibilidad -->
                     <div id="availability-tables">

@@ -9,15 +9,16 @@
     </head>
     <body>
         <header>
-            <div class="menu">
-                <a href="index.html">Inicio</a>
-                <a href="disponibilidad.html">Pistas/Horarios</a>
-                <a href="inscripciones.html">Inscripciones</a>
-                <a href="generarPartidos.html">Partidos</a>
-                <a href="generarCuadros.html">Generar Cuadro</a>
-            </div>
+            <div class="menu"></div>
             <h3>Selecciona el archivo ZIP con los partidos</h3>
-            <input type="file" id="fileInputZip" accept=".zip" />
+            <input
+                type="file"
+                id="fileInputZip"
+                accept=".zip"
+                style="display: none"
+            /><label for="fileInputZip" class="Import-btn">Importar </label>
+            <button id="genCuadros">Generar Cuadros</button>
+            <button id="delCuadros">Eliminar Cuadros</button>
         </header>
         <div id="tournament-container"></div>
 

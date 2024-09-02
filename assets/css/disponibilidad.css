@@ -1,3 +1,69 @@
+.menu-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    border-radius: 10px;
+    background-color: #4b6c8b;
+    padding: 0.5em;
+    border: solid 1px #adadb2;
+}
+
+.menu-element {
+    padding: 1em;
+    margin-right: 0.5em;
+    background-color: white;
+    color: #4b6c8b;
+    font-weight: bold;
+}
+
+#day-select {
+    width: 15%;
+}
+
+#delete-all-btn:hover {
+    background-color: #da5c58;
+    color: white;
+}
+
+#add-day-btn:hover {
+    background-color: #5cb85c;
+    color: white;
+}
+
+#availability-tables {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espacio entre columnas */
+}
+
+.table-container {
+    flex: 1 1 30%; /* Ajusta el tamaño de las columnas según sea necesario */
+    display: flex;
+    flex-direction: column;
+    cursor: move; /* Cambia el cursor para indicar que se puede arrastrar */
+}
+
+.table-container.dragging {
+    opacity: 0.5; /* Cambia la opacidad mientras se arrastra */
+}
+
+.table-container.over {
+    border: 2px dashed #000; /* Añade un borde para indicar el área de soltar */
+}
+
+.table-container.over-before {
+    border-left: 2px solid #000; /* Añade un borde para indicar la posición antes */
+}
+
+.table-container.over-after {
+    border-right: 2px solid #000; /* Añade un borde para indicar la posición después */
+}
+
+.table-container table {
+    width: 100%;
+}
+
+/* Resto de tu CSS */
 .availability-cell {
     cursor: pointer;
     background-color: #ffffff;
@@ -8,17 +74,17 @@
     background-color: #f7984b;
 }
 
-#day-selection {
-    margin-bottom: 20px;
+.availability-cell.preview {
+    background-color: rgba(245, 167, 104, 0.5);
 }
 
-#day-input {
-    margin-right: 10px;
-}
-
-#add-day-btn {
-    margin-top: 1em;
-    cursor: pointer;
+.availability-cell.selected.preview {
+    background-color: rgba(
+        245,
+        167,
+        104,
+        0.8
+    ); /* Color diferente para previsualización cuando ya está seleccionada */
 }
 
 #availability-tables {
@@ -44,6 +110,7 @@
 #availability-tables th {
     background-color: #4b6c8b;
 }
+
 #availability-tables tr {
     background-color: #7f9db8;
 }
@@ -59,17 +126,6 @@
 #availability th:hover,
 #availability td:hover {
     background-color: #555;
-}
-
-#delete-all-btn {
-    background-color: #d9534f;
-    width: 20%;
-    height: 2em;
-    margin: 0 auto;
-}
-
-#delete-all-btn:hover {
-    background-color: #c9302c;
 }
 
 h1,
@@ -135,76 +191,16 @@ button {
     background-color: rgba(245, 167, 104, 0.5);
 }
 
+.availability-cell.selected.preview {
+    background-color: rgba(
+        245,
+        167,
+        104,
+        0.8
+    ); /* Color diferente para previsualización cuando ya está seleccionada */
+}
+
 .container-availability {
     margin: 0 auto;
     width: 80%;
-}
-
-#navigation-buttons {
-    display: flex;
-    justify-content: space-between;
-    position: absolute;
-    top: 45%;
-    left: 15%;
-    right: 0;
-    transform: translateY(-50%);
-    pointer-events: none; /* Allow clicks to pass through */
-    margin: 0 auto;
-    width: 75%;
-    height: 20%;
-}
-
-.navigation-buttons button {
-    background-color: grey;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.5s ease;
-    font-size: 1.5em;
-}
-
-.navigation-buttons button:hover {
-    background-color: darksalmon;
-}
-
-.navigation-buttons {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    border: 1px solid black;
-    border-bottom: none;
-    border-radius: 5px 5px 0 0;
-    background-color: #4b6c8b;
-}
-
-.table-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
-
-.table-container table {
-    flex-grow: 1;
-}
-
-.delete-day-btn {
-    position: absolute;
-    right: -2em;
-    top: 3.3em;
-    bottom: 0;
-    width: 2em;
-    border: solid 1px darkred;
-    border-radius: 0px 5px 5px 0px;
-    background-color: #d9534f;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.5s ease;
-}
-
-.delete-day-btn:hover {
-    background-color: #c9302c;
 }

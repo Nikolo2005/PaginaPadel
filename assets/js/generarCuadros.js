@@ -8,9 +8,20 @@ document.addEventListener("DOMContentLoaded", function () {
     renderTournaments();
   }
 
-  document
-    .getElementById("fileInputZip")
-    .addEventListener("change", handleFileInput);
+  const fileInputZip = document.getElementById("fileInputZip");
+  const delCuadros = document.getElementById("delCuadros");
+
+  if (fileInputZip) {
+    fileInputZip.addEventListener("change", handleFileInput);
+  } else {
+    console.error("Element with id 'fileInputZip' not found.");
+  }
+
+  if (delCuadros) {
+    delCuadros.addEventListener("click", deleteTournaments);
+  } else {
+    console.error("Element with id 'delCuadros' not found.");
+  }
 
   function handleFileInput(event) {
     const file = event.target.files[0];
@@ -122,6 +133,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
       container.appendChild(categoryContainer);
     });
+  }
+
+  function deleteTournaments() {
+    const container = document.getElementById("tournament-container");
+    container.innerHTML = "";
+    localStorage.removeItem("categories");
+    categories = {};
   }
 
   function downloadCategory(categoryName, categoryContainer) {
@@ -313,6 +331,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     container.style.height = `${totalHeight + 100}px`;
+
+    // Guardar datos actualizados en localStorage
+    localStorage.setItem("categories", JSON.stringify(categories));
   }
 
   function advancePair(

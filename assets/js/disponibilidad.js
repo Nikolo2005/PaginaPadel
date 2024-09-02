@@ -26,8 +26,8 @@ const availabilityTableTemplate = (() => {
   return Object.fromEntries(hours.map((hour) => [hour, pistas]));
 })();
 
-let currentDayIndex = 0;
 let addedDays = [];
+let draggedElement = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   loadStoredData();
@@ -46,7 +46,6 @@ function deleteAllData() {
     clearAvailabilityData();
     clearAvailabilityTables();
     addedDays = [];
-    currentDayIndex = 0;
   }
 }
 
@@ -67,8 +66,7 @@ function addDay() {
     return;
   }
 
-  const availabilityTables = document.getElementById("availability-tables");
-  if (availabilityTables.querySelector(`#availability-${day}`)) {
+  if (addedDays.includes(day)) {
     alert("El día ya está agregado.");
     return;
   }
@@ -78,10 +76,8 @@ function addDay() {
   updateLocalStorage(day);
 
   addedDays.push(day);
-  currentDayIndex = addedDays.length - 1;
-  updateDayVisibility();
-
   daySelect.value = "";
+  addDragAndDropListeners(); // Añadir los listeners de arrastrar y soltar a los nuevos días
 }
 
 function updateLocalStorage(day) {
@@ -100,10 +96,7 @@ function removeDay(day) {
     localStorage.setItem("availabilityData", JSON.stringify(availabilityData));
 
     addedDays = addedDays.filter((d) => d !== day);
-    if (currentDayIndex >= addedDays.length) {
-      currentDayIndex = addedDays.length - 1;
-    }
-    updateDayVisibility();
+    updateOrderInLocalStorage();
   }
 }
 
@@ -162,6 +155,12 @@ function addHoverAndClickListeners(day) {
         isSelected,
       );
     });
+    cell.addEventListener("mouseover", () => {
+      cell.classList.add("preview");
+    });
+    cell.addEventListener("mouseout", () => {
+      cell.classList.remove("preview");
+    });
   });
 }
 
@@ -202,20 +201,15 @@ function loadStoredData() {
     restoreAvailability(day, availabilityData[day]);
     addedDays.push(day);
   });
-  updateDayVisibility();
+  addDragAndDropListeners(); // Mover aquí para asegurar que se añaden los listeners después de cargar los datos
 }
 
 function addDayElement(day) {
   const availabilityTables = document.getElementById("availability-tables");
   const tableContainer = document.createElement("div");
   tableContainer.classList.add("table-container");
+  tableContainer.setAttribute("draggable", "true");
   tableContainer.innerHTML = `
-    <div class="navigation-buttons">
-
-      <button id="prev-day-btn" onclick="showPreviousDay()">&#9664;</button>
-
-      <button id="next-day-btn" onclick="showNextDay()">&#9654;</button>
-    </div>
     <table id="availability-${day}">
       <thead>
         <tr>
@@ -265,25 +259,104 @@ function restoreAvailability(day, dayData) {
   });
 }
 
-function showPreviousDay() {
-  if (currentDayIndex > 0) {
-    currentDayIndex--;
-    updateDayVisibility();
+function addDragAndDropListeners() {
+  const containers = document.querySelectorAll(".table-container");
+
+  containers.forEach((container) => {
+    container.addEventListener("dragstart", handleDragStart);
+    container.addEventListener("dragover", handleDragOver);
+    container.addEventListener("dragleave", handleDragLeave);
+    container.addEventListener("drop", handleDrop);
+    container.addEventListener("dragend", handleDragEnd);
+  });
+}
+
+function handleDragStart(e) {
+  draggedElement = e.target;
+  e.target.classList.add("dragging");
+  e.dataTransfer.effectAllowed = "move";
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  const target = getClosestTableContainer(e.target);
+  if (target && target !== draggedElement) {
+    const rect = target.getBoundingClientRect();
+    const offset = e.clientX - rect.left;
+    if (offset < rect.width / 2) {
+      target.classList.add("over-before");
+      target.classList.remove("over-after");
+    } else {
+      target.classList.add("over-after");
+      target.classList.remove("over-before");
+    }
   }
 }
 
-function showNextDay() {
-  if (currentDayIndex < addedDays.length - 1) {
-    currentDayIndex++;
-    updateDayVisibility();
+function handleDragLeave(e) {
+  const target = getClosestTableContainer(e.target);
+  if (target) {
+    target.classList.remove("over-before", "over-after");
   }
 }
 
-function updateDayVisibility() {
-  const availabilityTables = document.getElementById(
-    "availability-tables",
-  ).children;
-  Array.from(availabilityTables).forEach((table, index) => {
-    table.style.display = index === currentDayIndex ? "flex" : "none";
+function handleDrop(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const target = getClosestTableContainer(e.target);
+  if (draggedElement !== target) {
+    const parent = document.getElementById("availability-tables");
+    const children = Array.from(parent.children);
+    const draggedIndex = children.indexOf(draggedElement);
+    const targetIndex = children.indexOf(target);
+
+    if (target.classList.contains("over-before")) {
+      parent.insertBefore(draggedElement, target);
+    } else {
+      parent.insertBefore(draggedElement, target.nextSibling);
+    }
+    updateOrderInLocalStorage();
+  }
+  if (target) {
+    target.classList.remove("over-before", "over-after");
+  }
+  clearAllPreviews(); // Limpiar todas las previsualizaciones después de soltar
+}
+
+function handleDragEnd(e) {
+  e.target.classList.remove("dragging");
+  document.querySelectorAll(".table-container").forEach((container) => {
+    container.classList.remove("over-before", "over-after");
+  });
+  clearAllPreviews(); // Limpiar todas las previsualizaciones después de terminar el arrastre
+}
+
+function getClosestTableContainer(element) {
+  while (element && !element.classList.contains("table-container")) {
+    element = element.parentElement;
+  }
+  return element;
+}
+
+function updateOrderInLocalStorage() {
+  const parent = document.getElementById("availability-tables");
+  const children = Array.from(parent.children);
+  const newOrder = children.map((child) =>
+    child.querySelector("table").id.replace("availability-", ""),
+  );
+  const availabilityData =
+    JSON.parse(localStorage.getItem("availabilityData")) || {};
+  const newAvailabilityData = {};
+  newOrder.forEach((day) => {
+    newAvailabilityData[day] = availabilityData[day];
+  });
+  localStorage.setItem("availabilityData", JSON.stringify(newAvailabilityData));
+}
+
+function clearAllPreviews() {
+  document.querySelectorAll(".preview").forEach((cell) => {
+    cell.classList.remove("preview");
   });
 }

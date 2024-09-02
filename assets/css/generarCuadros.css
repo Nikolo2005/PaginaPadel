@@ -16,24 +16,6 @@ header {
     color: white;
 }
 
-.menu {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-.menu > a {
-    margin: 1em;
-    padding: 1em;
-    color: white;
-    text-decoration: none;
-    text-align: center;
-    font-weight: bold;
-    border: solid 1px white;
-    background-color: #92a9c8;
-    border-radius: 5px;
-    width: 10em;
-}
-
 #tournament-container {
     display: flex;
     flex-direction: column;
@@ -43,6 +25,15 @@ header {
     padding: 1em;
 }
 
+.Import-btn {
+    background-color: #d25a01;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.4s;
+}
 .category-container {
     display: flex;
     flex-direction: column;
