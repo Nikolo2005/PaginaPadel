@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const fileInputZip = document.getElementById("fileInputZip");
   const delCuadros = document.getElementById("delCuadros");
+  const generateBracketButton = document.getElementById("generateBracket");
 
   if (fileInputZip) {
     fileInputZip.addEventListener("change", handleFileInput);
@@ -21,6 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
     delCuadros.addEventListener("click", deleteTournaments);
   } else {
     console.error("Element with id 'delCuadros' not found.");
+  }
+
+  if (generateBracketButton) {
+    generateBracketButton.addEventListener("click", generateBracket);
+  } else {
+    console.error("Element with id 'generateBracket' not found.");
   }
 
   function handleFileInput(event) {
@@ -180,9 +187,11 @@ document.addEventListener("DOMContentLoaded", function () {
     sortedRounds = Object.keys(rounds).sort((a, b) => {
       const roundOrder = {
         "Treintaidosavos de Final": 0,
-        "Cuartos de Final": 1,
-        Semifinal: 2,
-        Final: 3,
+        "Dieciseisavos de Final": 1,
+        "Octavos de Final": 2,
+        "Cuartos de Final": 3,
+        Semifinal: 4,
+        Final: 5,
       };
       return roundOrder[a] - roundOrder[b];
     });
@@ -394,6 +403,60 @@ document.addEventListener("DOMContentLoaded", function () {
         sortedRounds,
         rounds,
       );
+    }
+  }
+
+  function generateBracket() {
+    const matches = JSON.parse(localStorage.getItem("tournamentMatches")) || [];
+    const availabilityData =
+      JSON.parse(localStorage.getItem("availabilityData")) || {};
+    const tournamentData =
+      JSON.parse(localStorage.getItem("tournamentData")) || [];
+
+    const matchesByCategoryAndSex = matches.reduce((acc, match) => {
+      const key = `${match.category}-${match.sex}`;
+      (acc[key] = acc[key] || []).push(match);
+      return acc;
+    }, {});
+
+    const zip = new JSZip();
+
+    // Añadir partidos al ZIP
+    Object.entries(matchesByCategoryAndSex).forEach(
+      ([key, matchesInCategory]) => {
+        const fileName = `${key}_matches.json`;
+        const fileContent = JSON.stringify(matchesInCategory, null, 2);
+        zip.file(fileName, fileContent);
+      },
+    );
+
+    // Añadir disponibilidad horaria al ZIP
+    const availabilityFileName = "availability_data.json";
+    const availabilityFileContent = JSON.stringify(availabilityData, null, 2);
+    zip.file(availabilityFileName, availabilityFileContent);
+
+    // Añadir inscripciones al ZIP
+    const tournamentFileName = "tournament_data.json";
+    const tournamentFileContent = JSON.stringify(tournamentData, null, 2);
+    zip.file(tournamentFileName, tournamentFileContent);
+
+    // Generar el ZIP y procesarlo automáticamente
+    zip
+      .generateAsync({ type: "blob" })
+      .then((content) => {
+        JSZip.loadAsync(content).then(processZipFile).catch(handleError);
+      })
+      .catch((error) => {
+        console.error("Error al generar el archivo ZIP:", error);
+      });
+  }
+
+  function safeParseJSON(jsonString) {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error("Failed to parse JSON:", error);
+      return null;
     }
   }
 });

@@ -30,10 +30,9 @@ h2 {
 
 .animated-back-btn:hover {
     background-color: #ff4500;
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.1);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     opacity: 0.9;
-    animation: pulse 1s infinite;
 }
 
 .animated-back-btn:active {
@@ -133,7 +132,6 @@ h2 {
     color: white;
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    animation: pulse 1s infinite;
     border: 2px solid #388e3c;
 }
 

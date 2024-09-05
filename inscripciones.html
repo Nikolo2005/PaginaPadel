@@ -28,11 +28,14 @@
                         <div class="menu-actions">
                             <button
                                 id="open-popup-btn"
-                                class="add-button up-element"
+                                class="open-add-button up-element"
                             >
                                 Agregar Pareja
                             </button>
-                            <button id="delete-all-btn" class="up-element">
+                            <button
+                                id="delete-all-btn"
+                                class="up-element delete-all-btn"
+                            >
                                 Borrar todas las parejas
                             </button>
                         </div>
@@ -43,7 +46,7 @@
                                     <th>Pareja</th>
                                     <th>Categoría</th>
                                     <th>Género</th>
-                                    <th>Acciones</th>
+                                    <th class="actions-row">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="tournament-body">
@@ -87,9 +90,7 @@
                         <option value="femenino">Femenino</option>
                         <option value="mixto">Mixto</option>
                     </select>
-                    <button type="submit" class="add-button">
-                        Agregar Pareja
-                    </button>
+                    <button type="submit" class="add-button">Guardar</button>
                     <button class="close-btn">Cancelar</button>
                 </form>
             </div>

@@ -14,17 +14,26 @@ form {
     gap: 10px;
 }
 
+.open-add-button:hover {
+    background-color: #5cb85c;
+    color: white;
+}
+
+.delete-all-btn:hover {
+    background-color: #da5c58;
+    color: white;
+}
+
 #tournament-form {
     text-align: center;
     align-items: center;
 
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-areas:
         "title title"
-        "name1-form name1-form"
-        "name2-form name2-form"
+        "name1-form name2-form"
         "category category"
         "category-form category-form"
         "sex sex"
@@ -85,6 +94,11 @@ select {
     box-sizing: border-box;
 }
 
+.action-container {
+    display: flex;
+    flex-direction: row;
+}
+
 button {
     padding: 12px;
     background-color: #ff5100bb;
@@ -94,16 +108,33 @@ button {
     transition: background-color 0.5s ease;
 }
 
-button.delete-button {
-    padding: 0.5em;
-    background-color: #d9534f;
+.img-edit-pair-btn,
+.img-save-pair-btn,
+.img-del-pair-btn {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 1.5em;
 }
 
-button.delete-button i {
-    margin-right: 0.5em;
+button.edit-button,
+button.save-button,
+button.delete-button {
+    margin: 0.2em;
+    padding: 0.2em;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+}
+
+button.save-button:hover {
+    background-color: grey;
+}
+
+button.edit-button:hover {
+    background-color: #d9822b;
 }
 
 button.delete-button:hover {
@@ -112,22 +143,30 @@ button.delete-button:hover {
 
 table {
     width: 100%;
+    max-width: 100%;
     border-collapse: collapse;
     background-color: #4b6c8b;
     border: 1px solid #adadb2;
     color: #f0f0f0;
 }
 
-th,
+.overflow-cell {
+    width: 0%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+tr,
 td {
     padding: 0.2em;
     padding-left: 0.5em;
     text-align: left;
     border-bottom: 1px solid #adadb2;
 }
-
-#tournament-body > tr:hover {
-    background-color: rgba(29, 29, 29, 0.5);
+#tournament-body > tr:not(.category-header):hover {
+    background-color: rgba(29, 29, 29, 0.2);
 }
 
 .menu-actions {
@@ -139,6 +178,10 @@ td {
     border-bottom: none;
     background-color: #4b6c8b;
     padding: 0.5em;
+}
+
+.actions-row {
+    width: 7%;
 }
 
 .up-element {
@@ -168,7 +211,6 @@ td {
 
 .hidden-row {
     display: none;
-    transition: display 0.5s ease;
 }
 
 .content {
