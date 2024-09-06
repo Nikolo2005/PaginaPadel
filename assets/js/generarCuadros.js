@@ -17,9 +17,15 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     console.error("Element with id 'fileInputZip' not found.");
   }
-
   if (delCuadros) {
-    delCuadros.addEventListener("click", deleteTournaments);
+    delCuadros.addEventListener("click", function () {
+      const confirmation = confirm(
+        "¿Estás seguro de que deseas eliminar todos los cuadros?",
+      );
+      if (confirmation) {
+        deleteTournaments();
+      }
+    });
   } else {
     console.error("Element with id 'delCuadros' not found.");
   }

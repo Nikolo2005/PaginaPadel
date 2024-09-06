@@ -172,7 +172,18 @@ function createMatches(pairs) {
         round: getRoundName(Math.log2(nextPowerOf2) - 1),
         schedule: null,
       });
-      currentRoundPairs.push(pair1.player1 === "BYE" ? pair2 : pair1);
+      if (pair1.player1 === "BYE") {
+        currentRoundPairs.push(pair2);
+      } else if (pair2.player1 === "BYE") {
+        currentRoundPairs.push(pair1);
+      } else {
+        currentRoundPairs.push({
+          player1: "",
+          player2: "",
+          category: pair1.category,
+          sex: pair1.sex,
+        });
+      }
     });
 
     let roundNumber = Math.log2(nextPowerOf2) - 2;
@@ -182,9 +193,6 @@ function createMatches(pairs) {
       const nextRoundPairs = [];
       for (let i = 0; i < currentRoundPairs.length; i += 2) {
         let [pair1, pair2] = [currentRoundPairs[i], currentRoundPairs[i + 1]];
-        if (pair1.player1 === "BYE" && pair2.player1 !== "BYE") {
-          [pair1, pair2] = [pair2, pair1];
-        }
 
         matches.push({
           pair1,
@@ -195,9 +203,11 @@ function createMatches(pairs) {
           schedule: null,
         });
 
-        if (pair1.player1 !== "BYE" && pair2.player1 === "BYE") {
+        if (pair1.player1 === "BYE") {
+          nextRoundPairs.push(pair2);
+        } else if (pair2.player1 === "BYE") {
           nextRoundPairs.push(pair1);
-        } else if (pair1.player1 !== "BYE" && pair2.player1 !== "BYE") {
+        } else {
           nextRoundPairs.push({
             player1: "",
             player2: "",
@@ -213,7 +223,6 @@ function createMatches(pairs) {
 
   return matches;
 }
-
 // Crear partidos de consolación
 function createConsolationMatches(matches) {
   // Inicializa un array vacío para almacenar los partidos de consolación
@@ -347,10 +356,11 @@ function displayMatchesByCategory(matches) {
                 ${
                   match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
                     ? `<td>
-                        <button class="edit-btn" data-match-index="${index}" data-category="${key}">Editar</button>
+                    <div class="action-container">
+                    <button class="edit-btn" data-match-index="${index}" data-category="${key}" onclick="event.stopPropagation(); event.target.closest('button').click();"><img class="img-del-pair-btn" src="assets/img/edit.svg"/></button>
                         ${
                           match.schedule
-                            ? `<button class="clear-schedule-btn" data-match-index="${index}" data-category="${key}">Borrar Horario</button>`
+                            ? `<button class="clear-schedule-btn" data-match-index="${index}" data-category="${key}"><img class="img-del-pair-btn" src="assets/img/dustbin_120823.svg" onclick="event.stopPropagation(); event.target.closest('button').click();"/></button>`
                             : ""
                         }
                     </td>`

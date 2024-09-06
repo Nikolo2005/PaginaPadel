@@ -122,12 +122,12 @@ svg {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.6); /* Fondo semitransparente */
-    display: none; /* Oculto por defecto */
+    background-color: rgba(255, 255, 255, 0.6);
+    display: none;
     justify-content: center;
     align-items: center;
-    flex-direction: column; /* Para alinear el texto y el loader verticalmente */
-    z-index: 9999;
+    flex-direction: column;
+    z-index: 1000;
 }
 
 .loader-text {
@@ -142,7 +142,7 @@ svg {
     padding: 4px;
     width: 160px;
     height: 16px;
-    margin-top: 20px; /* Espacio entre el texto y la animación */
+    margin-top: 20px;
 }
 
 .space {

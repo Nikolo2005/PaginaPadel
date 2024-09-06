@@ -11,14 +11,22 @@
         <header>
             <div class="menu"></div>
             <h3>Selecciona el archivo ZIP con los partidos</h3>
-            <input
-                type="file"
-                id="fileInputZip"
-                accept=".zip"
-                style="display: none"
-            /><label for="fileInputZip" class="Import-btn">Importar </label>
-            <button id="generateBracket">Generar Cuadros</button>
-            <button id="delCuadros">Eliminar Cuadros</button>
+            <div class="option-box">
+                <button id="generateBracket" class="menu-btn">
+                    Generar Cuadros
+                </button>
+                <input
+                    type="file"
+                    id="fileInputZip"
+                    accept=".zip"
+                    style="display: none"
+                /><label for="fileInputZip" class="menu-btn"
+                    >Importar ZIP
+                </label>
+                <button id="delCuadros" class="menu-btn">
+                    Eliminar Cuadros
+                </button>
+            </div>
         </header>
         <div id="tournament-container"></div>
 
