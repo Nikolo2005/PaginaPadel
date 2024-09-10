@@ -85,7 +85,20 @@ function openSchedulePopup(category, matchIndex) {
     return acc;
   }, {});
 
-  const match = matchesByCategoryAndSex[category][matchIndex]; // Ensure match is defined here
+  if (!matchesByCategoryAndSex[category]) {
+    console.error(
+      `La categoría ${category} no existe en matchesByCategoryAndSex`,
+    );
+    return;
+  }
+
+  const match = matchesByCategoryAndSex[category][matchIndex];
+  if (!match) {
+    console.error(
+      `El índice ${matchIndex} no es válido para la categoría ${category}`,
+    );
+    return;
+  }
 
   currentEditingCategory = category;
   currentEditingMatchIndex = matchIndex;

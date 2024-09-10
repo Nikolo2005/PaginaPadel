@@ -15,16 +15,31 @@ function getStoredPairs() {
 }
 
 function addEventListeners() {
-  document
-    .getElementById("tournament-form")
-    .addEventListener("submit", addPair);
-  document
-    .getElementById("delete-all-btn")
-    .addEventListener("click", deleteAllData);
-  document
-    .getElementById("open-popup-btn")
-    .addEventListener("click", openPopup);
-  document.querySelector(".close-btn").addEventListener("click", closePopup);
+  const tournamentForm = document.getElementById("tournament-form");
+  const deleteAllBtn = document.getElementById("delete-all-btn");
+  const openPopupBtn = document.getElementById("open-popup-btn");
+  const closeBtns = document.querySelectorAll(".close-btn");
+
+  if (tournamentForm) {
+    tournamentForm.addEventListener("submit", addPair);
+  } else {
+    console.error("Elemento con id 'tournament-form' no encontrado.");
+  }
+
+  if (deleteAllBtn) {
+    deleteAllBtn.addEventListener("click", deleteAllData);
+  } else {
+    console.error("Elemento con id 'delete-all-btn' no encontrado.");
+  }
+
+  if (openPopupBtn) {
+    openPopupBtn.addEventListener("click", openPopup);
+  } else {
+    console.error("Elemento con id 'open-popup-btn' no encontrado.");
+  }
+
+  closeBtns.forEach((btn) => btn.addEventListener("click", closePopup));
+
   window.addEventListener("click", outsideClick);
 }
 
@@ -226,25 +241,13 @@ function editPair(pairId, editButton) {
   }
 
   function handleEnterKey(event) {
-    if (event.key === "Escape") {
-      row.querySelector(".player1-text").style.display = "inline";
-      row.querySelector(".player2-text").style.display = "inline";
-      row.querySelector(".player1-input").style.display = "none";
-      row.querySelector(".player2-input").style.display = "none";
-      row.querySelector(".edit-button").style.display = "inline";
-      row.querySelector(".save-button").style.display = "none";
-      document.removeEventListener("keydown", handleEscKey);
-    }
-  }
-
-  function handleEnterKey(event) {
     if (event.key === "Enter") {
       savePair(pairId, row.querySelector(".save-button"));
       document.removeEventListener("keydown", handleEnterKey);
     }
   }
-  document.addEventListener("keydown", handleEnterKey);
 
+  document.addEventListener("keydown", handleEnterKey);
   document.addEventListener("keydown", handleEscKey);
 }
 
@@ -288,7 +291,8 @@ function outsideClick(event) {
 }
 
 function resetPopupInputs() {
-  ["player1", "player2", "category", "sex"].forEach(
-    (id) => (document.getElementById(id).value = ""),
-  );
+  document.getElementById("player1").value = " ";
+  document.getElementById("player2").value = " ";
+  document.getElementById("category").selectedIndex = 0;
+  document.getElementById("sex").selectedIndex = 0;
 }

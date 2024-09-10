@@ -350,7 +350,7 @@ function updateRoundCellCountElement(elementId, newCount) {
   if (oldCount !== newCount) {
     element.textContent = newCount;
     element.classList.remove("flash");
-    void element.offsetWidth; // Trigger reflow to restart the animation
+    void element.offsetWidth;
     element.classList.add("flash");
   }
 }

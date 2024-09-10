@@ -225,44 +225,90 @@ function createMatches(pairs) {
 }
 // Crear partidos de consolación
 function createConsolationMatches(matches) {
-  // Inicializa un array vacío para almacenar los partidos de consolación
+  // Initialize an array to store the consolation matches
   const consolationMatches = [];
 
-  // Agrupa los partidos por categoría y sexo
+  // Group matches by category and sex
   const matchesByCategoryAndSex = matches.reduce((acc, match) => {
     const key = `${match.category}-${match.sex}`;
     (acc[key] = acc[key] || []).push(match);
     return acc;
   }, {});
 
-  // Itera sobre cada grupo de partidos por categoría y sexo
+  // Iterate over each group of matches by category and sex
   Object.entries(matchesByCategoryAndSex).forEach(
     ([key, matchesInCategory]) => {
-      // Calcula el número de partidos de consolación
-      const numConsolationMatches = Math.floor(matchesInCategory.length / 2);
-      let numMatches = numConsolationMatches + 1;
-      let roundNumber = Math.ceil(Math.log2(numMatches));
+      // Filter matches that have a "BYE" (matches without an opponent)
+      const byeMatches = matchesInCategory.filter(
+        (match) =>
+          match.pair1.player1 === "BYE" || match.pair2.player1 === "BYE",
+      ).length;
 
-      // Crea los partidos de consolación
+      // Calculate the number of first-round consolation matches needed
+      let numConsolationMatches = Math.floor(matchesInCategory.length / 4 + 1);
+
+      // Calculate the number of matches without BYEs
+      let matchesNoByes = matchesInCategory.length / 2 + 0.5 - byeMatches;
+
+      if (matchesNoByes === 2) {
+        numConsolationMatches = 1;
+      } else if (matchesNoByes === 1) {
+        //No generate consolation category
+        numConsolationMatches = 0;
+      }
+
+      // Create first-round consolation matches
       for (let i = 0; i < numConsolationMatches; i++) {
         const consolationMatch = {
           pair1: { player1: "", player2: "" },
           pair2: { player1: "", player2: "" },
           category: `consolación-${matchesInCategory[0].category}`,
           sex: matchesInCategory[0].sex,
-          round: getRoundName(roundNumber - 1),
+          round: getRoundName(Math.log2(numConsolationMatches)),
           schedule: null,
         };
         consolationMatches.push(consolationMatch);
-        numMatches--;
-        if (numMatches === Math.pow(2, Math.ceil(Math.log2(numMatches)))) {
-          roundNumber--;
+      }
+
+      // Generate subsequent rounds of consolation matches
+      let currentRoundPairs = Array(numConsolationMatches).fill({
+        player1: "",
+        player2: "",
+        category: matchesInCategory[0].category,
+        sex: matchesInCategory[0].sex,
+      });
+
+      let roundNumber = Math.log2(numConsolationMatches) - 2;
+
+      while (currentRoundPairs.length > 1) {
+        const nextRoundPairs = [];
+        for (let i = 0; i < currentRoundPairs.length; i += 2) {
+          let [pair1, pair2] = [currentRoundPairs[i], currentRoundPairs[i + 1]];
+
+          const consolationMatch = {
+            pair1,
+            pair2,
+            category: `consolación-${matchesInCategory[0].category}`,
+            sex: matchesInCategory[0].sex,
+            round: getRoundName(roundNumber + 1),
+            schedule: null,
+          };
+          consolationMatches.push(consolationMatch);
+
+          nextRoundPairs.push({
+            player1: "",
+            player2: "",
+            category: matchesInCategory[0].category,
+            sex: matchesInCategory[0].sex,
+          });
         }
+        currentRoundPairs = nextRoundPairs;
+        roundNumber--;
       }
     },
   );
 
-  // Devuelve el array de partidos de consolación
+  // Return the array of consolation matches
   return consolationMatches;
 }
 
@@ -349,24 +395,25 @@ function displayMatchesByCategory(matches) {
         }
 
         row.innerHTML = `
-                <td class="overflow-cell">${match.pair1.player1 !== "BYE" ? `${match.pair1.player1} - ${match.pair1.player2}` : "BYE"}</td>
-                <td class="overflow-cell">${match.pair2.player1 !== "BYE" ? `${match.pair2.player1} - ${match.pair2.player2}` : "BYE"}</td>
-                <td>${match.round}</td>
-                <td>${isUnprogrammed ? "" : match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : ""}</td>
-                ${
-                  match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
-                    ? `<td>
-                    <div class="action-container">
+          <td class="overflow-cell">${match.pair1.player1 !== "BYE" ? `${match.pair1.player1} - ${match.pair1.player2}` : "BYE"}</td>
+          <td class="overflow-cell">${match.pair2.player1 !== "BYE" ? `${match.pair2.player1} - ${match.pair2.player2}` : "BYE"}</td>
+          <td>${match.round}</td>
+          <td>${isUnprogrammed ? "" : match.schedule ? `${match.schedule.day} ${match.schedule.time} ${match.schedule.court}` : ""}</td>
+          ${
+            match.pair1.player1 !== "BYE" && match.pair2.player1 !== "BYE"
+              ? `<td>
+                  <div class="action-container">
                     <button class="edit-btn" data-match-index="${index}" data-category="${key}" onclick="event.stopPropagation(); event.target.closest('button').click();"><img class="img-del-pair-btn" src="assets/img/edit.svg"/></button>
-                        ${
-                          match.schedule
-                            ? `<button class="clear-schedule-btn" data-match-index="${index}" data-category="${key}"><img class="img-del-pair-btn" src="assets/img/dustbin_120823.svg" onclick="event.stopPropagation(); event.target.closest('button').click();"/></button>`
-                            : ""
-                        }
-                    </td>`
-                    : `<td></td>`
-                }
-            `;
+                    ${
+                      match.schedule
+                        ? `<button class="clear-schedule-btn" data-match-index="${index}" data-category="${key}"><img class="img-del-pair-btn" src="assets/img/dustbin_120823.svg" onclick="event.stopPropagation(); event.target.closest('button').click();"/></button>`
+                        : ""
+                    }
+                  </div>
+                </td>`
+              : `<td></td>`
+          }
+        `;
         if (categoryStatesMatches[key]) {
           row.classList.remove("hidden-row");
         }
@@ -379,9 +426,14 @@ function displayMatchesByCategory(matches) {
 
   document.querySelectorAll(".edit-btn").forEach((button) => {
     button.addEventListener("click", (event) => {
-      const matchIndex = event.target.getAttribute("data-match-index");
-      const category = event.target.getAttribute("data-category");
-      openSchedulePopup(category, matchIndex);
+      const matchIndex = event.currentTarget.getAttribute("data-match-index");
+      const category = event.currentTarget.getAttribute("data-category");
+
+      if (category && matchIndex !== null) {
+        openSchedulePopup(category, matchIndex);
+      } else {
+        console.error("Category or matchIndex is null or undefined");
+      }
     });
   });
 
