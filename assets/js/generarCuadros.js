@@ -31,7 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (generateBracketButton) {
-    generateBracketButton.addEventListener("click", generateBracket);
+    generateBracketButton.addEventListener("click", function () {
+      const confirmation = confirm(
+        "¿Estás seguro de que deseas generar los cuadros?",
+      );
+      if (confirmation) {
+        generateBracket();
+      }
+    });
   } else {
     console.error("Element with id 'generateBracket' not found.");
   }
@@ -320,7 +327,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           const verticalConnectorDiv = document.createElement("div");
           verticalConnectorDiv.classList.add("vertical-connector");
-
           const prevRound = sortedRounds[roundIndex - 1];
           const prevRoundMatches = roundPositions[prevRound];
           const topPrevMatch1 = prevRoundMatches[matchIndex * 2];
@@ -399,17 +405,99 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentMatch = rounds[sortedRounds[roundIndex]][matchIndex];
     currentMatch.advanced = true;
 
+    // Mover la pareja perdedora al partido de consolación solo si es la primera ronda
+    if (roundIndex === 0) {
+      const losingPair =
+        pairIndex === 1 ? currentMatch.pair2 : currentMatch.pair1;
+
+      // Buscar el nombre de la categoría del partido actual
+      const categoryName = Object.keys(categories).find((name) =>
+        categories[name].main.some(
+          (match) =>
+            match.round === currentMatch.round &&
+            match.category === currentMatch.category &&
+            match.sex === currentMatch.sex,
+        ),
+      );
+
+      const currentConsolationMatches = Object.values(categories).flatMap(
+        (category) =>
+          Object.values(category).flatMap((tournament) =>
+            tournament.filter(
+              (match) =>
+                match.sex === currentMatch.sex &&
+                match.category === `consolación-${currentMatch.category}`,
+            ),
+          ),
+      );
+      console.log("Partidos actuales:", currentConsolationMatches);
+
+      // Imprimir la categoría encontrada
+      console.log(`Categoría encontrada: ${categoryName}`);
+
+      // Si se encuentra la categoría
+      if (categoryName) {
+        // Construir el nombre de la categoría de consolación
+        const consolationCategoryName = `consolación-${categoryName}`;
+
+        // Buscar los partidos de consolación que coincidan con la categoría y el sexo del partido actual
+        if (currentConsolationMatches.length > 0) {
+          // Calcular la nueva posición en el cuadro de consolación
+
+          const matchesInRound = categories[categoryName].main.filter(
+            (match) =>
+              match.round === currentMatch.round &&
+              match.category === currentMatch.category &&
+              match.sex === currentMatch.sex,
+          );
+          console.log("matchesInRound:", matchesInRound);
+          const originalPosition = matchesInRound.indexOf(currentMatch);
+          if (originalPosition === -1) {
+            console.error("currentMatch no se encontró en matchesInRound");
+            return;
+          }
+          const newPosition = Math.floor(originalPosition / 2);
+
+          // Buscar el partido de consolación correspondiente a la nueva posición
+          const consolationMatch = currentConsolationMatches[newPosition];
+
+          if (consolationMatch) {
+            if (originalPosition % 2 === 0) {
+              consolationMatch.pair1 = losingPair;
+              console.log(
+                `Pareja ${losingPair.player1} - ${losingPair.player2} agregada a partido de consolación en la posición ${newPosition}: ${consolationMatch.round}`,
+              );
+            } else {
+              consolationMatch.pair2 = losingPair;
+              console.log(
+                `Pareja ${losingPair.player1} - ${losingPair.player2} agregada a partido de consolación en la posición ${newPosition}: ${consolationMatch.round}`,
+              );
+            }
+          } else {
+            // Si no se encuentra un partido de consolación en la nueva posición
+
+            if (currentConsolationMatches.length === 1) {
+              const consolationMatch = currentConsolationMatches[0];
+              if (consolationMatch)
+                if (!consolationMatch.pair1.player1) {
+                  consolationMatch.pair1 = losingPair;
+                } else {
+                  consolationMatch.pair2 = losingPair;
+                }
+            }
+          }
+        } else {
+          console.log(
+            `No se encontraron partidos de consolación para la categoría: ${consolationCategoryName}`,
+          );
+        }
+      }
+    }
+
     // Guardar datos actualizados en localStorage
     localStorage.setItem("categories", JSON.stringify(categories));
 
-    if (!isAuto) {
-      generateTournament(
-        Object.values(rounds).flat(),
-        container,
-        sortedRounds,
-        rounds,
-      );
-    }
+    renderTournaments();
   }
 
   function generateBracket() {

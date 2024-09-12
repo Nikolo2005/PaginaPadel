@@ -27,7 +27,6 @@ form {
 #tournament-form {
     text-align: center;
     align-items: center;
-
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -71,11 +70,19 @@ form {
 #tournament-form > .close-btn {
     width: 100%;
     grid-area: close-btn;
+    border-radius: 5px;
+    background-color: #da5c58;
+    font-weight: bold;
+}
+
+#tournament-form > .close-btn:hover {
+    background-color: #c9302c;
 }
 
 #tournament-form > .add-button {
     width: 100%;
     grid-area: add-button;
+    border-radius: 5px;
 }
 
 label {
@@ -106,6 +113,11 @@ button {
     border: none;
     cursor: pointer;
     transition: background-color 0.5s ease;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #cc4100;
 }
 
 .img-edit-pair-btn,

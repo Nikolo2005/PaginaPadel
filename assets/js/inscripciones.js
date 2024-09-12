@@ -291,8 +291,8 @@ function outsideClick(event) {
 }
 
 function resetPopupInputs() {
-  document.getElementById("player1").value = " ";
-  document.getElementById("player2").value = " ";
+  document.getElementById("player1").value = "";
+  document.getElementById("player2").value = "";
   document.getElementById("category").selectedIndex = 0;
   document.getElementById("sex").selectedIndex = 0;
 }

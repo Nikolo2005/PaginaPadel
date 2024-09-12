@@ -28,6 +28,7 @@ button {
 .edit-btn {
     padding: 2px;
     background-color: rgba(0, 0, 0, 0);
+    margin-right: 0.4em;
 }
 
 .actions-row {
