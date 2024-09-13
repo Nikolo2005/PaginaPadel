@@ -222,7 +222,9 @@ function addDayElement(day) {
       </thead>
       <tbody></tbody>
     </table>
-    <button class="delete-day-btn" onclick="removeDay('${day}')">X</button>
+    <button class="delete-day-btn" onclick="removeDay('${day}')">
+      <img class="rm-day-btn" src="assets/img/dustbin_120823.svg"/>
+    </button>
   `;
   availabilityTables.appendChild(tableContainer);
 }

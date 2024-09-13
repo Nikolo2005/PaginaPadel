@@ -168,9 +168,16 @@ button {
 
 .delete-day-btn {
     background-color: #da5c58;
+    display: flex;
+    justify-content: center;
+    border-radius: 0 0 5px 5px;
 }
 .delete-day-btn:hover {
     background-color: #962422;
+}
+
+.rm-day-btn {
+    height: 1.7em;
 }
 
 .availability-cell {
